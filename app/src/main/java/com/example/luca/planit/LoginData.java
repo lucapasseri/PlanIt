@@ -1,0 +1,41 @@
+package com.example.luca.planit;
+
+/**
+ * Created by diego on 22/07/2017.
+ */
+
+public class LoginData {
+    private String email;
+    private String password;
+    private String username;
+
+    private LoginData(String email, String username, String password) {
+        if (!email.isEmpty()) {
+            this.email = email;
+        } else if (!username.isEmpty()) {
+            this.username = username;
+        }
+        this.password = password;
+
+    }
+
+    public static LoginData getLoginDataInstanceByUsername(String username, String password) {
+        return new LoginData("", username, password);
+    }
+
+    public static LoginData getLoginDataInstanceByEmail(String email, String password) {
+        return new LoginData(email, "", password);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+}
