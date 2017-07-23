@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,9 +33,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,7 +64,7 @@ public class LoginActivity extends Activity {
 
     ArrayAdapter<String> adapter;
 
-    private UserLoginTask mAuthTask = null;
+    private LoginTask mAuthTask = null;
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -139,8 +157,8 @@ public class LoginActivity extends Activity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(this, email, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask = new LoginTask(this);
+            mAuthTask.execute(LoginData.getLoginDataInstanceByEmail(email, password));
         }
     }
 
@@ -182,43 +200,49 @@ public class LoginActivity extends Activity {
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mAuthTask = null;
+        showProgress(false);
+    }
+
+    private class LoginTask extends AsyncTask<LoginData,Void,Result> {
 
         private final Context context;
-        private final String mEmail;
-        private final String mPassword;
 
-        UserLoginTask(Context context, String email, String password) {
+        public LoginTask(Context context) {
             this.context = context;
-            mEmail = email;
-            mPassword = password;
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+        private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for(Map.Entry<String, String> entry : params.entrySet()){
+                if(first)
+                    first = false;
+                else
+                    result.append("&");
+                result.append(URLEncoder.encode(entry.getKey(),"UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(),"UTF-8"));
             }
 
-            
-            return true;
+            return  result.toString();
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
+        //Nome dei parametri del json di risposta
 
-            if (!success) {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            } else {
+
+        Result toReturn ;
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder response = new StringBuilder();
+        BufferedReader rd = null;
+
+        @Override
+        protected void onPostExecute(Result result) {
+            if(result.getResult().equals(LoginResult.OK_LOGIN)){
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 Set<String> emailSet = new HashSet<>();
@@ -228,12 +252,15 @@ public class LoginActivity extends Activity {
                     emailSet.add(e);
                 }
 
-                emailSet.add(mEmail);
+                String emailResult = result.getAccount().getEmail();
+                String passwordResult = result.getAccount().getPassword();
+
+                emailSet.add(emailResult);
 
                 editor.putStringSet(getString(R.string.email_list_pref), emailSet);
 
-                editor.putString(getString(R.string.email_pref), mEmail);
-                editor.putString(getString(R.string.password_pref), mPassword);
+                editor.putString(getString(R.string.email_pref), emailResult);
+                editor.putString(getString(R.string.password_pref), passwordResult);
 
                 editor.apply();
 
@@ -243,13 +270,83 @@ public class LoginActivity extends Activity {
                 intent.putExtra(FirstActivity.USERNAME_EXTRA, username);
                 startActivity(intent);
                 ((Activity) context).finish();
+            } else {
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();
             }
         }
 
         @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+        protected Result doInBackground(LoginData... params) {
+            try {
+                URL url = new URL(Resource.BASE_URL+Resource.LOGIN_PAGE); //Enter URL here
+
+                httpURLConnection = (HttpURLConnection)url.openConnection();
+
+                httpURLConnection.setUseCaches(false);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
+                //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                HashMap<String,String> toPass = new HashMap<>();
+                toPass.put("email",params[0].getEmail());
+                toPass.put("password",params[0].getPassword());
+                writer.write(getPostDataString(toPass));
+                writer.flush();
+                writer.close();
+                os.close();
+                httpURLConnection.connect();
+                int responseCode = httpURLConnection.getResponseCode();
+                if(responseCode == httpURLConnection.HTTP_OK){
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    rd = new BufferedReader(new InputStreamReader(inputStream));
+                    String line = "";
+                    while ((line = rd.readLine())!= null){
+                        response.append(line);
+                    }
+                }
+                if(response.toString().isEmpty()){
+                    toReturn = new Result(LoginResult.WRONG_CREDENTIAL);
+                    Log.d("risposta","Credenziali errate");
+                }else{
+                    try {
+                        JSONObject returned = new JSONObject(response.toString());
+                        Account loggedAccount = new AccountImpl.Builder()
+                                .setBorndate(returned.getString("data_nascita"))
+                                .setEmail(returned.getString("email"))
+                                .setId(String.valueOf(returned.getInt("id")))
+                                .setName(returned.getString("nome"))
+                                .setSurname(returned.getString("cognome"))
+                                .setPassword(returned.getString("password"))
+                                .setUsername(returned.getString("username"))
+                                .build();
+                        toReturn = new Result(LoginResult.OK_LOGIN,loggedAccount);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if( rd != null){
+                    try {
+                        rd.close();
+                    }catch (Exception e){
+
+                    }
+                }
+                if(httpURLConnection != null){
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return toReturn;
         }
     }
 }
