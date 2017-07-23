@@ -30,7 +30,7 @@ public class EventOrganizedFragment extends Fragment {
                 R.layout.event_organized_fragment, container, false);
 
         for (int i=0; i<100; i++) {
-            dataset.add(String.valueOf(i));
+            dataset.add("Event number " + String.valueOf(i));
         }
 
         ListView listView = (ListView) rootView.findViewById(R.id.event_organized_list_view);

@@ -27,7 +27,7 @@ public class EventTakePartFragment extends Fragment {
                 R.layout.event_take_part_fragment, container, false);
 
         for (int i=0; i<100; i++) {
-            dataset.add(String.valueOf(i));
+            dataset.add("Event number " + String.valueOf(i));
         }
 
         ListView listView = (ListView) rootView.findViewById(R.id.event_take_part_list_view);

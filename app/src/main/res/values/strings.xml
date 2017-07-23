@@ -13,7 +13,8 @@
     <string name="event_organized_title">Event you organized</string>
     <string name="event_take_part_title">Event you take part in</string>
     <string name="nav_groups_title">Groups</string>
-    <string name="nav_settings_title">Settings</string>
+    <string name="nav_info_title">Info</string>
+    <string name="nav_logout_title">Log Out</string>
 
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
 

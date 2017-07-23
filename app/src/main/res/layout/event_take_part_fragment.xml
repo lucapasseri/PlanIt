@@ -22,15 +22,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_take_part_title"
-            android:textSize="25sp"
+            android:textSize="30sp"
+            android:textColor="@color/wet_asphalt"
             android:textAlignment="center"/>
 
         <ListView
             android:id="@+id/event_take_part_list_view"
-            android:paddingTop="15dp"
+            android:paddingTop="20sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="45sp"/>
+            android:paddingBottom="50sp"/>
 
     </LinearLayout>
 

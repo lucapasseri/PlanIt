@@ -7,9 +7,13 @@
             android:icon="@drawable/group_icon"
             android:title="@string/nav_groups_title" />
         <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/settings_icon"
-            android:title="@string/nav_settings_title" />
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_info_black_36dp"
+            android:title="@string/nav_info_title" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_black_36dp"
+            android:title="@string/nav_logout_title" />
     </group>
 
 </menu>
