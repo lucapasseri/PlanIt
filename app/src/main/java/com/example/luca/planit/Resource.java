@@ -15,5 +15,7 @@ public final class Resource {
     public static final String PART_OF_EVENT_PAGE = "getInvitedEvent.php";
     public static final String REGISTRATION_EVENT_PAGE = "registrationEvent.php";
     public static final String ACCEPT_INVITE_PAGE = "accettaInvito.php";
+    public static final String ASSIGN_TASK_PAGE = "assegnaCompiti.php";
+    public static final String GET_BEST_DATE_PAGE = "computeBestDate.php";
 
 }
