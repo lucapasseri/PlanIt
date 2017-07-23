@@ -5,5 +5,5 @@ package com.example.luca.planit;
  */
 
 public enum LoginResult {
-    OK_LOGIN,WRONG_CREDENTIAL;
+    OK_LOGIN,WRONG_CREDENTIAL,USERNAME_ALREADY_EXISTING,MAIL_ALREADY_PRESENT,OK_REGISTRATION;
 }
