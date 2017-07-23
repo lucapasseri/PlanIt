@@ -6,4 +6,5 @@ public interface EventInfo {
 	String getProvince();
 	String getNamePlace();
 	String getCity();
+	Organizer getOrganizer();
 }

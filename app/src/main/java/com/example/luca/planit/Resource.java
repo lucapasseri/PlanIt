@@ -12,4 +12,5 @@ public final class Resource {
     public static final String LOGIN_PAGE = "login.php";
     public static final String REGISTRATION_PAGE = "registration.php";
     public static final String ORGANIZED_EVENT_PAGE = "getOrganizedEvent.php";
+    public static final String PART_OF_EVENT_PAGE = "getInvitedEvent.php";
 }

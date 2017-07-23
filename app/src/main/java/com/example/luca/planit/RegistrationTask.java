@@ -62,7 +62,7 @@ public class RegistrationTask extends AsyncTask<RegistrationData,Void,Result> {
     @Override
     protected Result doInBackground(RegistrationData... params) {
         try {
-            URL url = new URL(Resource.BASE_URL+Resource.LOGIN_PAGE); //Enter URL here
+            URL url = new URL(Resource.BASE_URL+Resource.REGISTRATION_PAGE); //Enter URL here
             JSONObject returned = null;
             httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setUseCaches(false);

@@ -1,7 +1,6 @@
 package com.example.luca.planit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +15,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -29,7 +27,7 @@ import java.util.Map;
  * Created by diego on 22/07/2017.
  */
 
-public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
+public class TakePartEventTask extends AsyncTask<Account, Void, List<Event>> {
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -65,7 +63,7 @@ public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
     protected List<Event> doInBackground(Account... params) {
         List<Event> listEvent = new LinkedList<>();
         try {
-            URL url = new URL(Resource.BASE_URL + Resource.ORGANIZED_EVENT_PAGE); //Enter URL here
+            URL url = new URL(Resource.BASE_URL + Resource.PART_OF_EVENT_PAGE); //Enter URL here
             JSONObject returned = null;
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setUseCaches(false);
@@ -76,7 +74,7 @@ public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
             HashMap<String, String> toPass = new HashMap<>();
-            toPass.put("id_org", params[0].getId());
+            toPass.put("id_utente", params[0].getId());
             writer.write(getPostDataString(toPass));
             writer.flush();
             writer.close();
@@ -108,7 +106,7 @@ public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
                         .setNamePlace(eventInfoJson.optString("nome_luogo"))
                         .setCity(eventInfoJson.optString("citta"))
                         .setData(eventInfoJson.optString("data"))
-                        .setOrganizer(new OrganizerImpl(params[0].getName(),params[0].getSurname()))
+                        .setOrganizer(new OrganizerImpl(eventInfoJson.getString("organizzatore_nome"),eventInfoJson.getString("organizzatore_cognome")))
                         .build();
 
                 System.out.println(eventInfo.toString());
