@@ -7,4 +7,5 @@ public interface EventInfo {
 	String getNamePlace();
 	String getCity();
 	Organizer getOrganizer();
+	String getNameEvent() ;
 }
