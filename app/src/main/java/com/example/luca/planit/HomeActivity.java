@@ -88,10 +88,10 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getIntent().hasExtra(LoginActivity.FROM_LOGIN_EXTRA)) {
+           // if (getIntent().hasExtra(LoginActivity.FROM_LOGIN_EXTRA)) {
                 Intent intent = new Intent(getApplication(), LoginActivity.class);
                 startActivity(intent);
-            }
+           // }
             finish();
         }
     }

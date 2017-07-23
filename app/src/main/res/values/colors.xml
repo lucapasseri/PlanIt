@@ -5,6 +5,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="blue_water">#026266</color>
+    <color name="turquoise">#1abc9c</color>
+    <color name="green_sea_dark">#0d7268</color>
+    <color name="green_sea">#16a085</color>
     <color name="bezile_hole">#2980b9</color>
     <color name="peter_river">#3498db</color>
     <color name="light_crusta">#F2784B</color>

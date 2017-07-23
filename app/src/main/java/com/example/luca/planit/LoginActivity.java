@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -17,12 +19,16 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +40,7 @@ import java.util.Set;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
 
     public static final String FROM_LOGIN_EXTRA = "FROM_LOGIN";
 
@@ -50,13 +56,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        this.setContentView(R.layout.activity_login);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
         SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         List<String> emailList = new LinkedList<>();
-        Set<String> emailPrefs = prefs.getStringSet("emails", new HashSet<String>());
+        Set<String> emailPrefs = prefs.getStringSet(getString(R.string.email_list_pref), new HashSet<String>());
 
         for (String e : emailPrefs) {
             emailList.add(e);
@@ -88,6 +94,10 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        ((ProgressBar) mProgressView).getIndeterminateDrawable().
+                setColorFilter(ContextCompat.getColor(this, R.color.green_sea), android.graphics.PorterDuff.Mode.MULTIPLY);
+
     }
 
     /**
@@ -115,9 +125,9 @@ public class LoginActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
         }
 
@@ -132,10 +142,6 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = new UserLoginTask(this, email, password);
             mAuthTask.execute((Void) null);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.length() > 0;
     }
 
     /**
@@ -212,28 +218,32 @@ public class LoginActivity extends AppCompatActivity {
             if (!success) {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+            } else {
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                Set<String> emailSet = new HashSet<>();
+                Set<String> emailPrefs = prefs.getStringSet(getString(R.string.email_list_pref), new HashSet<String>());
+
+                for (String e : emailPrefs) {
+                    emailSet.add(e);
+                }
+
+                emailSet.add(mEmail);
+
+                editor.putStringSet(getString(R.string.email_list_pref), emailSet);
+
+                editor.putString(getString(R.string.email_pref), mEmail);
+                editor.putString(getString(R.string.password_pref), mPassword);
+
+                editor.apply();
+
+                Intent intent = new Intent(getApplication(), HomeActivity.class);
+                String username = "";
+                intent.putExtra(FROM_LOGIN_EXTRA, true);
+                intent.putExtra(FirstActivity.USERNAME_EXTRA, username);
+                startActivity(intent);
+                ((Activity) context).finish();
             }
-
-            SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            Set<String> emailSet = new HashSet<>();
-            Set<String> emailPrefs = prefs.getStringSet("emails", new HashSet<String>());
-
-            for (String e : emailPrefs) {
-                emailSet.add(e);
-            }
-
-            emailSet.add(mEmail);
-
-            editor.putStringSet("emails", emailSet);
-            editor.apply();
-
-            Intent intent = new Intent(getApplication(), HomeActivity.class);
-            String username = "";
-            intent.putExtra(FROM_LOGIN_EXTRA, true);
-            intent.putExtra(FirstActivity.USERNAME_EXTRA, username);
-            startActivity(intent);
-            ((Activity) context).finish();
         }
 
         @Override
