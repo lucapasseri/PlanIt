@@ -34,6 +34,8 @@ public class FirstActivity extends AppCompatActivity {
             intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+
+        finish();
     }
 
     private boolean areDataStored() {

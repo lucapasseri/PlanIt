@@ -7,25 +7,31 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="event_organized_title">EVENT YOU ORGANIZED</string>
-    <string name="event_take_part_title">EVENT YOU TAKE PART IN</string>
+    <string name="event_organized_title">Event you organized</string>
+    <string name="event_take_part_title">Event you take part in</string>
     <string name="nav_groups_title">Groups</string>
     <string name="nav_settings_title">Settings</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email or Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_log_in">Login</string>
-    <string name="action_log_in_short">Log in</string>
-    <string name="error_invalid_email">This email address or username are not registered</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="email_list_pref">emailList</string>
     <string name="email_pref">email</string>
     <string name="password_pref">pasword</string>
-    <string name="action_sign_up">Sign Up</string>
+
+    <!-- Strings related to login -->
+    <string name="login_prompt_email">Email or Username</string>
+    <string name="login_prompt_password">Password</string>
+    <string name="login_text_button">Log In</string>
+    <string name="signup_text_button">Sign Up</string>
+    <string name="error_invalid_email">This email address or username is not registered</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+
+    <!-- Strings related to signup -->
+    <string name="signup_prompt_name">Name</string>
+    <string name="signup_prompt_surname">Surname</string>
+    <string name="signup_prompt_email">Email</string>
+    <string name="signup_prompt_username">Username</string>
+    <string name="signup_prompt_password">Password</string>
+    <string name="signup_prompt_born_date">Born Date</string>
 
 </resources>

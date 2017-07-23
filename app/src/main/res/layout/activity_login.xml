@@ -36,7 +36,7 @@
         android:layout_below="@+id/app_name_title">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/login_email_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -60,10 +60,10 @@
                     android:theme="@style/TextLabel">
 
                     <AutoCompleteTextView
-                        android:id="@+id/email"
+                        android:id="@+id/login_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_email"
+                        android:hint="@string/login_prompt_email"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -91,13 +91,10 @@
                     android:theme="@style/TextLabel">
 
                     <EditText
-                        android:id="@+id/password"
+                        android:id="@+id/login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_password"
-                        android:imeActionId="@+id/login"
-                        android:imeActionLabel="@string/action_log_in_short"
-                        android:imeOptions="actionUnspecified"
+                        android:hint="@string/login_prompt_password"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -107,24 +104,24 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/login_login_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="@string/action_log_in"
+                android:text="@string/login_text_button"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/login_button"
                 android:layout_gravity="center_horizontal"/>
 
             <Button
-                android:id="@+id/email_sign_up_button"
+                android:id="@+id/login_signup_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="@string/action_sign_up"
+                android:text="@string/signup_text_button"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/signup_button"
