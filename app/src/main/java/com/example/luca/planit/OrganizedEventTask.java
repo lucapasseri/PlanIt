@@ -1,10 +1,9 @@
 package com.example.luca.planit;
 
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,16 +17,19 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by diego on 22/07/2017.
  */
 
-public class LoginTask extends AsyncTask<LoginData,Void,Result> {
+public class OrganizedEventTask extends AsyncTask<RegistrationData,Void,Result> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -62,12 +64,11 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
     }
 
     @Override
-    protected Result doInBackground(LoginData... params) {
+    protected Result doInBackground(RegistrationData... params) {
         try {
-            URL url = new URL(Resource.BASE_URL+Resource.LOGIN_PAGE); //Enter URL here
-
+            URL url = new URL(Resource.BASE_URL+Resource.ORGANIZED_EVENT_PAGE); //Enter URL here
+            JSONObject returned = null;
             httpURLConnection = (HttpURLConnection)url.openConnection();
-
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
@@ -76,8 +77,7 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
-            toPass.put("email",params[0].getEmail());
-            toPass.put("password",params[0].getPassword());
+            toPass.put("id_org","1");
             writer.write(getPostDataString(toPass));
             writer.flush();
             writer.close();
@@ -91,34 +91,37 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
                 while ((line = rd.readLine())!= null){
                     response.append(line);
                 }
-            }
-            if(response.toString().isEmpty()){
-                toReturn = new Result(RequestResult.WRONG_CREDENTIAL);
-                Log.d("risposta","Credenziali errate");
-            }else{
-                try {
-                    JSONObject returned = new JSONObject(response.toString());
-                    Account loggedAccount = new AccountImpl.Builder()
-                            .setBorndate(returned.getString("data_nascita"))
-                            .setEmail(returned.getString("email"))
-                            .setId(String.valueOf(returned.getInt("id")))
-                            .setName(returned.getString("nome"))
-                            .setSurname(returned.getString("cognome"))
-                            .setPassword(returned.getString("password"))
-                            .setUsername(returned.getString("username"))
-                            .build();
-                    toReturn = new Result(RequestResult.OK_LOGIN,loggedAccount);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                System.out.println(response.toString());
+                returned = new JSONObject(response.toString());
             }
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+            JSONObject eventInfoJson = (returned.getJSONObject("Info"));
+            EventInfo eventInfo = new EventInfoImpl.Builder()
+                    .setAddress(eventInfoJson.getString("indirizzo"))
+                    .setCity(eventInfoJson.getString("citta"))
+                    .setProvince(eventInfoJson.getString("provincia"))
+                    .setNamePlace(eventInfoJson.getString("nome_luogo"))
+                    .setCity(eventInfoJson.getString("citta"))
+                    .setData(eventInfoJson.getString("data"))
+                    .build();
+
+            List<Guest> guests = new LinkedList<>();
+
+            JSONArray guestsJSon = returned.getJSONArray("Invitati");
+
+            for (int i = 0; i< guestsJSon.length();i++){
+                JSONObject jsonObj =  (JSONObject) guestsJSon.get(i);
+                boolean confirmed = jsonObj.getString("accettato").equals("1")?true:false;
+                guests.add(new GuestImpl(jsonObj.getString("nome"),jsonObj.getString("cognome"),confirmed));
+            }
+            } catch (ProtocolException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+         finally {
             if( rd != null){
                 try {
                     rd.close();

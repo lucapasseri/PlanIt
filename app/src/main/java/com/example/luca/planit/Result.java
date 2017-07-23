@@ -5,15 +5,15 @@ package com.example.luca.planit;
  */
 
 public class Result {
-    private final LoginResult result;
+    private final RequestResult result;
     private final Account account;
 
-    public Result(LoginResult result) {
+    public Result(RequestResult result) {
         this.result = result;
         this.account = null;
     }
 
-    public Result(LoginResult result, Account account) {
+    public Result(RequestResult result, Account account) {
         this.result = result;
         this.account = account;
     }
@@ -22,7 +22,7 @@ public class Result {
         return account == null;
     }
 
-    public LoginResult getResult() {
+    public RequestResult getResult() {
         return result;
     }
 

@@ -52,7 +52,7 @@ public class RegistrationTask extends AsyncTask<RegistrationData,Void,Result> {
 
     @Override
     protected void onPostExecute(Result result) {
-        if(result.getResult().equals(LoginResult.OK_LOGIN)){
+        if(result.getResult().equals(RequestResult.OK_LOGIN)){
             //listener.onSuccessfulLogin(response.toString(),checkBox.isChecked());
         }else{
             //listener.onUnsuccessfulLogin();
@@ -94,11 +94,11 @@ public class RegistrationTask extends AsyncTask<RegistrationData,Void,Result> {
                 }
                 returned = new JSONObject(response.toString());
             }
-            if(returned.getString("result").equals(LoginResult.USERNAME_ALREADY_EXISTING.toString())){
-                toReturn = new Result(LoginResult.USERNAME_ALREADY_EXISTING);
+            if(returned.getString("result").equals(RequestResult.USERNAME_ALREADY_EXISTING.toString())){
+                toReturn = new Result(RequestResult.USERNAME_ALREADY_EXISTING);
                 Log.d("risposta","Credenziali errate");
-            }else if(returned.getString("result").equals(LoginResult.MAIL_ALREADY_PRESENT.toString())){
-                toReturn = new Result(LoginResult.USERNAME_ALREADY_EXISTING);
+            }else if(returned.getString("result").equals(RequestResult.MAIL_ALREADY_PRESENT.toString())){
+                toReturn = new Result(RequestResult.USERNAME_ALREADY_EXISTING);
                 Log.d("risposta","Credenziali errate");
             }else{
                 try {
@@ -111,7 +111,7 @@ public class RegistrationTask extends AsyncTask<RegistrationData,Void,Result> {
                             .setPassword(params[0].getPassword())
                             .setUsername(params[0].getUsername())
                             .build();
-                    toReturn = new Result(LoginResult.OK_REGISTRATION,loggedAccount);
+                    toReturn = new Result(RequestResult.OK_REGISTRATION,loggedAccount);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
