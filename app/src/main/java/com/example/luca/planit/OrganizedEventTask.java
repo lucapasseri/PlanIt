@@ -108,6 +108,8 @@ public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
                         .setNamePlace(eventInfoJson.optString("nome_luogo"))
                         .setCity(eventInfoJson.optString("citta"))
                         .setData(eventInfoJson.optString("data"))
+                        .setNameEvent(eventInfoJson.getString("nome_evento"))
+                        .setEventId(eventInfoJson.getString("id_evento"))
                         .setOrganizer(new OrganizerImpl(params[0].getName(),params[0].getSurname()))
                         .build();
 

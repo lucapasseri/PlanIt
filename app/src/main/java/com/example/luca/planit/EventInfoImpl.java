@@ -10,12 +10,10 @@ public class EventInfoImpl implements EventInfo {
     private final String city;
     private final Organizer organizer;
     private final String name_event;
+    private final String eventId;
 
 
-
-    public EventInfoImpl(String data, String address, String province, String namePlace, String city,
-                         Organizer organizer, String name_event) {
-        super();
+    public EventInfoImpl(String data, String address, String province, String namePlace, String city, Organizer organizer, String name_event, String eventId) {
         this.data = data;
         this.address = address;
         this.province = province;
@@ -23,10 +21,8 @@ public class EventInfoImpl implements EventInfo {
         this.city = city;
         this.organizer = organizer;
         this.name_event = name_event;
+        this.eventId = eventId;
     }
-
-
-
 
     public String getData() {
         return data;
@@ -72,7 +68,10 @@ public class EventInfoImpl implements EventInfo {
         return name_event;
     }
 
-
+    @Override
+    public String getEventId() {
+        return null;
+    }
 
 
     @Override
@@ -93,7 +92,7 @@ public class EventInfoImpl implements EventInfo {
         private  String city;
         private  Organizer organizer;
         private  String name_event;
-
+        private  String eventId;
         public Builder setData(String data) {
             this.data = data;
             return this;
@@ -125,10 +124,15 @@ public class EventInfoImpl implements EventInfo {
             return this;
         }
 
+        public Builder setEventId(String eventId) {
+            this.eventId = eventId;
+            return this;
+        }
+
 
         public EventInfo build() {
             return new EventInfoImpl((data), (address),
-                    (province), (namePlace), (city),Objects.requireNonNull(organizer),Objects.requireNonNull(name_event));
+                    (province), (namePlace), (city),(organizer),Objects.requireNonNull(name_event),eventId);
         }
 
 

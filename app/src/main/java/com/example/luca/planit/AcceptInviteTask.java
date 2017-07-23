@@ -1,7 +1,6 @@
 package com.example.luca.planit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,15 +18,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by diego on 22/07/2017.
  */
 
-public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Void,EventInfo> {
+public class AcceptInviteTask extends AsyncTask<EventInvite,Void,RequestResult> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -45,15 +42,13 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
     }
 
     //Nome dei parametri del json di risposta
-
-
-    EventInfo toReturn ;
+    RequestResult toReturn  = null;
     HttpURLConnection httpURLConnection = null;
     StringBuilder response = new StringBuilder();
     BufferedReader rd = null;
 
     @Override
-    protected void onPostExecute(EventInfo result) {
+    protected void onPostExecute(RequestResult result) {
         if(result !=null ){
             //listener.onSuccessfulLogin(response.toString(),checkBox.isChecked());
         }else{
@@ -62,10 +57,10 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
     }
 
     @Override
-    protected EventInfo doInBackground(EventRegistrationWrapper... params) {
+    protected RequestResult doInBackground(EventInvite... params) {
         try {
-            URL url = new URL(Resource.BASE_URL+Resource.REGISTRATION_EVENT_PAGE); //Enter URL here
-            JSONObject returned = null;
+
+            URL url = new URL(Resource.BASE_URL+Resource.ACCEPT_INVITE_PAGE); //Enter URL here
             httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setDoOutput(true);
@@ -75,33 +70,11 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
-            /*
-            Place toAddPlace = new PlaceImpl.Builder()
-                    .setAddress("Via Boscone 715")
-                    .setCity("Cesena")
-                    .setProvince("FC")
-                    .setNamePlace("Casadeis")
-                    .build();
-            EventRegistrationWrapper wrapper = new EventRegistrationWrapperImpl.Builder()
-                    .setName_event("Serata GOT")
-                    .setOrganizer_id("19")
-                    .setPlace(toAddPlace)
-                    .setDate("2017-07-24")
-                    .build();
-            */
-            if(params[0].getPlace() != null){
-                toPass.put("nome",params[0].getPlace().getNamePlace());
-                toPass.put("indirizzo",params[0].getPlace().getAddress());
-                toPass.put("citta",params[0].getPlace().getCity());
-                toPass.put("provincia",params[0].getPlace().getProvince());
-            }
 
-            if(params[0].getDate() != null){
-                toPass.put("data", params[0].getDate());
-            }
+            InviteWrapper invite = new  InviteWrapper("6", "1");
 
-            toPass.put("id_org",params[0].getOrganizer_id());
-            toPass.put("nome_evento", params[0].getName_event());
+            toPass.put("id_evento",invite.getEventId());
+            toPass.put("id_utente",invite.getGuestId());
 
             writer.write(getPostDataString(toPass));
             writer.flush();
@@ -117,45 +90,11 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
                     response.append(line);
                 }
                 System.out.println(response.toString());
-                returned = new JSONObject(response.toString());
-
-
-                if(params[0].getPlace() != null && params[0].getDate() != null){
-
-                    toReturn = new EventInfoImpl.Builder()
-                            .setAddress(params[0].getPlace().getAddress())
-                            .setCity(params[0].getPlace().getCity())
-                            .setProvince(params[0].getPlace().getProvince())
-                            .setNamePlace(params[0].getPlace().getNamePlace())
-                            .setData(params[0].getDate())
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
-
-                }else if (params[0].getPlace() != null){
-                    toReturn = new EventInfoImpl.Builder()
-                            .setAddress(params[0].getPlace().getAddress())
-                            .setCity(params[0].getPlace().getCity())
-                            .setProvince(params[0].getPlace().getProvince())
-                            .setNamePlace(params[0].getPlace().getNamePlace())
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
-                }else if(params[0].getDate() != null){
-                    toReturn = new EventInfoImpl.Builder()
-                            .setData(params[0].getDate())
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
-                }else{
-                    toReturn = new EventInfoImpl.Builder()
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
+                String returnedString = new JSONObject(response.toString()).getString("response");
+                if( returnedString.equals(RequestResult.INVITE_ACCEPTED.toString())){
+                    toReturn = RequestResult.INVITE_ACCEPTED;
                 }
-
             }
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

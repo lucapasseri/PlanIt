@@ -8,4 +8,5 @@ public interface EventInfo {
 	String getCity();
 	Organizer getOrganizer();
 	String getNameEvent() ;
+	String getEventId();
 }

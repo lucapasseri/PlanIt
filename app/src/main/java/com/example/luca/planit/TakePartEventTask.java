@@ -106,6 +106,8 @@ public class TakePartEventTask extends AsyncTask<Account, Void, List<Event>> {
                         .setNamePlace(eventInfoJson.optString("nome_luogo"))
                         .setCity(eventInfoJson.optString("citta"))
                         .setData(eventInfoJson.optString("data"))
+                        .setNameEvent(eventInfoJson.getString("nome_evento"))
+                        .setEventId(eventInfoJson.getString("id_evento"))
                         .setOrganizer(new OrganizerImpl(eventInfoJson.getString("organizzatore_nome"),eventInfoJson.getString("organizzatore_cognome")))
                         .build();
 
