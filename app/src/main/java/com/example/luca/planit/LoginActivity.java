@@ -242,7 +242,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(Result result) {
-            if(result.getResult().equals(LoginResult.OK_LOGIN)){
+            if(result.getResult().equals(RequestResult.OK_LOGIN.toString())){
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 Set<String> emailSet = new HashSet<>();
@@ -308,7 +308,7 @@ public class LoginActivity extends Activity {
                     }
                 }
                 if(response.toString().isEmpty()){
-                    toReturn = new Result(LoginResult.WRONG_CREDENTIAL);
+                    toReturn = new Result(RequestResult.WRONG_CREDENTIAL);
                     Log.d("risposta","Credenziali errate");
                 }else{
                     try {
@@ -322,7 +322,7 @@ public class LoginActivity extends Activity {
                                 .setPassword(returned.getString("password"))
                                 .setUsername(returned.getString("username"))
                                 .build();
-                        toReturn = new Result(LoginResult.OK_LOGIN,loggedAccount);
+                        toReturn = new Result(RequestResult.OK_LOGIN,loggedAccount);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
