@@ -93,7 +93,6 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
                 }
             }
             if(response.toString().isEmpty()){
-                toReturn = new Result(RequestResult.WRONG_CREDENTIAL);
                 Log.d("risposta","Credenziali errate");
             }else{
                 try {

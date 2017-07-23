@@ -64,8 +64,6 @@ public class LoginActivity extends Activity {
 
     ArrayAdapter<String> adapter;
 
-    private LoginTask mAuthTask = null;
-
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -124,9 +122,6 @@ public class LoginActivity extends Activity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -157,8 +152,8 @@ public class LoginActivity extends Activity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new LoginTask(this);
-            mAuthTask.execute(LoginData.getLoginDataInstanceByEmail(email, password));
+            LoginTask loginTask = new LoginTask(this);
+            loginTask.execute(LoginData.getLoginDataInstanceByEmail(email, password));
         }
     }
 
@@ -200,14 +195,6 @@ public class LoginActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        mAuthTask = null;
-        showProgress(false);
-    }
-
     private class LoginTask extends AsyncTask<LoginData,Void,Result> {
 
         private final Context context;
@@ -242,7 +229,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(Result result) {
-            if(result.getResult().equals(RequestResult.OK_LOGIN.toString())){
+            if(result.getResult()== (RequestResult.OK_LOGIN)){
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 Set<String> emailSet = new HashSet<>();
@@ -271,8 +258,14 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
                 ((Activity) context).finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                showProgress(false);
+                if(result.getResult() == RequestResult.MAIL_NOT_PRESENT) {
+                    mEmailView.setError(getString(R.string.error_invalid_email));
+                    mEmailView.requestFocus();
+                } else if(result.getResult() == RequestResult.WRONG_PASSWORD) {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
             }
         }
 
@@ -307,12 +300,16 @@ public class LoginActivity extends Activity {
                         response.append(line);
                     }
                 }
-                if(response.toString().isEmpty()){
-                    toReturn = new Result(RequestResult.WRONG_CREDENTIAL);
-                    Log.d("risposta","Credenziali errate");
+                if(response.toString().equals(RequestResult.MAIL_NOT_PRESENT.toString())){
+                    toReturn = new Result(RequestResult.MAIL_NOT_PRESENT);
+                    Log.d("risposta","MAIL_NOT_PRESENT");
+                }else if(response.toString().equals(RequestResult.WRONG_PASSWORD.toString())){
+                    toReturn = new Result(RequestResult.WRONG_PASSWORD);
+                    Log.d("risposta","WRONG_PASSWORD");
                 }else{
                     try {
                         JSONObject returned = new JSONObject(response.toString());
+                        Log.d("risposta",response.toString());
                         Account loggedAccount = new AccountImpl.Builder()
                                 .setBorndate(returned.getString("data_nascita"))
                                 .setEmail(returned.getString("email"))
