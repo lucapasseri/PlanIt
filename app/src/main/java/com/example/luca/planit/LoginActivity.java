@@ -51,8 +51,6 @@ import java.util.Set;
  */
 public class LoginActivity extends Activity {
 
-    public static final String FROM_LOGIN_EXTRA = "FROM_LOGIN";
-
     ArrayAdapter<String> adapter;
 
     private AutoCompleteTextView emailEditText;
@@ -66,6 +64,7 @@ public class LoginActivity extends Activity {
         this.setContentView(R.layout.activity_login);
 
         emailEditText = (AutoCompleteTextView) findViewById(R.id.login_email);
+        passwordEditText = (EditText) findViewById(R.id.login_password);
 
         SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         List<String> emailList = new LinkedList<>();
@@ -78,8 +77,6 @@ public class LoginActivity extends Activity {
         adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, emailList);
         emailEditText.setAdapter(adapter);
-
-        passwordEditText = (EditText) findViewById(R.id.login_password);
 
         Button loginButton = (Button) findViewById(R.id.login_login_button);
         loginButton.setOnClickListener(new OnClickListener() {
@@ -242,9 +239,7 @@ public class LoginActivity extends Activity {
                 editor.apply();
 
                 Intent intent = new Intent(getApplication(), HomeActivity.class);
-                String username = "";
-                intent.putExtra(FROM_LOGIN_EXTRA, true);
-                intent.putExtra(FirstActivity.USERNAME_EXTRA, username);
+                intent.putExtra(getString(R.string.extra_from_login), true);
                 startActivity(intent);
                 ((Activity) context).finish();
             } else {

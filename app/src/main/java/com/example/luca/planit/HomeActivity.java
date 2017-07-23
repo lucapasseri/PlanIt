@@ -1,7 +1,6 @@
 package com.example.luca.planit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -20,10 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Luca on 21/07/2017.
@@ -88,10 +83,12 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-           // if (getIntent().hasExtra(LoginActivity.FROM_LOGIN_EXTRA)) {
+            //if (getIntent().hasExtra(getString(R.string.extra_from_login)) ||
+            //        getIntent().hasExtra(getString(R.string.extra_from_signup))) {
                 Intent intent = new Intent(getApplication(), LoginActivity.class);
                 startActivity(intent);
-           // }
+            //}
+
             finish();
         }
     }

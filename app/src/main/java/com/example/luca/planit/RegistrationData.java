@@ -15,7 +15,7 @@ public class RegistrationData {
     private String borndate;
 
 
-    public RegistrationData(String email, String password, String username, String name, String surname, String borndate) {
+    private RegistrationData(String email, String password, String username, String name, String surname, String borndate) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -55,7 +55,6 @@ public class RegistrationData {
         private String username;
         private String name;
         private String surname;
-        private String id;
         private String borndate;
 
         public Builder setEmail(String email) {
@@ -80,11 +79,6 @@ public class RegistrationData {
 
         public Builder setSurname(String surname) {
             this.surname = surname;
-            return this;
-        }
-
-        public Builder setId(String id) {
-            this.id = id;
             return this;
         }
 

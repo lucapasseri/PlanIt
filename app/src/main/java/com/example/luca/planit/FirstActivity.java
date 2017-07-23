@@ -42,9 +42,10 @@ public class FirstActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         String email = prefs.getString(getString(R.string.email_pref), null);
+        String username = prefs.getString(getString(R.string.username_pref), null);
         String password = prefs.getString(getString(R.string.password_pref), null);
 
-        if(email!=null && password!=null) {
+        if(email!=null && username!= null && password!=null) {
             return true;
         }
 
