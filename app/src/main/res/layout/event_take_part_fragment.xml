@@ -31,7 +31,9 @@
             android:paddingTop="20sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="50sp"/>
+            android:paddingBottom="80sp"
+            android:divider="@null"
+            android:dividerHeight="0dp"/>
 
     </LinearLayout>
 
