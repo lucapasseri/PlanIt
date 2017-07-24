@@ -1,26 +1,24 @@
 package com.example.luca.planit;
 
 public class GuestImpl implements Guest {
-	private String name;
-	private String surname;
+	private final Person personalInfo;
 	private final boolean confirmed;
-	
+
 
 	public GuestImpl(String name, String surname, boolean confirmed) {
 		super();
-		this.name = name;
-		this.surname = surname;
+		this.personalInfo = new PersonImpl(name,surname);
 		this.confirmed = confirmed;
 	}
 
 	@Override
 	public String getName() {
-		return this.name;
+		return this.personalInfo.getName();
 	}
 
 	@Override
 	public String getSurname() {
-		return this.surname;
+		return this.personalInfo.getSurname();
 	}
 
 	@Override
@@ -30,8 +28,9 @@ public class GuestImpl implements Guest {
 
 	@Override
 	public String toString() {
-		return "GuestImpl [name=" + name + ", surname=" + surname + ", confirmed=" + confirmed + "]";
+		return "GuestImpl [name=" + this.personalInfo.getName() + ", surname=" + this.personalInfo.getSurname() + ", confirmed=" + confirmed + "]";
 	}
-	
+
+
 
 }

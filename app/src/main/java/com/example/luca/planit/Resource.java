@@ -19,4 +19,6 @@ public final class Resource {
     public static final String GET_BEST_DATE_PAGE = "computeBestDate.php";
     public static final String GET_BEST_PLACE_PAGE = "computeBestPlace.php";
     public static final String GET_PLACE_BY_ID = "getLuogoByID.php";
+    public static final String CREATE_GROUP_PAGE = "createGroup.php";
+    public static final String DELETE_EVENT_PAGE = "deleteEvent.php";
 }
