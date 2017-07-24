@@ -10,12 +10,9 @@ public class LoginData {
     private String username;
 
     private LoginData(String email, String username, String password) {
-        if (!email.isEmpty()) {
             this.email = email;
-        } else if (!username.isEmpty()) {
             this.username = username;
-        }
-        this.password = password;
+            this.password = password;
 
     }
 
