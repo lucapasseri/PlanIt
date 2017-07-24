@@ -132,7 +132,7 @@ public class BestPlaceTask extends AsyncTask<String,Void,List<PlacePreference>> 
                             .setProvince(returned.getString("provincia"))
                             .setNamePlace(returned.getString("nome_luogo"))
                             .build();
-                    PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"));
+                    PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
                     listPreferences.add(toAdd);
                     System.out.println(toAdd.toString());
                 }
@@ -176,7 +176,7 @@ public class BestPlaceTask extends AsyncTask<String,Void,List<PlacePreference>> 
                                 .setProvince(returned.getString("provincia"))
                                 .setNamePlace(returned.getString("nome_luogo"))
                                 .build();
-                        PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"));
+                        PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
                         listPreferences.add(toAdd);
                         System.out.println(toAdd.toString());
                     }

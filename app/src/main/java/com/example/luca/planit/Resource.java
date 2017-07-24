@@ -21,4 +21,10 @@ public final class Resource {
     public static final String GET_PLACE_BY_ID = "getLuogoByID.php";
     public static final String CREATE_GROUP_PAGE = "createGroup.php";
     public static final String DELETE_EVENT_PAGE = "deleteEvent.php";
+    public static final String GET_GROUP_PAGE = "getGroup.php";
+    public static final String GET_BEST_TIME_PAGE = "computeBestTime.php";
+    public static final String INSERT_TIME_PREFERENCE_PAGE = "setPreferenceTime.php";
+    public static final String INSERT_DATE_PREFERENCE_PAGE = "setPreferenceData.php";
+    public static final String INSERT_PLACE_PREFERENCE_PAGE = "setPlacePreference.php";
+    public static final String GET_TASK_PAGE = "ritornaCompiti.php";
 }

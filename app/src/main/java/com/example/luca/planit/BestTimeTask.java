@@ -1,8 +1,8 @@
 package com.example.luca.planit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by diego on 22/07/2017.
  */
 
-public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Void,EventInfo> {
+public class BestTimeTask extends AsyncTask<String,Void,List<TimePreference>> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -47,14 +47,14 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
     //Nome dei parametri del json di risposta
 
 
-    EventInfo toReturn ;
+    List<TimePreference> toReturn ;
     HttpURLConnection httpURLConnection = null;
     StringBuilder response = new StringBuilder();
     BufferedReader rd = null;
 
     @Override
-    protected void onPostExecute(EventInfo result) {
-        if(result !=null ){
+    protected void onPostExecute(List<TimePreference> result) {
+        if(!result.isEmpty() ){
             //listener.onSuccessfulLogin(response.toString(),checkBox.isChecked());
         }else{
             //listener.onUnsuccessfulLogin();
@@ -62,9 +62,9 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
     }
 
     @Override
-    protected EventInfo doInBackground(EventRegistrationWrapper... params) {
+    protected List<TimePreference> doInBackground(String... params) {
         try {
-            URL url = new URL(Resource.BASE_URL+Resource.REGISTRATION_EVENT_PAGE); //Enter URL here
+            URL url = new URL(Resource.BASE_URL+Resource.GET_BEST_TIME_PAGE); //Enter URL here
             JSONObject returned = null;
             httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setUseCaches(false);
@@ -75,37 +75,7 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
-            /*
-            Place toAddPlace = new PlaceImpl.Builder()
-                    .setAddress("Via Boscone 715")
-                    .setCity("Cesena")
-                    .setProvince("FC")
-                    .setNamePlace("Casadeis")
-                    .build();
-            EventRegistrationWrapper wrapper = new EventRegistrationWrapperImpl.Builder()
-                    .setName_event("Serata GOT")
-                    .setOrganizer_id("19")
-                    .setPlace(toAddPlace)
-                    .setDate("2017-07-24")
-                    .build();
-            */
-            if(params[0].getPlace() != null){
-                toPass.put("nome",params[0].getPlace().getNamePlace());
-                toPass.put("indirizzo",params[0].getPlace().getAddress());
-                toPass.put("citta",params[0].getPlace().getCity());
-                toPass.put("provincia",params[0].getPlace().getProvince());
-            }
-
-            if(params[0].getDate() != null){
-                toPass.put("data", params[0].getDate());
-            }
-            if(params[0].getTime() != null){
-                toPass.put("ora", params[0].getTime());
-            }
-
-            toPass.put("id_org",params[0].getOrganizer_id());
-            toPass.put("nome_evento", params[0].getName_event());
-
+            toPass.put("id_evento",params[0]);
             writer.write(getPostDataString(toPass));
             writer.flush();
             writer.close();
@@ -121,42 +91,29 @@ public class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper,Vo
                 }
                 System.out.println(response.toString());
                 returned = new JSONObject(response.toString());
+            }
 
-
-                if(params[0].getPlace() != null && params[0].getDate() != null){
-
-                    toReturn = new EventInfoImpl.Builder()
-                            .setAddress(params[0].getPlace().getAddress())
-                            .setCity(params[0].getPlace().getCity())
-                            .setProvince(params[0].getPlace().getProvince())
-                            .setNamePlace(params[0].getPlace().getNamePlace())
-                            .setData(params[0].getDate())
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
-
-                }else if (params[0].getPlace() != null){
-                    toReturn = new EventInfoImpl.Builder()
-                            .setAddress(params[0].getPlace().getAddress())
-                            .setCity(params[0].getPlace().getCity())
-                            .setProvince(params[0].getPlace().getProvince())
-                            .setNamePlace(params[0].getPlace().getNamePlace())
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
-                }else if(params[0].getDate() != null){
-                    toReturn = new EventInfoImpl.Builder()
-                            .setData(params[0].getDate())
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
-                }else{
-                    toReturn = new EventInfoImpl.Builder()
-                            .setNameEvent(params[0].getName_event())
-                            .setEventId(returned.getString("id_evento"))
-                            .build();
+            JSONArray dates = returned.optJSONArray("Ore_Possibili");
+            if (dates == null){
+                JSONObject bestDate = returned.getJSONObject("Miglior_Ora");
+                String time = bestDate.getString("ora");
+                String hour = time.substring(0,2);
+                String minutes = time.substring(2,4);
+                time = (hour+":"+minutes);
+                TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
+                toReturn.add(toAdd);
+                System.out.println(toAdd.toString());
+            }else {
+                for ( int i = 0; i< dates.length() ; i++){
+                    JSONObject bestDate = (JSONObject) dates.get(i);
+                    String time = bestDate.getString("ora");
+                    String hour = time.substring(0,2);
+                    String minutes = time.substring(2,4);
+                    time = (hour+":"+minutes);
+                    TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
+                    toReturn.add(toAdd);
+                    System.out.println(toAdd.toString());
                 }
-
             }
 
         } catch (MalformedURLException e) {

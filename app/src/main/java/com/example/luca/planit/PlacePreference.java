@@ -4,4 +4,5 @@ public interface PlacePreference {
 	Place getPlace() ;
 
 	int getNumPreferences();
+	String getidPlace();
 }

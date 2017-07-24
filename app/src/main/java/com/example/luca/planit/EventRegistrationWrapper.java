@@ -5,5 +5,5 @@ public interface EventRegistrationWrapper {
 	String getName_event();
 	public Place getPlace();
 	public String getDate();
-	
+	public String getTime();
 }

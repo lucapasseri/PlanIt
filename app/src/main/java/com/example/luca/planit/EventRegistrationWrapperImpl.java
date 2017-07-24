@@ -8,10 +8,10 @@ public class EventRegistrationWrapperImpl implements EventRegistrationWrapper {
 	private final String name_event;
 	private final Place place;
 	private final String date;
-	
+	private final String time;
 	
 
-	private EventRegistrationWrapperImpl(String organizer_id, String name_event, Place placeP, String dateP) {
+	private EventRegistrationWrapperImpl(String organizer_id, String name_event, Place placeP, String dateP,String time) {
 		super();
 		this.organizer_id = organizer_id;
 		this.name_event = name_event;
@@ -24,6 +24,11 @@ public class EventRegistrationWrapperImpl implements EventRegistrationWrapper {
 			this.date = null;
 		}else{
 			this.date = dateP;
+		}
+		if (time == null){
+			this.time = null;
+		}else{
+			this.time = time;
 		}
 	}
 
@@ -43,12 +48,17 @@ public class EventRegistrationWrapperImpl implements EventRegistrationWrapper {
 		return date;
 	}
 	
+	@Override
+	public String getTime() {
+		return this.time;
+	}
+	
 	public static class Builder {
 		private  String organizer_id;
 		private  String name_event;
 		private  Place place;
 		private  String date;
-		
+		private String time;
 		
 		public Builder setOrganizer_id(String organizer_id) {
 			this.organizer_id = organizer_id;
@@ -66,13 +76,19 @@ public class EventRegistrationWrapperImpl implements EventRegistrationWrapper {
 			this.date = date;
 			return this;
 		}
+		public Builder setTime(String time) {
+			this.time = time;
+			return this;
+		}
 		
 		public EventRegistrationWrapperImpl build() {
 			return new EventRegistrationWrapperImpl(Objects.requireNonNull(this.organizer_id),
-					Objects.requireNonNull(this.name_event),this.place, this.date);
+					Objects.requireNonNull(this.name_event),this.place, this.date,this.time);
 		}
 		
 	}
+
+
 	
 	
 }
