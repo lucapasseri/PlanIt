@@ -28,7 +28,7 @@
 
         <ListView
             android:id="@+id/event_take_part_list_view"
-            android:paddingTop="20sp"
+            android:layout_marginTop="20sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="80sp"

@@ -68,7 +68,7 @@ public class LoginActivity extends Activity {
 
         SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         List<String> emailList = new LinkedList<>();
-        Set<String> emailPrefs = prefs.getStringSet(getString(R.string.email_list_pref), new HashSet<String>());
+        Set<String> emailPrefs = prefs.getStringSet(getString(R.string.email_user_list_pref), new HashSet<String>());
 
         for (String e : emailPrefs) {
             emailList.add(e);
@@ -224,14 +224,6 @@ public class LoginActivity extends Activity {
         @Override
         protected void onPostExecute(Result result) {
             if(result.getResult()== (RequestResult.OK_LOGIN)){
-                SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                Set<String> emailSet = new HashSet<>();
-                Set<String> emailPrefs = prefs.getStringSet(getString(R.string.email_list_pref), new HashSet<String>());
-
-                for (String e : emailPrefs) {
-                    emailSet.add(e);
-                }
 
                 Account account = result.getAccount();
                 String name = account.getName();
@@ -241,6 +233,19 @@ public class LoginActivity extends Activity {
                 String password = account.getPassword();
                 String bornDate = account.getBorndate();
 
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                Set<String> emailSet = new HashSet<>();
+                Set<String> emailPrefs = prefs.getStringSet(getString(R.string.email_user_list_pref), new HashSet<String>());
+
+                for (String e : emailPrefs) {
+                    emailSet.add(e);
+                }
+
+                emailSet.add(email);
+                emailSet.add(username);
+
+                editor.putStringSet(getString(R.string.email_user_list_pref), emailSet);
                 editor.putString(getString(R.string.name_pref), name);
                 editor.putString(getString(R.string.surname_pref), surname);
                 editor.putString(getString(R.string.email_pref), email);

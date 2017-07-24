@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,8 +19,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +39,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
@@ -50,7 +59,11 @@ public class SignupActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText bornDateEditText;
     private View progressView;
-    private View signupFormView;
+    private ScrollView signupFormView;
+    private Button signupButton;
+
+    private Calendar calendar = Calendar.getInstance();
+    private DatePickerDialog.OnDateSetListener date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
         passwordEditText = (EditText) findViewById(R.id.signup_password);
         bornDateEditText = (EditText) findViewById(R.id.signup_born_date);
 
-        Button signupButton = (Button) findViewById(R.id.signup_signup_button);
+        signupButton = (Button) findViewById(R.id.signup_signup_button);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,12 +85,48 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        signupFormView = findViewById(R.id.signup_form);
+        signupFormView = (ScrollView) findViewById(R.id.signup_form);
         progressView = findViewById(R.id.signup_progress);
+
+        calendar = Calendar.getInstance();
+
+        date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        bornDateEditText.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                bornDateEditText.setError(null);
+                new DatePickerDialog(SignupActivity.this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
         ((ProgressBar) progressView).getIndeterminateDrawable().
                 setColorFilter(ContextCompat.getColor(this, R.color.green_sea), android.graphics.PorterDuff.Mode.MULTIPLY);
 
+    }
+
+    private void updateLabel() {
+
+        String format = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+
+        bornDateEditText.setText(sdf.format(calendar.getTime()));
     }
 
     /**
@@ -109,19 +158,19 @@ public class SignupActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(name)) {
             nameEditText.setError(getString(R.string.error_field_required));
-            focusView = emailEditText;
+            focusView = nameEditText;
             cancel = true;
         } else if (TextUtils.isEmpty(surname)) {
             surnameEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
+            focusView = surnameEditText;
             cancel = true;
         } else if (TextUtils.isEmpty(email)) {
             emailEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
+            focusView = emailEditText;
             cancel = true;
         } else if (TextUtils.isEmpty(username)) {
             usernameEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
+            focusView = usernameEditText;
             cancel = true;
         } else if (TextUtils.isEmpty(password)) {
             passwordEditText.setError(getString(R.string.error_field_required));
@@ -129,18 +178,35 @@ public class SignupActivity extends AppCompatActivity {
             cancel = true;
         } else if (TextUtils.isEmpty(bornDate)) {
             bornDateEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
+            focusView = bornDateEditText;
             cancel = true;
+            signupFormView.fullScroll(ScrollView.FOCUS_DOWN);
         }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
+
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            String fromFormat = "dd/MM/yyy";
+            String toFormat = "yyyy-MM-dd";
+
+            SimpleDateFormat fromFormatter = new SimpleDateFormat(fromFormat, Locale.US);
+            SimpleDateFormat toFormatter = new SimpleDateFormat(toFormat, Locale.US);
+
+            try {
+                Date date = fromFormatter.parse(bornDate);
+                bornDate = toFormatter.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
             RegistrationTask registrationTask = new RegistrationTask(this);
             registrationTask.execute(new RegistrationData.Builder()
                     .setName(name)
@@ -168,12 +234,22 @@ public class SignupActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
+            signupButton.setVisibility(show ? View.GONE : View.VISIBLE);
             signupFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+
             signupFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     signupFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            signupButton.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    signupButton.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -186,8 +262,10 @@ public class SignupActivity extends AppCompatActivity {
                 }
             });
         } else {
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            signupButton.setVisibility(show ? View.GONE : View.VISIBLE);
             signupFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 
