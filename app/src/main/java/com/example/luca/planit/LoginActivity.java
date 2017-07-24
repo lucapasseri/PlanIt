@@ -272,7 +272,7 @@ public class LoginActivity extends Activity {
                 if(params[0].isMailLoginData()){
                     toPass.put("email",params[0].getEmail());
                 }else{
-                    toPass.put("username",params[0].getEmail());
+                    toPass.put("username",params[0].getUsername());
                 }
                 toPass.put("password",params[0].getPassword());
                 writer.write(getPostDataString(toPass));
