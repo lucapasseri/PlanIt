@@ -115,13 +115,13 @@ public class LoginActivity extends Activity {
         passwordEditText.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = emailEditText.getText().toString();
+        String emailUser = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(emailUser)) {
             emailEditText.setError(getString(R.string.error_field_required));
             focusView = emailEditText;
             cancel = true;
@@ -140,7 +140,14 @@ public class LoginActivity extends Activity {
             // perform the user login attempt.
             showProgress(true);
             LoginTask loginTask = new LoginTask(this);
-            loginTask.execute(LoginData.getLoginDataInstanceByEmail(email, password));
+
+            if(emailUser.contains("@")) {
+                loginTask.execute(LoginData.getLoginDataInstanceByEmail(emailUser, password));
+            } else {
+                Log.d("tag1", "ciao");
+                loginTask.execute(LoginData.getLoginDataInstanceByUsername(emailUser, password));
+            }
+
         }
     }
 

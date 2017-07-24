@@ -83,11 +83,11 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //if (getIntent().hasExtra(getString(R.string.extra_from_login)) ||
-            //        getIntent().hasExtra(getString(R.string.extra_from_signup))) {
+            if (getIntent().hasExtra(getString(R.string.extra_from_login)) ||
+                    getIntent().hasExtra(getString(R.string.extra_from_signup))) {
                 Intent intent = new Intent(getApplication(), LoginActivity.class);
                 startActivity(intent);
-            //}
+            }
 
             finish();
         }
@@ -124,7 +124,10 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_info) {
 
         } else if (id == R.id.nav_logout) {
+            Intent intent = new Intent(getApplication(), LoginActivity.class);
+            startActivity(intent);
 
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
