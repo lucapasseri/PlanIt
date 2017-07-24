@@ -19,11 +19,11 @@ import java.util.List;
  * Created by Luca on 23/07/2017.
  */
 
-public class EventTakePartAdapter extends ArrayAdapter<ListViewItem> {
+public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
 
     private final List<ListViewItem> dataset;
 
-    public EventTakePartAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<ListViewItem> objects) {
+    public EventTakePartListAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<ListViewItem> objects) {
         super(context, resource, textViewResourceId, objects);
 
         dataset = objects;
@@ -31,7 +31,7 @@ public class EventTakePartAdapter extends ArrayAdapter<ListViewItem> {
 
     @Override
     public int getItemViewType(int position) {
-        return position%2==0 ? 0 : 1;
+        return position%2==0 ? 1 : 0;
     }
 
     @Override
@@ -59,10 +59,16 @@ public class EventTakePartAdapter extends ArrayAdapter<ListViewItem> {
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_right);
                 textView.setBackground(drawable);
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.wet_asphalt));
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
                 textView.setGravity(Gravity.RIGHT);
                 textView.setPadding(0, 75, 50, 20);
             }
+
+            TextView textView = (TextView) convertView.findViewById(R.id.textView);
+            viewHolder = new ViewHolder(textView);
+
+            convertView.setTag(viewHolder);
+
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }

@@ -29,8 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@color/colorPrimary"
-        app:backgroundTint="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:srcCompat="@drawable/ic_add_circle_outline_white_36dp" />
 
 </android.support.design.widget.CoordinatorLayout>

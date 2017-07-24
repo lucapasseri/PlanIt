@@ -28,9 +28,11 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".SignupActivity"
-            android:noHistory="true"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SignupActivity"
+            android:noHistory="true" />
+        <activity android:name=".BasePlanEventActivity"></activity>
     </application>
 
 </manifest>

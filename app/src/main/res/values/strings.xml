@@ -26,7 +26,7 @@
     <string name="password_pref">pasword</string>
     <string name="born_date_pref">email</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to Login -->
     <string name="login_prompt_email">Email or Username</string>
     <string name="login_prompt_password">Password</string>
     <string name="login_text_button">Log In</string>
@@ -35,7 +35,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
-    <!-- Strings related to signup -->
+    <!-- Strings related to Signup -->
     <string name="signup_prompt_name">Name</string>
     <string name="signup_prompt_surname">Surname</string>
     <string name="signup_prompt_email">Email</string>
@@ -44,5 +44,11 @@
     <string name="signup_prompt_born_date">Born Date (yyyy-mm-dd)</string>
     <string name="error_already_present_email">This email is already present</string>
     <string name="error_already_existing_username">This username already exists</string>
+    <string name="data_settings_text">Choose settings for the data</string>
+    <string name="place_settings_text">Choose settings for the place</string>
+
+
+    <!-- Strings related to BasePlanEvent -->
+    <string name="place_name_edit">Nome Luogo</string>
 
 </resources>

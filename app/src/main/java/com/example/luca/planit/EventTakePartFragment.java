@@ -44,7 +44,7 @@ public class EventTakePartFragment extends Fragment {
             }
         });
 
-        ArrayAdapter<ListViewItem> adapter = new EventOrganizedListAdapter(getActivity(), R.layout.list_item, R.id.textView, dataset);
+        ArrayAdapter<ListViewItem> adapter = new EventTakePartListAdapter(getActivity(), R.layout.list_item, R.id.textView, dataset);
         listView.setAdapter(adapter);
 
         return rootView;

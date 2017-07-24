@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:text="@string/event_take_part_title"
             android:textSize="30sp"
-            android:textColor="@color/wet_asphalt"
+            android:textColor="@color/white"
             android:textAlignment="center"/>
 
         <ListView
