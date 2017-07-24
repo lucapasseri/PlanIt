@@ -233,15 +233,20 @@ public class LoginActivity extends Activity {
                     emailSet.add(e);
                 }
 
-                String emailResult = result.getAccount().getEmail();
-                String passwordResult = result.getAccount().getPassword();
+                Account account = result.getAccount();
+                String name = account.getName();
+                String surname = account.getSurname();
+                String email = account.getEmail();
+                String username = account.getUsername();
+                String password = account.getPassword();
+                String bornDate = account.getBorndate();
 
-                emailSet.add(emailResult);
-
-                editor.putStringSet(getString(R.string.email_list_pref), emailSet);
-
-                editor.putString(getString(R.string.email_pref), emailResult);
-                editor.putString(getString(R.string.password_pref), passwordResult);
+                editor.putString(getString(R.string.name_pref), name);
+                editor.putString(getString(R.string.surname_pref), surname);
+                editor.putString(getString(R.string.email_pref), email);
+                editor.putString(getString(R.string.username_pref), username);
+                editor.putString(getString(R.string.password_pref), password);
+                editor.putString(getString(R.string.born_date_pref), bornDate);
 
                 editor.apply();
 
@@ -257,6 +262,9 @@ public class LoginActivity extends Activity {
                 } else if(result.getResult() == RequestResult.WRONG_PASSWORD) {
                     passwordEditText.setError(getString(R.string.error_incorrect_password));
                     passwordEditText.requestFocus();
+                } else if(result.getResult() == RequestResult.USERNAME_NOT_PRESENT) {
+                    emailEditText.setError(getString(R.string.error_invalid_email));
+                    emailEditText.requestFocus();
                 }
             }
         }
@@ -296,13 +304,16 @@ public class LoginActivity extends Activity {
                         response.append(line);
                     }
                 }
-                if(response.toString().equals(RequestResult.MAIL_NOT_PRESENT.toString())){
+                if (response.toString().equals(RequestResult.MAIL_NOT_PRESENT.toString())) {
                     toReturn = new Result(RequestResult.MAIL_NOT_PRESENT);
                     Log.d("risposta","MAIL_NOT_PRESENT");
-                }else if(response.toString().equals(RequestResult.WRONG_PASSWORD.toString())){
+                } else if (response.toString().equals(RequestResult.WRONG_PASSWORD.toString())) {
                     toReturn = new Result(RequestResult.WRONG_PASSWORD);
                     Log.d("risposta","WRONG_PASSWORD");
-                }else{
+                } else if(response.toString().equals(RequestResult.USERNAME_NOT_PRESENT.toString())){
+                    toReturn = new Result(RequestResult.USERNAME_NOT_PRESENT);
+                    Log.d("risposta","USERNAME_NOT_PRESENT");
+                } else {
                     try {
                         JSONObject returned = new JSONObject(response.toString());
                         Log.d("risposta",response.toString());

@@ -1,6 +1,7 @@
 package com.example.luca.planit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -126,6 +127,18 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(getApplication(), LoginActivity.class);
             startActivity(intent);
+
+            SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.remove(getString(R.string.name_pref));
+            editor.remove(getString(R.string.surname_pref));
+            editor.remove(getString(R.string.email_pref));
+            editor.remove(getString(R.string.username_pref));
+            editor.remove(getString(R.string.password_pref));
+            editor.remove(getString(R.string.born_date_pref));
+
+            editor.apply();
 
             finish();
         }
