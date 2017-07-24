@@ -76,7 +76,12 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
-            toPass.put("email",params[0].getEmail());
+            if(params[0].isMailLoginData()){
+                toPass.put("email",params[0].getEmail());
+            }else{
+                toPass.put("username",params[0].getEmail());
+            }
+
             toPass.put("password",params[0].getPassword());
             writer.write(getPostDataString(toPass));
             writer.flush();

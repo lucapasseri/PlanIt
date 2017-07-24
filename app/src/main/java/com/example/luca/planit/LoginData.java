@@ -27,6 +27,12 @@ public class LoginData {
         return new LoginData(email, "", password);
     }
 
+    public boolean isUsernameLoginData(){
+        return this.email.isEmpty();
+    }
+    public boolean isMailLoginData(){
+        return this.username.isEmpty();
+    }
     public String getEmail() {
         return email;
     }
