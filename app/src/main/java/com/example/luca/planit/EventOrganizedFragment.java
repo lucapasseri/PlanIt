@@ -50,14 +50,16 @@ public class EventOrganizedFragment extends Fragment {
 
         adapter = new EventOrganizedListAdapter(getActivity(), R.layout.list_item, R.id.textView, dataset);
         listView.setAdapter(adapter);
+        this.startTask();
 
-        OrganizedEventTask organizedEventTask = new OrganizedEventTask(getActivity());
-        organizedEventTask.execute(LoggedAccount.getLoggedAccount());
 
         return rootView;
     }
 
-
+    public void startTask(){
+        OrganizedEventTask organizedEventTask = new OrganizedEventTask(getActivity());
+        organizedEventTask.execute(LoggedAccount.getLoggedAccount());
+    }
 
     public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
 
@@ -117,9 +119,19 @@ public class EventOrganizedFragment extends Fragment {
 
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
-                        dataset.add(new ListViewItem(events.get(i).getEventInfo().getNameEvent(), EventOrganizedListAdapter.TYPE_LEFT));
+                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
+                                EventOrganizedListAdapter.TYPE_LEFT,
+                                events.get(i).getEventInfo().getEventId());
+                        if(!dataset.contains(toAdd)){
+                            dataset.add(toAdd);
+                        }
                     } else {
-                        dataset.add(new ListViewItem(events.get(i).getEventInfo().getNameEvent(), EventOrganizedListAdapter.TYPE_RIGHT));
+                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
+                                EventOrganizedListAdapter.TYPE_RIGHT,
+                                events.get(i).getEventInfo().getEventId());
+                        if(!dataset.contains(toAdd)){
+                            dataset.add(toAdd);
+                        }
                     }
 
                     adapter.notifyDataSetChanged();

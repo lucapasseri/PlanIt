@@ -1,8 +1,12 @@
 package com.example.luca.planit;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -35,7 +39,22 @@ public class HomeActivity extends AppCompatActivity
      * and next wizard steps.
      */
     private ViewPager pager;
-
+    private EventDownloader eventDownloader;
+    private EventOrganizedFragment eventOrganizedFragment = new EventOrganizedFragment();
+    private EventTakePartFragment eventTakePartFragment = new EventTakePartFragment();
+    private boolean bounded;
+    private ServiceConnection conn = new ServiceConnection (){
+        @Override
+        public void onServiceConnected (ComponentName cls , IBinder bnd ){
+            eventDownloader = (( EventDownloader.EventDonwloaderBinder ) bnd).getService();
+            bounded = true ;
+                eventDownloader.startMonitoring(eventTakePartFragment, eventOrganizedFragment);
+        }
+        @Override
+        public void onServiceDisconnected ( ComponentName cls){
+            bounded = false ;
+        }
+    };
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
@@ -97,6 +116,8 @@ public class HomeActivity extends AppCompatActivity
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager, true);
+        Intent intent = new Intent(this,EventDownloader.class);
+        bindService(intent,conn, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -124,9 +145,11 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
             if (position==0) {
-                return new EventOrganizedFragment();
+                //eventOrganizedFragment = new EventOrganizedFragment();
+                return eventOrganizedFragment;
             } else {
-                return new EventTakePartFragment();
+                //eventTakePartFragment = new EventTakePartFragment();
+                return  eventTakePartFragment;
             }
         }
 

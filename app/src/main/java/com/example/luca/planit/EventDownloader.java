@@ -6,7 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.IBinder;
-
+import android.util.Log;
 
 
 /**
@@ -18,11 +18,13 @@ public class EventDownloader extends Service {
     private final IBinder binder = new EventDonwloaderBinder();
     private MonitoringAgent agent;
     private boolean isSet = false;
-    private Account account ;
-    public void startMonitoring(Account account)  {
+    private EventOrganizedFragment eventOrganizedFragment;
+    private EventTakePartFragment eventTakePartFragment;
+    public void startMonitoring(EventTakePartFragment eventTakePartFragment,EventOrganizedFragment eventOrganizedFragment)  {
         if(!isSet){
             isSet = true;
-            this.account = account;
+            this.eventOrganizedFragment = eventOrganizedFragment;
+            this.eventTakePartFragment = eventTakePartFragment;
             this.agent = new MonitoringAgent();
             this.agent.start();
         }
@@ -53,8 +55,9 @@ public class EventDownloader extends Service {
         public void run() {
 
             while (!this.stop) {
-                OrganizedEventTask organizedEventTask = new OrganizedEventTask();
-                organizedEventTask.execute(EventDownloader.this.account);
+                Log.d("Monitor","Started");
+                EventDownloader.this.eventOrganizedFragment.startTask();
+                EventDownloader.this.eventTakePartFragment.startTask();
                 try {
                     sleep(2000);
                 } catch (InterruptedException e) {

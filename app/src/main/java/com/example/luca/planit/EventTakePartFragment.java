@@ -56,13 +56,15 @@ public class EventTakePartFragment extends Fragment {
         adapter = new EventTakePartListAdapter(getActivity(), R.layout.list_item, R.id.textView, dataset);
         listView.setAdapter(adapter);
 
-        TakePartEventTask takePartEventTask = new TakePartEventTask(getActivity());
-        takePartEventTask.execute(LoggedAccount.getLoggedAccount());
+        startTask();
 
         return rootView;
     }
 
-
+    public void startTask(){
+        TakePartEventTask takePartEventTask = new TakePartEventTask(getActivity());
+        takePartEventTask.execute(LoggedAccount.getLoggedAccount());
+    }
 
     public class TakePartEventTask extends AsyncTask<Account, Void, List<Event>> {
 
@@ -122,9 +124,19 @@ public class EventTakePartFragment extends Fragment {
 
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
-                        dataset.add(new ListViewItem(events.get(i).getEventInfo().getNameEvent(), EventOrganizedListAdapter.TYPE_LEFT));
+                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
+                                EventOrganizedListAdapter.TYPE_LEFT,
+                                events.get(i).getEventInfo().getEventId());
+                        if(!dataset.contains(toAdd)){
+                            dataset.add(toAdd);
+                        }
                     } else {
-                        dataset.add(new ListViewItem(events.get(i).getEventInfo().getNameEvent(), EventOrganizedListAdapter.TYPE_RIGHT));
+                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
+                                EventOrganizedListAdapter.TYPE_RIGHT,
+                                events.get(i).getEventInfo().getEventId());
+                        if(!dataset.contains(toAdd)){
+                            dataset.add(toAdd);
+                        }
                     }
 
                     adapter.notifyDataSetChanged();
