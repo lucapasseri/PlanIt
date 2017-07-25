@@ -2,6 +2,8 @@ package com.example.luca.planit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -95,15 +97,30 @@ public class EventOrganizedFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Event> events) {
             if (events.isEmpty()) {
-                if(eventListVisible) {
-                    ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
-                    TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
+                ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    if(eventListVisible) {
+                        ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
+                        TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
 
-                    listView.setVisibility(View.GONE);
-                    textView.setVisibility(View.VISIBLE);
+                        listView.setVisibility(View.GONE);
+                        textView.setVisibility(View.VISIBLE);
 
-                    eventListVisible = false;
+                        eventListVisible = false;
+                    }
+                }else {
+                    if(eventListVisible) {
+                        ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
+                        TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
+
+                        listView.setVisibility(View.GONE);
+                        textView.setVisibility(View.VISIBLE);
+
+                        eventListVisible = false;
+                    }
                 }
+
 
             } else {
 
