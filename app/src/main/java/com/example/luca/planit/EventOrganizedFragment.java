@@ -144,9 +144,11 @@ public class EventOrganizedFragment extends Fragment {
                     }
 
                 }
-                for(ListViewItem itemToRemove : listItemToRemove){
-                    dataset.remove(itemToRemove);
+
+                if (!listItemToRemove.isEmpty()) {
+                    dataset.clear();
                 }
+
 
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
@@ -164,9 +166,9 @@ public class EventOrganizedFragment extends Fragment {
                             dataset.add(toAdd);
                         }
                     }
-
-                    adapter.notifyDataSetChanged();
                 }
+
+                adapter.notifyDataSetChanged();
             }
         }
 

@@ -30,7 +30,7 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/base_plan_form"
+        android:id="@+id/plan_event_form"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="25sp"
@@ -253,6 +253,7 @@
                 android:theme="@style/HorizontalLine" />
 
             <TextView
+                android:id="@+id/date_form_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"

@@ -63,9 +63,9 @@ public class SignupActivity extends AppCompatActivity {
     private EditText firstPasswordEditText;
     private EditText confirmPasswordEditText;
     private EditText bornDateEditText;
+    private Button signupButton;
     private View progressView;
     private ScrollView signupFormView;
-    private Button signupButton;
 
     private Calendar calendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
@@ -187,15 +187,15 @@ public class SignupActivity extends AppCompatActivity {
             confirmPasswordEditText.setError(getString(R.string.error_field_required));
             focusView = confirmPasswordEditText;
             cancel = true;
+        } else if (!password.equals(confirmPassword)) {
+            confirmPasswordEditText.setError(getString(R.string.error_password_not_matching));
+            focusView = confirmPasswordEditText;
+            cancel = true;
         } else if (TextUtils.isEmpty(bornDate)) {
             bornDateEditText.setError(getString(R.string.error_field_required));
             focusView = bornDateEditText;
             cancel = true;
             signupFormView.fullScroll(ScrollView.FOCUS_DOWN);
-        } else if (!password.equals(confirmPassword)) {
-            confirmPasswordEditText.setError(getString(R.string.error_password_not_matching));
-            focusView = confirmPasswordEditText;
-            cancel = true;
         }
 
         if (cancel) {
