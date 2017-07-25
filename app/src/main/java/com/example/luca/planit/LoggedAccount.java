@@ -12,7 +12,7 @@ public class LoggedAccount {
 
     }
 
-    public static void createAccount(Account account) {
+    public static void storeLoggedAccount(Account account) {
         loggedAccount = account;
     }
 

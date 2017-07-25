@@ -98,17 +98,17 @@
                 android:layout_marginTop="15sp">
 
                 <RadioButton
+                    android:id="@+id/radio_place_not_defined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_choose_place_after" />
+
+                <RadioButton
                     android:id="@+id/radio_place_defined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/radio_choose_place_now" />
-
-                <RadioButton
-                    android:id="@+id/radio_place_not_defined"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/radio_choose_place_after" />
 
             </RadioGroup>
 
@@ -266,17 +266,17 @@
                 android:layout_marginTop="15sp">
 
                 <RadioButton
+                    android:id="@+id/radio_date_not_defined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_choose_date_after" />
+
+                <RadioButton
                     android:id="@+id/radio_date_defined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/radio_choose_date_now" />
-
-                <RadioButton
-                    android:id="@+id/radio_date_not_defined"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/radio_choose_date_after" />
 
             </RadioGroup>
 
@@ -340,17 +340,17 @@
                 android:layout_marginTop="15sp">
 
                 <RadioButton
+                    android:id="@+id/radio_hour_not_defined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_choose_hour_after" />
+
+                <RadioButton
                     android:id="@+id/radio_hour_defined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/radio_choose_hour_now" />
-
-                <RadioButton
-                    android:id="@+id/radio_hour_not_defined"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/radio_choose_hour_after" />
 
             </RadioGroup>
 
