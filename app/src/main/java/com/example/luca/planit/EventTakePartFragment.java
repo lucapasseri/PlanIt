@@ -119,6 +119,7 @@ public class EventTakePartFragment extends Fragment {
                 }else {
                     ListView listView = (ListView) activity.findViewById(R.id.event_take_part_list_view);
                     TextView textView = (TextView) activity.findViewById(R.id.no_take_part_event_text);
+                    textView.setText("Connection not avalaible");
 
                     listView.setVisibility(View.GONE);
                     textView.setVisibility(View.VISIBLE);

@@ -110,15 +110,11 @@ public class EventOrganizedFragment extends Fragment {
                         eventListVisible = false;
                     }
                 }else {
-                    if(eventListVisible) {
                         ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
                         TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
-
+                        textView.setText("Connection not avalaible");
                         listView.setVisibility(View.GONE);
                         textView.setVisibility(View.VISIBLE);
-
-                        eventListVisible = false;
-                    }
                 }
 
 
