@@ -136,6 +136,30 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(bounded){
+            unbindService(conn);
+            bounded = false;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(bounded){
+            unbindService(conn);
+            bounded = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this,EventDownloader.class);
+        bindService(intent,conn, Context.BIND_AUTO_CREATE);
+    }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {

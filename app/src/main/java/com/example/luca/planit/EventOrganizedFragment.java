@@ -116,6 +116,20 @@ public class EventOrganizedFragment extends Fragment {
 
                     eventListVisible = true;
                 }
+                List<String> listId = new LinkedList<>();
+                List<ListViewItem> listItemToRemove = new LinkedList<>();
+                for(Event event : events){
+                    listId.add(event.getEventInfo().getEventId());
+                }
+                for(ListViewItem item : dataset){
+                    if(!listId.contains(item.getEventId())){
+                        listItemToRemove.add(item);
+                    }
+
+                }
+                for(ListViewItem itemToRemove : listItemToRemove){
+                    dataset.remove(itemToRemove);
+                }
 
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {

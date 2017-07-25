@@ -68,7 +68,7 @@ public class EventDownloader extends Service {
         }
 
         public void setStop() {
-            this.stop = false;
+            this.stop = true;
         }
 
         public boolean isStop() {
