@@ -58,19 +58,19 @@
     <string name="data_settings_text">Date</string>
     <string name="radio_choose_date_now">Choose date now</string>
     <string name="radio_choose_date_after">Choose date after</string>
-    <string name="hour_settings_text">Hour</string>
-    <string name="radio_choose_hour_now">Choose hour now</string>
-    <string name="radio_choose_hour_after">Choose houre after</string>
-    <string name="hour_minutes_separator">:</string>
+    <string name="time_settings_text">Time</string>
+    <string name="radio_choose_time_now">Choose time now</string>
+    <string name="radio_choose_time_after">Choose time after</string>
+    <string name="time_minutes_separator">:</string>
     <string name="date_edit">Date</string>
     <string name="create_button_text">Create</string>
 
     <string name="data_range_settings_text">Date Range</string>
     <string name="start_date_edit">Start Date</string>
     <string name="end_date_edit">End Date</string>
-    <string name="hour_range_settings_text">Hour Range</string>
-    <string name="start_hour_text">Start Hour</string>
-    <string name="end_hour_text">End Hour</string>
+    <string name="time_range_settings_text">Time Range</string>
+    <string name="start_time_text">Start Time</string>
+    <string name="end_time_text">End Time</string>
     <string name="id_pref">id</string>
     <string name="no_event_text">No event to be shown</string>
     <string name="place_province_edit">Province</string>

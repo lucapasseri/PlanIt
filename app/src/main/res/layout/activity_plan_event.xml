@@ -331,32 +331,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
-                android:text="@string/hour_settings_text"
+                android:text="@string/time_settings_text"
                 android:textSize="20sp" />
 
             <RadioGroup
-                android:id="@+id/radio_hour"
+                android:id="@+id/radio_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15sp">
 
                 <RadioButton
-                    android:id="@+id/radio_hour_not_defined"
+                    android:id="@+id/radio_time_not_defined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/radio_choose_hour_after" />
+                    android:text="@string/radio_choose_time_after" />
 
                 <RadioButton
-                    android:id="@+id/radio_hour_defined"
+                    android:id="@+id/radio_time_defined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/radio_choose_hour_now" />
+                    android:text="@string/radio_choose_time_now" />
 
             </RadioGroup>
 
             <LinearLayout
-                android:id="@+id/hour_layout"
+                android:id="@+id/time_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -389,7 +389,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="10sp"
-                        android:text="@string/hour_minutes_separator"
+                        android:text="@string/time_minutes_separator"
                         android:textSize="20sp" />
 
                     <NumberPicker

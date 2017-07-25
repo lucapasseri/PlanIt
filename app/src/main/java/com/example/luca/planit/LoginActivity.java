@@ -95,6 +95,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -275,8 +276,8 @@ public class LoginActivity extends Activity {
 
                     Intent intent = new Intent(getApplication(), HomeActivity.class);
                     intent.putExtra(getString(R.string.extra_from_login), true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    ((Activity) context).finish();
                 } else {
                     showProgress(false);
                     if (result.getResult() == RequestResult.MAIL_NOT_PRESENT) {

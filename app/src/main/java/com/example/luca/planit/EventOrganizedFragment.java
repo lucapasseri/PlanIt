@@ -149,7 +149,6 @@ public class EventOrganizedFragment extends Fragment {
                     dataset.clear();
                 }
 
-
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
                         ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),

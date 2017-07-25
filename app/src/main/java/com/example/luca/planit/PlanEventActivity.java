@@ -3,14 +3,16 @@ package com.example.luca.planit;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,11 +27,28 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class PlanEventActivity extends AppCompatActivity {
 
@@ -42,7 +61,7 @@ public class PlanEventActivity extends AppCompatActivity {
     private TextView dateFormText;
     private RadioGroup dateRadio;
     private EditText dateEdit;
-    private RadioGroup hourRadio;
+    private RadioGroup timeRadio;
     private NumberPicker hourNp;
     private NumberPicker minutesNp;
     private Button createButton;
@@ -51,7 +70,7 @@ public class PlanEventActivity extends AppCompatActivity {
 
     private LinearLayout placeLayout;
     private LinearLayout dateLayout;
-    private LinearLayout hourLayout;
+    private LinearLayout timeLayout;
 
     private Calendar dateCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
@@ -75,14 +94,14 @@ public class PlanEventActivity extends AppCompatActivity {
         dateFormText = (TextView) findViewById(R.id.date_form_text);
         dateRadio = (RadioGroup) findViewById(R.id.radio_date);
         dateEdit = (EditText) findViewById(R.id.date_edit);
-        hourRadio = (RadioGroup) findViewById(R.id.radio_hour);
+        timeRadio = (RadioGroup) findViewById(R.id.radio_time);
         hourNp = (NumberPicker) findViewById(R.id.hour_np);
         minutesNp = (NumberPicker) findViewById(R.id.minutes_np);
         createButton = (Button) findViewById(R.id.create_button);
 
         dateLayout = (LinearLayout) findViewById(R.id.date_layout);
         placeLayout = (LinearLayout) findViewById(R.id.place_layout);
-        hourLayout = (LinearLayout) findViewById(R.id.hour_layout);
+        timeLayout = (LinearLayout) findViewById(R.id.time_layout);
         createEventFormView = (ScrollView) findViewById(R.id.plan_event_form);
 
         hourNp.setMinValue(0);
@@ -106,7 +125,6 @@ public class PlanEventActivity extends AppCompatActivity {
                 return String.format("%02d", i);
             }
         });
-
 
 
         dateRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -139,17 +157,17 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         });
 
-        hourRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        timeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 switch (checkedId) {
-                    case R.id.radio_hour_defined:
-                        hourLayout.setVisibility(View.VISIBLE);
+                    case R.id.radio_time_defined:
+                        timeLayout.setVisibility(View.VISIBLE);
                         break;
-                    case R.id.radio_hour_not_defined:
-                        hourLayout.setVisibility(View.GONE);
+                    case R.id.radio_time_not_defined:
+                        timeLayout.setVisibility(View.GONE);
                 }
             }
         });
@@ -230,7 +248,7 @@ public class PlanEventActivity extends AppCompatActivity {
 
         Choice placeChoice;
         Choice dateChoice;
-        Choice hourChoice;
+        Choice timeChoice;
 
         if (placeRadio.getCheckedRadioButtonId() == R.id.radio_place_defined) {
             placeChoice = Choice.NOW;
@@ -243,10 +261,10 @@ public class PlanEventActivity extends AppCompatActivity {
         } else {
             dateChoice = Choice.AFTER;
         }
-        if (hourRadio.getCheckedRadioButtonId() == R.id.radio_hour_defined) {
-            hourChoice = Choice.NOW;
+        if (timeRadio.getCheckedRadioButtonId() == R.id.radio_time_defined) {
+            timeChoice = Choice.NOW;
         } else {
-            hourChoice = Choice.AFTER;
+            timeChoice = Choice.AFTER;
         }
 
 
@@ -256,6 +274,9 @@ public class PlanEventActivity extends AppCompatActivity {
         String placeCity = placeCityEdit.getText().toString();
         String placeAddress = placeAddressEdit.getText().toString();
         String date = dateEdit.getText().toString();
+        String hour = String.format("%02d", hourNp.getValue());
+        String minutes = String.format("%02d", minutesNp.getValue());
+        String time = hour + ":" + minutes;
 
         boolean cancel = false;
         View focusView = null;
@@ -310,17 +331,32 @@ public class PlanEventActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            EventRegistrationWrapperImpl.Builder builder = new EventRegistrationWrapperImpl.Builder();
 
+            if (placeChoice == Choice.NOW) {
+                Place toAddPlace = new PlaceImpl.Builder()
+                        .setAddress(placeAddress)
+                        .setCity(placeCity)
+                        .setProvince(placeProvince)
+                        .setNamePlace(placeName)
+                        .build();
+                builder.setPlace(toAddPlace);
+            }
+            if(dateChoice == Choice.NOW){
+                builder.setDate(date);
+            }
+            if(timeChoice == Choice.NOW){
+                builder.setTime(time);
+            }
+            //MEttere set time e controllo data subito
+            EventRegistrationWrapper wrapper =  builder
+                                                .setName_event(eventName)
+                                                .setOrganizer_id(LoggedAccount.getLoggedAccount().getId())
+                                                .build();
 
-            /*SignupActivity.RegistrationTask registrationTask = new SignupActivity.RegistrationTask(this);
-            registrationTask.execute(new RegistrationData.Builder()
-                    .setName(name)
-                    .setSurname(surname)
-                    .setEmail(email)
-                    .setUsername(username)
-                    .setPassword(password)
-                    .setBorndate(bornDate)
-                    .build()); */
+            RegistrationEventTask registrationTask = new RegistrationEventTask(this);
+            registrationTask.execute(wrapper);
+
         }
     }
 
@@ -376,6 +412,162 @@ public class PlanEventActivity extends AppCompatActivity {
 
     private enum Choice {
         NOW, AFTER
+    }
+
+
+    private class RegistrationEventTask extends AsyncTask<EventRegistrationWrapper, Void, EventInfo> {
+
+        Context context;
+
+        public RegistrationEventTask(Context context) {
+            this.context = context;
+        }
+
+        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+
+            return result.toString();
+        }
+
+        //Nome dei parametri del json di risposta
+
+
+        EventInfo toReturn;
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder response = new StringBuilder();
+        BufferedReader rd = null;
+
+        @Override
+        protected void onPostExecute(EventInfo result) {
+            if (result != null) {
+
+                Intent intent = new Intent(getApplication(), HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+            } else {
+                showProgress(false);
+            }
+        }
+
+        @Override
+        protected EventInfo doInBackground(EventRegistrationWrapper... params) {
+            try {
+                URL url = new URL(Resource.BASE_URL + Resource.REGISTRATION_EVENT_PAGE); //Enter URL here
+                JSONObject returned = null;
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setUseCaches(false);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
+                //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                HashMap<String, String> toPass = new HashMap<>();
+            /*
+            Place toAddPlace = new PlaceImpl.Builder()
+                    .setAddress("Via Boscone 715")
+                    .setCity("Cesena")
+                    .setProvince("FC")
+                    .setNamePlace("Casadeis")
+                    .build();
+            EventRegistrationWrapper wrapper = new EventRegistrationWrapperImpl.Builder()
+                    .setName_event("Serata GOT")
+                    .setOrganizer_id("19")
+                    .setPlace(toAddPlace)
+                    .setDate("2017-07-24")
+                    .build();
+            */
+                if (params[0].getPlace() != null) {
+                    toPass.put("nome", params[0].getPlace().getNamePlace());
+                    toPass.put("indirizzo", params[0].getPlace().getAddress());
+                    toPass.put("citta", params[0].getPlace().getCity());
+                    toPass.put("provincia", params[0].getPlace().getProvince());
+                }
+
+                if (params[0].getDate() != null) {
+                    toPass.put("data", params[0].getDate());
+                }
+                if (params[0].getTime() != null) {
+                    toPass.put("ora", params[0].getTime());
+                }
+
+                toPass.put("id_org", params[0].getOrganizer_id());
+                toPass.put("nome_evento", params[0].getName_event());
+
+                writer.write(getPostDataString(toPass));
+                writer.flush();
+                writer.close();
+                os.close();
+                httpURLConnection.connect();
+                int responseCode = httpURLConnection.getResponseCode();
+                if (responseCode == httpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    rd = new BufferedReader(new InputStreamReader(inputStream));
+                    String line = "";
+                    while ((line = rd.readLine()) != null) {
+                        response.append(line);
+                    }
+                    System.out.println(response.toString());
+                    returned = new JSONObject(response.toString());
+
+                    EventInfoImpl.Builder builder = new EventInfoImpl.Builder();
+
+                    if (params[0].getPlace() != null) {
+
+                                builder
+                                .setAddress(params[0].getPlace().getAddress())
+                                .setCity(params[0].getPlace().getCity())
+                                .setProvince(params[0].getPlace().getProvince())
+                                .setNamePlace(params[0].getPlace().getNamePlace());
+
+                    }
+                    if (params[0].getDate() != null) {
+                        builder.setData(params[0].getDate());
+                    }
+                    if (params[0].getTime() != null) {
+                        builder.setTime(params[0].getTime());
+                    }
+
+                    builder.setNameEvent(params[0].getName_event())
+                            .setEventId(returned.getString("result"))
+                            .setOrganizer(new OrganizerImpl(LoggedAccount.getLoggedAccount().getName(),LoggedAccount.getLoggedAccount().getSurname()))
+                            .build();
+                    toReturn = builder.build();
+
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (rd != null) {
+                    try {
+                        rd.close();
+                    } catch (Exception e) {
+
+                    }
+                }
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return toReturn;
+        }
     }
 
 

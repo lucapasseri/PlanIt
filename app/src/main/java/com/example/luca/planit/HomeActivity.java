@@ -97,6 +97,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, PlanEventActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -131,8 +132,6 @@ public class HomeActivity extends AppCompatActivity
                     getIntent().hasExtra(getString(R.string.extra_from_signup))) {
                 logout();
             }
-
-            finish();
         }
     }
 
@@ -204,6 +203,7 @@ public class HomeActivity extends AppCompatActivity
 
     private void logout() {
         Intent intent = new Intent(getApplication(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
@@ -217,7 +217,5 @@ public class HomeActivity extends AppCompatActivity
         editor.remove(getString(R.string.born_date_pref));
 
         editor.apply();
-
-        finish();
     }
 }

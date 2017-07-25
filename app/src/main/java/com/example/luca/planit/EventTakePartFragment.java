@@ -150,8 +150,9 @@ public class EventTakePartFragment extends Fragment {
                     }
 
                 }
-                for(ListViewItem itemToRemove : listItemToRemove){
-                    dataset.remove(itemToRemove);
+
+                if (!listItemToRemove.isEmpty()) {
+                    dataset.clear();
                 }
 
                 for (int i=0; i<events.size(); i++) {

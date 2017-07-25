@@ -366,8 +366,8 @@ public class SignupActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(getApplication(), HomeActivity.class);
                     intent.putExtra(getString(R.string.extra_from_signup), true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    ((Activity) context).finish();
                 } else {
                     showProgress(false);
                     if (result.getResult().equals(RequestResult.MAIL_ALREADY_PRESENT)) {
