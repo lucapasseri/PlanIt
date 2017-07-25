@@ -34,7 +34,18 @@
             android:text="@string/no_event_text"
             android:textAlignment="center"
             android:gravity="center"
-            android:textSize="30sp"/>
+            android:textSize="30sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/no_connection_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_connection_text"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:visibility="gone"/>
 
 
         <ListView
@@ -44,8 +55,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="65sp"
             android:divider="@null"
-            android:dividerHeight="0dp"
-            android:visibility="gone" />
+            android:dividerHeight="0dp"/>
 
     </LinearLayout>
 

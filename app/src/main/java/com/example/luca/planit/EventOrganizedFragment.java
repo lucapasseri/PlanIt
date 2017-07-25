@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.ElementType;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -42,16 +43,23 @@ public class EventOrganizedFragment extends Fragment {
     private final List<ListViewItem> dataset = new LinkedList<>();
     private ArrayAdapter<ListViewItem> adapter;
 
+    ListView listView;
+    TextView noEventsTextView;
+    TextView noConnectionTextView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.event_organized_fragment, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.event_organized_list_view);
+        listView = (ListView) rootView.findViewById(R.id.event_organized_list_view);
+        noEventsTextView = (TextView) rootView.findViewById(R.id.no_organized_event_text);
+        noConnectionTextView = (TextView) rootView.findViewById(R.id.no_connection_text);
 
         adapter = new EventOrganizedListAdapter(getActivity(), R.layout.list_item, R.id.textView, dataset);
         listView.setAdapter(adapter);
+
         this.startTask();
 
 
@@ -63,13 +71,35 @@ public class EventOrganizedFragment extends Fragment {
         organizedEventTask.execute(LoggedAccount.getLoggedAccount());
     }
 
+    private enum ItemType {
+        LIST_VIEW, NO_EVENT, NO_CONNECTION
+    }
+
     public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
 
         private final Activity activity;
-        private boolean eventListVisible = false;
+        private final Map<ItemType, View> items = new HashMap<>();
 
         public OrganizedEventTask(Activity activity) {
             this.activity = activity;
+
+            items.put(ItemType.LIST_VIEW, listView);
+            items.put(ItemType.NO_EVENT, noEventsTextView);
+            items.put(ItemType.NO_CONNECTION, noConnectionTextView);
+        }
+
+        private void showItem(ItemType itemType) {
+            for (Map.Entry<ItemType, View> e : items.entrySet()) {
+                if (e.getKey() == itemType) {
+                    if(items.get(e.getKey()).getVisibility() == View.GONE) {
+                        items.get(e.getKey()).setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if(items.get(e.getKey()).getVisibility() == View.VISIBLE) {
+                        items.get(e.getKey()).setVisibility(View.GONE);
+                    }
+                }
+            }
         }
 
         private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
@@ -96,39 +126,19 @@ public class EventOrganizedFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Event> events) {
+
             if (events.isEmpty()) {
                 ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    if(eventListVisible) {
-                        ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
-                        TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
-
-                        listView.setVisibility(View.GONE);
-                        textView.setVisibility(View.VISIBLE);
-
-                        eventListVisible = false;
-                    }
-                }else {
-                        ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
-                        TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
-                        textView.setText("Connection not avalaible");
-                        listView.setVisibility(View.GONE);
-                        textView.setVisibility(View.VISIBLE);
+                    showItem(ItemType.NO_EVENT);
+                } else {
+                    showItem(ItemType.NO_CONNECTION);
                 }
-
-
             } else {
 
-                if(!eventListVisible) {
-                    ListView listView = (ListView) activity.findViewById(R.id.event_organized_list_view);
-                    TextView textView = (TextView) activity.findViewById(R.id.no_organized_event_text);
+                showItem(ItemType.LIST_VIEW);
 
-                    listView.setVisibility(View.VISIBLE);
-                    textView.setVisibility(View.GONE);
-
-                    eventListVisible = true;
-                }
                 List<String> listId = new LinkedList<>();
                 List<ListViewItem> listItemToRemove = new LinkedList<>();
                 for(Event event : events){

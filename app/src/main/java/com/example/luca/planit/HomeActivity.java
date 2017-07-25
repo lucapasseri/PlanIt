@@ -39,6 +39,7 @@ public class HomeActivity extends AppCompatActivity
      * and next wizard steps.
      */
     private ViewPager pager;
+    private PagerAdapter pagerAdapter;
     private EventDownloader eventDownloader;
     private EventOrganizedFragment eventOrganizedFragment = new EventOrganizedFragment();
     private EventTakePartFragment eventTakePartFragment = new EventTakePartFragment();
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
-    private PagerAdapter pagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,7 @@ public class HomeActivity extends AppCompatActivity
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager, true);
+
         Intent intent = new Intent(this,EventDownloader.class);
         bindService(intent,conn, Context.BIND_AUTO_CREATE);
     }

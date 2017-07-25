@@ -78,5 +78,6 @@
     <string name="place_address_edit">Address (optional)</string>
     <string name="signup_prompt_confirm_password">Confirm Password</string>
     <string name="error_password_not_matching">Password not matching</string>
+    <string name="no_connection_text">Connection is not available</string>
 
 </resources>

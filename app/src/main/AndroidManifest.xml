@@ -19,7 +19,6 @@
             android:name=".EventDownloader"
             android:enabled="true"
             android:exported="true" />
-
         <activity
             android:name=".FirstActivity"
             android:noHistory="true">
@@ -29,8 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
+        <activity android:name=".LoginActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".HomeActivity"
@@ -40,10 +38,8 @@
             android:name=".SignupActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".PlanEventActivity"
+        <activity android:name=".PlanEventActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".InfoActivity"></activity>
     </application>
 
 </manifest>
