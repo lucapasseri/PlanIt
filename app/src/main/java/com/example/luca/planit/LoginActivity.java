@@ -232,6 +232,7 @@ public class LoginActivity extends Activity {
                 String username = account.getUsername();
                 String password = account.getPassword();
                 String bornDate = account.getBorndate();
+                String id = account.getId();
 
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -252,6 +253,7 @@ public class LoginActivity extends Activity {
                 editor.putString(getString(R.string.username_pref), username);
                 editor.putString(getString(R.string.password_pref), password);
                 editor.putString(getString(R.string.born_date_pref), bornDate);
+                editor.putString(getString(R.string.id_pref), id);
 
                 editor.apply();
 

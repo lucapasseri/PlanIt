@@ -71,5 +71,7 @@
     <string name="hour_range_settings_text">Hour Range</string>
     <string name="start_hour_text">Start Hour</string>
     <string name="end_hour_text">End Hour</string>
+    <string name="id_pref">id</string>
+    <string name="no_event_text">No event to be shown</string>
 
 </resources>

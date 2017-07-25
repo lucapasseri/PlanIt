@@ -8,7 +8,7 @@ public final class Resource {
     private Resource(){
         throw new AssertionError();
     }
-    public static final String BASE_URL = "http://192.168.1.12/planit/";
+    public static final String BASE_URL = "http://www.planit.altervista.org/";
     public static final String LOGIN_PAGE = "login.php";
     public static final String REGISTRATION_PAGE = "registration.php";
     public static final String ORGANIZED_EVENT_PAGE = "getOrganizedEvent.php";

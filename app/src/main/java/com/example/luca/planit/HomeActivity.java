@@ -47,6 +47,30 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String name = prefs.getString(getString(R.string.name_pref), null);
+        String surname = prefs.getString(getString(R.string.surname_pref), null);
+        String email = prefs.getString(getString(R.string.email_pref), null);
+        String username = prefs.getString(getString(R.string.username_pref), null);
+        String password = prefs.getString(getString(R.string.password_pref), null);
+        String bornDate = prefs.getString(getString(R.string.born_date_pref), null);
+        String id = prefs.getString(getString(R.string.id_pref), null);
+
+
+        Account loggedAccount = new AccountImpl.Builder()
+                .setBorndate(bornDate)
+                .setEmail(email)
+                .setId(id)
+                .setName(name)
+                .setSurname(surname)
+                .setPassword(password)
+                .setUsername(username)
+                .build();
+
+        LoggedAccount.createAccount(loggedAccount);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

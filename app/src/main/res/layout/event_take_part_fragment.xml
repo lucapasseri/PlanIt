@@ -26,6 +26,15 @@
             android:textColor="@color/white"
             android:textAlignment="center"/>
 
+        <TextView
+            android:id="@+id/no_take_part_event_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_event_text"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="30sp"/>
+
         <ListView
             android:id="@+id/event_take_part_list_view"
             android:layout_marginTop="10sp"
@@ -33,7 +42,8 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="65sp"
             android:divider="@null"
-            android:dividerHeight="0dp"/>
+            android:dividerHeight="0dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
