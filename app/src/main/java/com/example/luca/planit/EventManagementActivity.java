@@ -35,12 +35,13 @@ public class EventManagementActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position==0) {
-                //eventOrganizedFragment = new EventOrganizedFragment();
-                return eventOrganizedFragment;
-            } else {
-                //eventTakePartFragment = new EventTakePartFragment();
-                return  eventTakePartFragment;
+
+            } else if (position==1) {
+
+            } else if (position==2) {
+
             }
+            return null;
         }
 
         @Override
