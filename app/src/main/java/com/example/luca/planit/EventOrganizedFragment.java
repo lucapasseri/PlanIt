@@ -27,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.annotation.ElementType;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -51,7 +50,7 @@ public class EventOrganizedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.event_organized_fragment, container, false);
+                R.layout.fragment_event_organized, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.event_organized_list_view);
         noEventsTextView = (TextView) rootView.findViewById(R.id.no_organized_event_text);

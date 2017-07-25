@@ -15,6 +15,10 @@ public class EventManagementActivity extends AppCompatActivity {
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
 
+    private GuestsFragment guestsFragment = new GuestsFragment();
+    private EventInfoFragment infoFragment = new EventInfoFragment();
+    private SuggestionsFragment suggestionsFragment = new SuggestionsFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +39,12 @@ public class EventManagementActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position==0) {
-
+                return guestsFragment;
             } else if (position==1) {
-
-            } else if (position==2) {
-
+                return infoFragment;
+            } else {
+                return suggestionsFragment;
             }
-            return null;
         }
 
         @Override
