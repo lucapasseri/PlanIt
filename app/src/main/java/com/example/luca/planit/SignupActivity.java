@@ -40,7 +40,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,7 +56,8 @@ public class SignupActivity extends AppCompatActivity {
     private EditText surnameEditText;
     private EditText emailEditText;
     private EditText usernameEditText;
-    private EditText passwordEditText;
+    private EditText firstPasswordEditText;
+    private EditText confirmPasswordEditText;
     private EditText bornDateEditText;
     private View progressView;
     private ScrollView signupFormView;
@@ -78,7 +78,8 @@ public class SignupActivity extends AppCompatActivity {
         surnameEditText = (EditText) findViewById(R.id.signup_surname);
         emailEditText = (EditText) findViewById(R.id.signup_email);
         usernameEditText = (EditText) findViewById(R.id.signup_username);
-        passwordEditText = (EditText) findViewById(R.id.signup_password);
+        firstPasswordEditText = (EditText) findViewById(R.id.signup_first_password);
+        confirmPasswordEditText = (EditText) findViewById(R.id.signup_confirm_password);
         bornDateEditText = (EditText) findViewById(R.id.signup_born_date);
 
         signupButton = (Button) findViewById(R.id.signup_signup_button);
@@ -141,7 +142,8 @@ public class SignupActivity extends AppCompatActivity {
         surnameEditText.setError(null);
         emailEditText.setError(null);
         usernameEditText.setError(null);
-        passwordEditText.setError(null);
+        firstPasswordEditText.setError(null);
+        confirmPasswordEditText.setError(null);
         bornDateEditText.setError(null);
 
 
@@ -150,7 +152,8 @@ public class SignupActivity extends AppCompatActivity {
         String surname = surnameEditText.getText().toString();
         String email = emailEditText.getText().toString();
         String username = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        String password = firstPasswordEditText.getText().toString();
+        String confirmPassword = confirmPasswordEditText.getText().toString();
         String bornDate = bornDateEditText.getText().toString();
 
         boolean cancel = false;
@@ -173,14 +176,22 @@ public class SignupActivity extends AppCompatActivity {
             focusView = usernameEditText;
             cancel = true;
         } else if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
+            firstPasswordEditText.setError(getString(R.string.error_field_required));
+            focusView = firstPasswordEditText;
+            cancel = true;
+        } else if (TextUtils.isEmpty(password)) {
+            confirmPasswordEditText.setError(getString(R.string.error_field_required));
+            focusView = confirmPasswordEditText;
             cancel = true;
         } else if (TextUtils.isEmpty(bornDate)) {
             bornDateEditText.setError(getString(R.string.error_field_required));
             focusView = bornDateEditText;
             cancel = true;
             signupFormView.fullScroll(ScrollView.FOCUS_DOWN);
+        } else if (!password.equals(confirmPassword)) {
+            confirmPasswordEditText.setError(getString(R.string.error_password_not_matching));
+            focusView = confirmPasswordEditText;
+            cancel = true;
         }
 
         if (cancel) {

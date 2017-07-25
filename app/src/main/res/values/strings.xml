@@ -73,5 +73,10 @@
     <string name="end_hour_text">End Hour</string>
     <string name="id_pref">id</string>
     <string name="no_event_text">No event to be shown</string>
+    <string name="place_province_edit">Province</string>
+    <string name="place_city_edit">City</string>
+    <string name="place_address_edit">Address (optional)</string>
+    <string name="signup_prompt_confirm_password">Confirm Password</string>
+    <string name="error_password_not_matching">Password not matching</string>
 
 </resources>

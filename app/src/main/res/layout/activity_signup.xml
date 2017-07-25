@@ -62,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/signup_prompt_name"
-                        android:inputType="text"
+                        android:inputType="textCapSentences"
                         android:maxLines="1"
                         android:singleLine="true" />
 
@@ -78,7 +78,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_person_black_36dp"
+                    android:src="@drawable/ic_edit_black_36dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="2dp"/>
 
@@ -93,7 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/signup_prompt_surname"
-                        android:inputType="text"
+                        android:inputType="textCapSentences"
                         android:maxLines="1"
                         android:singleLine="true" />
 
@@ -182,10 +182,41 @@
                     android:theme="@style/TextLabel">
 
                     <EditText
-                        android:id="@+id/signup_password"
+                        android:id="@+id/signup_first_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/signup_prompt_password"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_vpn_key_black_36dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="2dp"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:id="@+id/signup_confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/signup_prompt_confirm_password"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true" />
