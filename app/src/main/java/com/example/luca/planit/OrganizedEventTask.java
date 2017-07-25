@@ -91,6 +91,10 @@ public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
                     response.append(line);
                 }
                 System.out.println(response.toString());
+
+                if(response.toString().isEmpty()){
+                    return listEvent;
+                }
                 returned = new JSONObject(response.toString());
             }
 
@@ -109,6 +113,7 @@ public class OrganizedEventTask extends AsyncTask<Account, Void, List<Event>> {
                         .setCity(eventInfoJson.optString("citta"))
                         .setData(eventInfoJson.optString("data"))
                         .setNameEvent(eventInfoJson.getString("nome_evento"))
+                        .setTime(eventInfoJson.optString("time"))
                         .setEventId(eventInfoJson.getString("id_evento"))
                         .setOrganizer(new OrganizerImpl(params[0].getName(),params[0].getSurname()))
                         .build();

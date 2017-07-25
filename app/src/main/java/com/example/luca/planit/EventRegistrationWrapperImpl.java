@@ -70,7 +70,7 @@ public class EventRegistrationWrapperImpl implements EventRegistrationWrapper {
 		}
 		public Builder setPlace(Place place) {
 			this.place = place;
-			return this;
+		s	return this;
 		}
 		public Builder setDate(String date) {
 			this.date = date;

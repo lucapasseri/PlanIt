@@ -27,4 +27,6 @@ public final class Resource {
     public static final String INSERT_DATE_PREFERENCE_PAGE = "setPreferenceData.php";
     public static final String INSERT_PLACE_PREFERENCE_PAGE = "setPlacePreference.php";
     public static final String GET_TASK_PAGE = "ritornaCompiti.php";
+    public static final String UPDATE_EVENT_PAGE = "updateEvent.php";
+    public static final String INVITE_TO_GROUP_PAGE = "inviteToGroup.php";
 }
