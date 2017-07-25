@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -69,6 +70,9 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_signup);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         nameEditText = (EditText) findViewById(R.id.signup_name);
         surnameEditText = (EditText) findViewById(R.id.signup_surname);
@@ -129,11 +133,7 @@ public class SignupActivity extends AppCompatActivity {
         bornDateEditText.setText(sdf.format(calendar.getTime()));
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
+
     private void attemptSignup() {
 
         // Reset errors.
@@ -267,6 +267,16 @@ public class SignupActivity extends AppCompatActivity {
 
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private class RegistrationTask extends AsyncTask<RegistrationData,Void,Result> {

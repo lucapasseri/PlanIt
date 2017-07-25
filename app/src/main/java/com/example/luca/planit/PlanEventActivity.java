@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,29 +22,27 @@ public class PlanEventActivity extends AppCompatActivity {
     private View progressView;
     private EditText eventNameEdit;
     private RadioGroup dateRadio;
-    private EditText startDateEdit;
-    private EditText endDateEdit;
+    private EditText dateEdit;
     private RadioGroup placeRadio;
     private EditText placeNameEdit;
     private RadioGroup hourRadio;
-    private NumberPicker startHourNp;
-    private NumberPicker startMinutesNp;
-    private NumberPicker endHourNp;
-    private NumberPicker endMinutesNp;
+    private NumberPicker hourNp;
+    private NumberPicker minutesNp;
 
     private LinearLayout placeLayout;
     private LinearLayout dateLayout;
     private LinearLayout hourLayout;
 
-    private Calendar startDateCalendar = Calendar.getInstance();
-    private Calendar endDateCalendar = Calendar.getInstance();
-    private DatePickerDialog.OnDateSetListener startDate;
-    private DatePickerDialog.OnDateSetListener endDate;
+    private Calendar dateCalendar = Calendar.getInstance();
+    private DatePickerDialog.OnDateSetListener date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_event);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         progressView = findViewById(R.id.signup_progress);
 
@@ -52,57 +51,33 @@ public class PlanEventActivity extends AppCompatActivity {
         placeNameEdit = (EditText) findViewById(R.id.place_name_edit);
         placeRadio = (RadioGroup) findViewById(R.id.radio_place);
 
-        startDateEdit = (EditText) findViewById(R.id.start_date_edit);
-        endDateEdit = (EditText) findViewById(R.id.end_date_edit);
+        dateEdit = (EditText) findViewById(R.id.date_edit);
         dateRadio = (RadioGroup) findViewById(R.id.radio_date);
 
         hourRadio = (RadioGroup) findViewById(R.id.radio_hour);
-        startHourNp = (NumberPicker) findViewById(R.id.start_hour_np);
-        startMinutesNp = (NumberPicker) findViewById(R.id.start_minutes_np);
-        endHourNp = (NumberPicker) findViewById(R.id.end_hour_np);
-        endMinutesNp = (NumberPicker) findViewById(R.id.end_minutes_np);
+        hourNp = (NumberPicker) findViewById(R.id.hour_np);
+        minutesNp = (NumberPicker) findViewById(R.id.minutes_np);
 
         dateLayout = (LinearLayout) findViewById(R.id.date_layout);
         placeLayout = (LinearLayout) findViewById(R.id.place_layout);
-        hourLayout = (LinearLayout) findViewById(R.id.hour_range_layout);
+        hourLayout = (LinearLayout) findViewById(R.id.hour_layout);
 
-        startHourNp.setMinValue(0);
-        startHourNp.setMaxValue(23);
-        startMinutesNp.setMinValue(0);
-        startMinutesNp.setMaxValue(60);
+        hourNp.setMinValue(0);
+        hourNp.setMaxValue(23);
+        minutesNp.setMinValue(0);
+        minutesNp.setMaxValue(59);
 
-        endHourNp.setMinValue(0);
-        endHourNp.setMaxValue(23);
-        endMinutesNp.setMinValue(0);
-        endMinutesNp.setMaxValue(60);
+        hourNp.setWrapSelectorWheel(false);
+        minutesNp.setWrapSelectorWheel(false);
 
-        startHourNp.setWrapSelectorWheel(false);
-        startMinutesNp.setWrapSelectorWheel(false);
-        endHourNp.setWrapSelectorWheel(false);
-        endMinutesNp.setWrapSelectorWheel(false);
-
-        startHourNp.setFormatter(new NumberPicker.Formatter() {
+        hourNp.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int i) {
                 return String.format("%02d", i);
             }
         });
 
-        startMinutesNp.setFormatter(new NumberPicker.Formatter() {
-            @Override
-            public String format(int i) {
-                return String.format("%02d", i);
-            }
-        });
-
-        endHourNp.setFormatter(new NumberPicker.Formatter() {
-            @Override
-            public String format(int i) {
-                return String.format("%02d", i);
-            }
-        });
-
-        endMinutesNp.setFormatter(new NumberPicker.Formatter() {
+        minutesNp.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int i) {
                 return String.format("%02d", i);
@@ -156,55 +131,29 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         });
 
-        startDate = new DatePickerDialog.OnDateSetListener() {
+        date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
 
-                startDateCalendar.set(Calendar.YEAR, year);
-                startDateCalendar.set(Calendar.MONTH, monthOfYear);
-                startDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDateLabel(DateType.START_DATE);
+                dateCalendar.set(Calendar.YEAR, year);
+                dateCalendar.set(Calendar.MONTH, monthOfYear);
+                dateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel();
             }
 
         };
 
-        endDate = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-
-                endDateCalendar.set(Calendar.YEAR, year);
-                endDateCalendar.set(Calendar.MONTH, monthOfYear);
-                endDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDateLabel(DateType.END_DATE);
-            }
-
-        };
-
-        startDateEdit.setOnClickListener(new View.OnClickListener() {
+        dateEdit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                startDateEdit.setError(null);
-                new DatePickerDialog(PlanEventActivity.this, startDate, startDateCalendar
-                        .get(Calendar.YEAR), startDateCalendar.get(Calendar.MONTH),
-                        startDateCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        endDateEdit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                endDateEdit.setError(null);
-                new DatePickerDialog(PlanEventActivity.this, endDate, endDateCalendar
-                        .get(Calendar.YEAR), endDateCalendar.get(Calendar.MONTH),
-                        endDateCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                dateEdit.setError(null);
+                new DatePickerDialog(PlanEventActivity.this, date, dateCalendar
+                        .get(Calendar.YEAR), dateCalendar.get(Calendar.MONTH),
+                        dateCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -213,24 +162,22 @@ public class PlanEventActivity extends AppCompatActivity {
 
     }
 
-    private void updateDateLabel(DateType dateType) {
+    private void updateDateLabel() {
 
         String format = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
 
-        switch (dateType) {
-            case START_DATE:
-                startDateEdit.setText(sdf.format(startDateCalendar.getTime()));
-                break;
-            case END_DATE:
-                endDateEdit.setText(sdf.format(endDateCalendar.getTime()));
-                break;
-        }
+        dateEdit.setText(sdf.format(dateCalendar.getTime()));
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-    private enum DateType {
-        START_DATE, END_DATE
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -39,8 +39,6 @@ public class EventTakePartFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Hello", Toast.LENGTH_SHORT).show();
             }
         });
 

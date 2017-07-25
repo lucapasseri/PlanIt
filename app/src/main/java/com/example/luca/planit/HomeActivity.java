@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -84,8 +85,7 @@ public class HomeActivity extends AppCompatActivity
         } else {
             if (getIntent().hasExtra(getString(R.string.extra_from_login)) ||
                     getIntent().hasExtra(getString(R.string.extra_from_signup))) {
-                Intent intent = new Intent(getApplication(), LoginActivity.class);
-                startActivity(intent);
+                logout();
             }
 
             finish();
@@ -123,27 +123,31 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_info) {
 
         } else if (id == R.id.nav_logout) {
-            Intent intent = new Intent(getApplication(), LoginActivity.class);
-            startActivity(intent);
-
-            SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-
-            editor.remove(getString(R.string.name_pref));
-            editor.remove(getString(R.string.surname_pref));
-            editor.remove(getString(R.string.email_pref));
-            editor.remove(getString(R.string.username_pref));
-            editor.remove(getString(R.string.password_pref));
-            editor.remove(getString(R.string.born_date_pref));
-
-            editor.apply();
-
-            finish();
+            logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return false;
+    }
+
+    private void logout() {
+        Intent intent = new Intent(getApplication(), LoginActivity.class);
+        startActivity(intent);
+
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.remove(getString(R.string.name_pref));
+        editor.remove(getString(R.string.surname_pref));
+        editor.remove(getString(R.string.email_pref));
+        editor.remove(getString(R.string.username_pref));
+        editor.remove(getString(R.string.password_pref));
+        editor.remove(getString(R.string.born_date_pref));
+
+        editor.apply();
+
+        finish();
     }
 }
