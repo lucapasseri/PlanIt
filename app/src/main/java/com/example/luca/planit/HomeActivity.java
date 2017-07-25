@@ -192,7 +192,9 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_groups) {
 
         } else if (id == R.id.nav_info) {
-
+            Intent intent = new Intent(getApplication(), InfoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else if (id == R.id.nav_logout) {
             logout();
         }

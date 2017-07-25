@@ -79,5 +79,9 @@
     <string name="signup_prompt_confirm_password">Confirm Password</string>
     <string name="error_password_not_matching">Password not matching</string>
     <string name="no_connection_text">Connection is not available</string>
+    <string name="name_info">Name:</string>
+    <string name="surname_info">Surname:</string>
+    <string name="email_info">Email:</string>
+    <string name="usernameInfo">Username:</string>
 
 </resources>

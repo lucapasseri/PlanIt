@@ -35,6 +35,9 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".InfoActivity"
+            android:label="@string/app_name" />
+        <activity
             android:name=".SignupActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan" />
