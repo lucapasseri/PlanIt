@@ -55,7 +55,6 @@ public class EventDownloader extends Service {
         public void run() {
 
             while (!this.stop) {
-                Log.d("Monitor","Started");
                 EventDownloader.this.eventOrganizedFragment.startTask();
                 EventDownloader.this.eventTakePartFragment.startTask();
                 try {
