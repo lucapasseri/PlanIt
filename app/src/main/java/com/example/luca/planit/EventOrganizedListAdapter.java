@@ -55,15 +55,16 @@ public class EventOrganizedListAdapter extends ArrayAdapter<ListViewItem> {
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_left);
                 textView.setBackground(drawable);
-                textView.setGravity(Gravity.LEFT);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 textView.setPadding(50, 75, 0, 20);
             } else if (listViewItemType == TYPE_RIGHT) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_right);
                 textView.setBackground(drawable);
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-                textView.setGravity(Gravity.RIGHT);
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                textView.setGravity(Gravity.CENTER);
                 textView.setPadding(0, 75, 50, 20);
             }
 

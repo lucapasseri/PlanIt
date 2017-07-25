@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="@string/event_organized_title"
             android:textSize="30sp"
-            android:textColor="@color/white"
+            android:textColor="@color/colorPrimaryDark"
             android:textAlignment="center"/>
 
         <TextView
