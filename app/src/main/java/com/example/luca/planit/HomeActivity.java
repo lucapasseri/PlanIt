@@ -134,7 +134,9 @@ public class HomeActivity extends AppCompatActivity
                     getIntent().hasExtra(getString(R.string.extra_from_signup))) {
                 logout();
             }
+            super.onBackPressed();
         }
+
     }
 
     @Override

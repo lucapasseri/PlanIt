@@ -3,12 +3,10 @@ package com.example.luca.planit;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +47,7 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
         int listViewItemType = getItemViewType(position);
 
         if (convertView == null) {
-            if (listViewItemType == EventOrganizedListAdapter.TYPE_LEFT) {
+            if (listViewItemType == EventListAdapter.TYPE_LEFT) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_left);
@@ -59,7 +57,7 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
                 Drawable organizerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_organizer_left);
                 organizerText.setBackground(organizerDrawable);
 
-            } else if (listViewItemType == EventOrganizedListAdapter.TYPE_RIGHT) {
+            } else if (listViewItemType == EventListAdapter.TYPE_RIGHT) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_right);

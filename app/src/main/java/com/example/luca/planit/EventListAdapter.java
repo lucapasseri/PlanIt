@@ -21,14 +21,14 @@ import java.util.List;
  * Created by Luca on 23/07/2017.
  */
 
-public class EventOrganizedListAdapter extends ArrayAdapter<ListViewItem> {
+public class EventListAdapter extends ArrayAdapter<ListViewItem> {
 
     public static final int TYPE_LEFT = 0;
     public static final int TYPE_RIGHT = 1;
 
     private final List<ListViewItem> dataset;
 
-    public EventOrganizedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ListViewItem> objects) {
+    public EventListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ListViewItem> objects) {
         super(context, resource, objects);
 
         dataset = objects;
