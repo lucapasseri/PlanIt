@@ -36,5 +36,9 @@
     <color name="blue_start">#0f93b8</color>
     <color name="blue_end">#0f93b8</color>
     <color name="transparent">#00000000</color>
+    <color name="white_smoke">#ECECEC</color>
+    <color name="iron">#DADFE1</color>
+    <color name="emeral">#3FC380</color>
+    <color name="shamrock">#2ECC71</color>
 
 </resources>

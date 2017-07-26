@@ -162,7 +162,8 @@ public class EventTakePartFragment extends Fragment {
                                 events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
                                 events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
                                 EventOrganizedListAdapter.TYPE_LEFT,
-                                events.get(i).getEventInfo().getEventId());
+                                events.get(i).getEventInfo().getEventId(),
+                                LoggedAccount.getColorT());
                         if(!dataset.contains(toAdd)){
                             dataset.add(toAdd);
                         }
@@ -171,7 +172,8 @@ public class EventTakePartFragment extends Fragment {
                                 events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
                                 events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
                                 EventOrganizedListAdapter.TYPE_RIGHT,
-                                events.get(i).getEventInfo().getEventId());
+                                events.get(i).getEventInfo().getEventId(),
+                                LoggedAccount.getColorT());
                         if(!dataset.contains(toAdd)){
                             dataset.add(toAdd);
                         }

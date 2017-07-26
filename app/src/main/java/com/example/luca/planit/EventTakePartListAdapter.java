@@ -1,7 +1,10 @@
 package com.example.luca.planit;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -30,7 +33,7 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
 
     @Override
     public int getItemViewType(int position) {
-        return position%2==0 ? 1 : 0;
+        return position%2==0 ? 0 : 1;
     }
 
     @Override
@@ -82,6 +85,12 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
 
         viewHolder.getEventNameventName().setText(listViewItem.getEventName());
         viewHolder.getOrganizerText().setText(initialNameLetter + initialSurnameLetter);
+
+        viewHolder.getOrganizerText().setBackgroundResource(R.drawable.list_item_organizer_left);
+
+        StateListDrawable drawable = (StateListDrawable)  viewHolder.getOrganizerText().getBackground();
+        drawable.setColorFilter(ContextCompat.getColor(getContext(),listViewItem.getColor()), PorterDuff.Mode.SRC_ATOP);
+        //drawable.setColor(ContextCompat.getColor(getContext(),R.color.alice_blue));
 
         return convertView;
     }

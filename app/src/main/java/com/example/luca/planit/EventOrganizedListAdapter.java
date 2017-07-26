@@ -1,7 +1,9 @@
 package com.example.luca.planit;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -87,6 +89,8 @@ public class EventOrganizedListAdapter extends ArrayAdapter<ListViewItem> {
         viewHolder.getEventNameventName().setText(listViewItem.getEventName());
         viewHolder.getOrganizerText().setText(initialNameLetter + initialSurnameLetter);
 
+        StateListDrawable drawable = (StateListDrawable)  viewHolder.getOrganizerText().getBackground();
+        drawable.setColorFilter(ContextCompat.getColor(getContext(),listViewItem.getColor()), PorterDuff.Mode.SRC_ATOP);
         return convertView;
     }
 

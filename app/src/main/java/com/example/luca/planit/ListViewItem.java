@@ -8,15 +8,17 @@ public class ListViewItem {
     private String eventName;
     private String organizerName;
     private String organizerSurname;
+    private Integer color;
     private int type;
     private String eventId;
 
-    public ListViewItem(String eventName, String organizerName, String organizerSurname, int type, String eventId) {
+    public ListViewItem(String eventName, String organizerName, String organizerSurname, int type, String eventId,Integer color) {
         this.eventName = eventName;
         this.organizerName = organizerName;
         this.organizerSurname = organizerSurname;
         this.type = type;
         this.eventId = eventId;
+        this.color = color;
     }
 
     public String getEventName() {
@@ -33,6 +35,10 @@ public class ListViewItem {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Integer getColor() {
+        return color;
     }
 
     public String getEventId() {
