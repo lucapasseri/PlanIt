@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -246,19 +247,23 @@ public class EventTakePartFragment extends Fragment {
                     List<Guest> guests = new LinkedList<>();
 
                     JSONArray guestsJSon = event.getJSONArray("Invitati");
-
+                    GuestState mystate = null;
                     for (int j = 0; j < guestsJSon.length(); j++) {
 
                         JSONObject jsonObj = (JSONObject) guestsJSon.get(j);
                         GuestState state = jsonObj.getString("accettato").equals("0")?
                                 GuestState.NOT_CONFIRMED:jsonObj.getString("accettato").equals("1")?
                                 GuestState.CONFIRMED:GuestState.DECLINED;
+                        if(params[0].getId().equals(jsonObj.getString("id_utente"))){
+                            mystate = state;
+                        }
                         Guest toAdd = new GuestImpl(jsonObj.getString("nome"),jsonObj.getString("cognome"),state);
                         guests.add(toAdd);
                         System.out.println(toAdd.toString());
                     }
-
-                    listEvent.add(new EventImpl(eventInfo, guests));
+                    if(mystate == GuestState.CONFIRMED){
+                        listEvent.add(new EventImpl(eventInfo, guests));
+                    }
                 }
             } catch (ProtocolException e1) {
                 e1.printStackTrace();
