@@ -6,12 +6,15 @@ package com.example.luca.planit;
 
 public class SelectedGroup {
     private static Group selectedGroup;
+    private  SelectedGroup(){
+
+    }
 
     public static Group getSelectedGroup() {
         return selectedGroup;
     }
 
-    public static void setSelectedGroup(Group selectedGroup) {
-        selectedGroup = selectedGroup;
+    public static void setSelectedGroup(Group group) {
+        selectedGroup = group;
     }
 }
