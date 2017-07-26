@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by diego on 22/07/2017.
  */
 
-public class AcceptInviteTask extends AsyncTask<EventInvite,Void,RequestResult> {
+public class UpdateInviteTask extends AsyncTask<InviteWrapper,Void,RequestResult> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -57,7 +57,7 @@ public class AcceptInviteTask extends AsyncTask<EventInvite,Void,RequestResult> 
     }
 
     @Override
-    protected RequestResult doInBackground(EventInvite... params) {
+    protected RequestResult doInBackground(InviteWrapper... params) {
         try {
 
             URL url = new URL(Resource.BASE_URL+Resource.ACCEPT_INVITE_PAGE); //Enter URL here
@@ -71,10 +71,10 @@ public class AcceptInviteTask extends AsyncTask<EventInvite,Void,RequestResult> 
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
 
-            InviteWrapper invite = new  InviteWrapper("6", "1");
 
-            toPass.put("id_evento",invite.getEventId());
-            toPass.put("id_utente",invite.getGuestId());
+            toPass.put("id_evento",params[0].getEventId());
+            toPass.put("id_utente",params[0].getGuestId());
+            toPass.put("choice",params[0].getGuestState().getCode());
 
             writer.write(getPostDataString(toPass));
             writer.flush();
@@ -91,8 +91,8 @@ public class AcceptInviteTask extends AsyncTask<EventInvite,Void,RequestResult> 
                 }
                 System.out.println(response.toString());
                 String returnedString = new JSONObject(response.toString()).getString("response");
-                if( returnedString.equals(RequestResult.INVITE_ACCEPTED.toString())){
-                    toReturn = RequestResult.INVITE_ACCEPTED;
+                if( returnedString.equals(RequestResult.INVITE_UPDATED.toString())){
+                    toReturn = RequestResult.INVITE_UPDATED;
                 }
             }
         } catch (MalformedURLException e) {

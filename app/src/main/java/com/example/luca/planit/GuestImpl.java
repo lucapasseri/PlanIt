@@ -2,13 +2,13 @@ package com.example.luca.planit;
 
 public class GuestImpl implements Guest {
 	private final Person personalInfo;
-	private final boolean confirmed;
+	private final GuestState guestState;
 
 
-	public GuestImpl(String name, String surname, boolean confirmed) {
+	public GuestImpl(String name, String surname, GuestState guestState) {
 		super();
 		this.personalInfo = new PersonImpl(name,surname);
-		this.confirmed = confirmed;
+		this.guestState = guestState;
 	}
 
 	@Override
@@ -22,13 +22,13 @@ public class GuestImpl implements Guest {
 	}
 
 	@Override
-	public boolean isConfirmed() {
-		return this.confirmed;
+	public GuestState getGuestState() {
+		return guestState;
 	}
 
 	@Override
 	public String toString() {
-		return "GuestImpl [name=" + this.personalInfo.getName() + ", surname=" + this.personalInfo.getSurname() + ", confirmed=" + confirmed + "]";
+		return "GuestImpl [personalInfo=" + personalInfo + ", guestState=" + guestState + "]";
 	}
 
 
