@@ -67,7 +67,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".GroupInfoActivity"
-            android:label="@string/title_activity_group_info"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

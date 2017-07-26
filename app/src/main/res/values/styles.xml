@@ -27,6 +27,8 @@
         <item name="colorControlActivated">@color/blue_water</item>
     </style>
 
+
+
     <style name="HorizontalLine">
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>

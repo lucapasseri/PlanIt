@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +63,9 @@ public class GroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_group);
+        if (!(getIntent().getStringExtra("TASK") == null)){
+            Toast.makeText(this, getIntent().getStringExtra("TASK"), Toast.LENGTH_LONG).show();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         listView = (ListView) findViewById(R.id.list_group);
@@ -85,9 +89,7 @@ public class GroupActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GroupActivity.this, GroupInfoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                new CreateGroupDialog(GroupActivity.this).show();
             }
         });
     }

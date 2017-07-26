@@ -1,15 +1,22 @@
 package com.example.luca.planit;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +31,10 @@ public class GroupInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_info);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         listView = (ListView) findViewById(R.id.people_list);
         numNumbers = (TextView) findViewById(R.id.num_invited);
         int num = SelectedGroup.getSelectedGroup().getPeopleInGroup().size();
@@ -39,8 +50,6 @@ public class GroupInfoActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this,R.layout.person_in_group_item,R.id.person_text_view,dataset);
 
         listView.setAdapter(adapter);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         groupEvent = (TextView) findViewById(R.id.group_name);
         this.groupEvent.setText(SelectedGroup.getSelectedGroup().getNameGroup());
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -49,8 +58,31 @@ public class GroupInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Invite to group", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Dialog custom = new CustomDialog(GroupInfoActivity.this);
+                custom.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent intent = new Intent(GroupInfoActivity.this, GroupActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
+                                SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
+                        intent.putExtra("TASK","Invite to "+toPass+" sended");
+                        GroupInfoActivity.this.startActivity(intent);
+                    }
+                });
+                custom.show();
+
             }
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

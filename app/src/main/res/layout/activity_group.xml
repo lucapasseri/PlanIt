@@ -35,6 +35,12 @@
             android:layout_weight="0.13">
         </ListView>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/iron"
+            android:theme="@style/HorizontalLine" />
+
     </LinearLayout>
 
 
