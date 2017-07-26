@@ -64,6 +64,9 @@ public class EventOrganizedFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                SelectedEvent.storeSelectedEvent(adapter.getItem(position).getEvent());
+
                 Intent intent = new Intent(EventOrganizedFragment.this.getActivity(), EventManagementActivity.class);
                 startActivity(intent);
             }
@@ -166,9 +169,7 @@ public class EventOrganizedFragment extends Fragment {
 
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
-                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
+                        ListViewItem toAdd =  new ListViewItem(events.get(i),
                                 EventListAdapter.TYPE_LEFT,
                                 events.get(i).getEventInfo().getEventId(),
                                 LoggedAccount.getColor());
@@ -176,9 +177,7 @@ public class EventOrganizedFragment extends Fragment {
                             dataset.add(toAdd);
                         }
                     } else {
-                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
+                        ListViewItem toAdd =  new ListViewItem(events.get(i),
                                 EventListAdapter.TYPE_RIGHT,
                                 events.get(i).getEventInfo().getEventId(),
                                 LoggedAccount.getColor());

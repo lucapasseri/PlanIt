@@ -40,7 +40,7 @@ public class EventInfoImpl implements EventInfo {
 
 
 
-	public String getData() {
+	public String getDate() {
 		return data;
 	}
 

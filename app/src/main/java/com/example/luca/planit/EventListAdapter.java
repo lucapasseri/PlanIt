@@ -52,6 +52,9 @@ public class EventListAdapter extends ArrayAdapter<ListViewItem> {
         int listViewItemType = getItemViewType(position);
 
         if (convertView == null) {
+
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+
             if (listViewItemType == TYPE_LEFT) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
@@ -63,7 +66,7 @@ public class EventListAdapter extends ArrayAdapter<ListViewItem> {
                 organizerText.setBackground(organizerDrawable);
 
             } else if (listViewItemType == TYPE_RIGHT) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_right);
                 textView.setBackground(drawable);
@@ -78,19 +81,20 @@ public class EventListAdapter extends ArrayAdapter<ListViewItem> {
             TextView organizerText = (TextView) convertView.findViewById(R.id.organizer_name);
             viewHolder = new ViewHolder(textView, organizerText);
 
+            String initialNameLetter = listViewItem.getEvent().getEventInfo().getOrganizer().getOrganizerName().substring(0, 1);
+            String initialSurnameLetter = listViewItem.getEvent().getEventInfo().getOrganizer().getOrganizerSurname().substring(0, 1);
+
+            viewHolder.getEventNameventName().setText(listViewItem.getEvent().getEventInfo().getNameEvent());
+            viewHolder.getOrganizerText().setText(initialNameLetter + initialSurnameLetter);
+
+            StateListDrawable drawable = (StateListDrawable)  viewHolder.getOrganizerText().getBackground();
+            drawable.setColorFilter(ContextCompat.getColor(getContext(),listViewItem.getColor()), PorterDuff.Mode.SRC_ATOP);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        String initialNameLetter = listViewItem.getOrganizerName().substring(0, 1);
-        String initialSurnameLetter = listViewItem.getOrganizerSurname().substring(0, 1);
-
-        viewHolder.getEventNameventName().setText(listViewItem.getEventName());
-        viewHolder.getOrganizerText().setText(initialNameLetter + initialSurnameLetter);
-
-        StateListDrawable drawable = (StateListDrawable)  viewHolder.getOrganizerText().getBackground();
-        drawable.setColorFilter(ContextCompat.getColor(getContext(),listViewItem.getColor()), PorterDuff.Mode.SRC_ATOP);
         return convertView;
     }
 

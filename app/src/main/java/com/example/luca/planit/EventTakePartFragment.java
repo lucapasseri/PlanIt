@@ -169,9 +169,7 @@ public class EventTakePartFragment extends Fragment {
 
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
-                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
+                        ListViewItem toAdd =  new ListViewItem(events.get(i),
                                 EventListAdapter.TYPE_LEFT,
                                 events.get(i).getEventInfo().getEventId(),
                                 LoggedAccount.getColorT());
@@ -179,9 +177,7 @@ public class EventTakePartFragment extends Fragment {
                             dataset.add(toAdd);
                         }
                     } else {
-                        ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
-                                events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
+                        ListViewItem toAdd =  new ListViewItem(events.get(i),
                                 EventListAdapter.TYPE_RIGHT,
                                 events.get(i).getEventInfo().getEventId(),
                                 LoggedAccount.getColorT());

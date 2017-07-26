@@ -42,9 +42,9 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="name"
                     android:layout_marginTop="5sp"
                     android:textAlignment="center"
                     android:textSize="25sp" />
@@ -73,9 +73,9 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/place_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="place"
                     android:layout_marginTop="5sp"
                     android:textAlignment="center"
                     android:textSize="25sp" />
@@ -105,9 +105,9 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/date_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="date"
                     android:layout_marginTop="5sp"
                     android:textAlignment="center"
                     android:textSize="25sp" />
@@ -136,9 +136,9 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/time_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="time"
                     android:layout_marginTop="5sp"
                     android:textAlignment="center"
                     android:textSize="25sp" />
