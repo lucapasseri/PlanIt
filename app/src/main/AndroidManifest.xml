@@ -46,6 +46,7 @@
         <activity
             android:name=".PlanEventActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".GroupActivity"></activity>
     </application>
 
 </manifest>
