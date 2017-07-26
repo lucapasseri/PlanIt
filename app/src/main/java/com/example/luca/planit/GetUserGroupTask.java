@@ -111,7 +111,7 @@ public class GetUserGroupTask extends AsyncTask<String, Void, List<Group>> {
                     peopleInGroup.add(new PersonImpl(person.getString("nome"),person.getString("cognome")));
                 }
 
-                listGroups.add(new GroupImpl(peopleInGroup,groupName));
+                //listGroups.add(new GroupImpl(peopleInGroup,groupName));
 
             }
         } catch (ProtocolException e1) {
