@@ -3,7 +3,6 @@ package com.example.luca.planit;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -132,8 +131,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void updateLabel() {
 
-        String format = "dd/MM/yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
 
         bornDateEditText.setText(sdf.format(calendar.getTime()));
     }
@@ -208,11 +206,8 @@ public class SignupActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
-            String fromFormat = "dd/MM/yyy";
-            String toFormat = "yyyy-MM-dd";
-
-            SimpleDateFormat fromFormatter = new SimpleDateFormat(fromFormat, Locale.US);
-            SimpleDateFormat toFormatter = new SimpleDateFormat(toFormat, Locale.US);
+            SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
+            SimpleDateFormat toFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
 
             try {
                 Date date = fromFormatter.parse(bornDate);

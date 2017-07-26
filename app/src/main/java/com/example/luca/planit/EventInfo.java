@@ -1,7 +1,7 @@
 package com.example.luca.planit;
 
 public interface EventInfo {
-	String getDate();
+	String getDate(DateFormatType formatType);
 	String getAddress();
 	String getProvince();
 	String getNamePlace();

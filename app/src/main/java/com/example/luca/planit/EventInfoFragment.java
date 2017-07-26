@@ -26,11 +26,33 @@ public class EventInfoFragment extends Fragment {
         timeText = (TextView) rootView.findViewById(R.id.time_text);
 
         Event selectedEvent = SelectedEvent.getSelectedEvent();
+        String nameEvent = selectedEvent.getEventInfo().getNameEvent();
+        String placeName = selectedEvent.getEventInfo().getNamePlace();
+        String placeProvince = selectedEvent.getEventInfo().getProvince();
+        String placeCity = selectedEvent.getEventInfo().getCity();
+        String placeAddress = selectedEvent.getEventInfo().getAddress();
+        String date = selectedEvent.getEventInfo().getDate(DateFormatType.DD_MM_YYYY_BACKSLASH);
+        String time = selectedEvent.getEventInfo().getTime();
 
-        nameText.setText(selectedEvent.getEventInfo().getNameEvent());
-        placeText.setText(selectedEvent.getEventInfo().getNamePlace());
-        dateText.setText(selectedEvent.getEventInfo().getDate());
-        timeText.setText(selectedEvent.getEventInfo().getTime());
+        nameText.setText(nameEvent);
+        if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
+            placeText.setText(placeName);
+        } else {
+            placeText.setText(R.string.empty_field_message);
+        }
+        if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
+            placeText.setText(placeName);
+        } else {
+            placeText.setText(R.string.empty_field_message);
+        }
+        if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
+            placeText.setText(placeName);
+        } else {
+            placeText.setText(R.string.empty_field_message);
+        }
+        dateText.setText(date);
+        timeText.setText(time);
+
 
         return rootView;
     }

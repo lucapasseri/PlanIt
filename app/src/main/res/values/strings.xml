@@ -86,6 +86,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_field_message">Still to be defined</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
 
 </resources>

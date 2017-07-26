@@ -1,8 +1,15 @@
 package com.example.luca.planit;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class EventInfoImpl implements EventInfo {
+
+    public static final String EMPTY_FIELD = "null";
+
 	private final String data;
 	private final String address;
 	private final String province;
@@ -40,10 +47,30 @@ public class EventInfoImpl implements EventInfo {
 
 
 
-	public String getDate() {
-		return data;
-	}
+	public String getDate(DateFormatType formatType) {
 
+		switch (formatType) {
+
+            case DD_MM_YYYY_BACKSLASH:
+                SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
+                SimpleDateFormat toFormatter  = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
+
+                String formattedDate = data;
+
+                try {
+                    Date toFormatDate = fromFormatter.parse(formattedDate);
+                    formattedDate = toFormatter.format(toFormatDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                return formattedDate;
+
+			default:
+				return data;
+		}
+
+	}
 
 
 
@@ -53,19 +80,15 @@ public class EventInfoImpl implements EventInfo {
 
 
 
-
 	public String getProvince() {
 		return province;
 	}
 
 
 
-
 	public String getNamePlace() {
 		return namePlace;
 	}
-
-
 
 
 	public String getCity() {
@@ -160,11 +183,7 @@ public class EventInfoImpl implements EventInfo {
 					(province), (namePlace), (city),Objects.requireNonNull(organizer),Objects.requireNonNull(name_event),time,eventId);
 		}
 		
-		
-		
 
 	}
-
-
 }
 
