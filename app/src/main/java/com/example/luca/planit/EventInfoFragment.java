@@ -2,6 +2,7 @@ package com.example.luca.planit;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 public class EventInfoFragment extends Fragment {
 
     TextView nameText;
-    TextView placeText;
+    TextView placeNameText;
+    TextView placeProvinceText;
+    TextView placeCitytText;
+    TextView placeAddressText;
     TextView dateText;
     TextView timeText;
 
@@ -21,7 +25,10 @@ public class EventInfoFragment extends Fragment {
                 R.layout.fragment_event_info, container, false);
 
         nameText = (TextView) rootView.findViewById(R.id.name_text);
-        placeText = (TextView) rootView.findViewById(R.id.place_text);
+        placeNameText = (TextView) rootView.findViewById(R.id.place_name_text);
+        placeProvinceText = (TextView) rootView.findViewById(R.id.place_province_text);
+        placeCitytText = (TextView) rootView.findViewById(R.id.place_city_text);
+        placeAddressText = (TextView) rootView.findViewById(R.id.place_address_text);
         dateText = (TextView) rootView.findViewById(R.id.date_text);
         timeText = (TextView) rootView.findViewById(R.id.time_text);
 
@@ -34,24 +41,43 @@ public class EventInfoFragment extends Fragment {
         String date = selectedEvent.getEventInfo().getDate(DateFormatType.DD_MM_YYYY_BACKSLASH);
         String time = selectedEvent.getEventInfo().getTime();
 
+        if(placeName.isEmpty()) {
+            Log.d("place1", "ciaoo");
+        }
+
+
+
         nameText.setText(nameEvent);
         if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
-            placeText.setText(placeName);
+            placeNameText.setText(R.string.empty_field_message);
         } else {
-            placeText.setText(R.string.empty_field_message);
+            placeNameText.setText(placeName);
         }
-        if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
-            placeText.setText(placeName);
+        if (placeProvince.equals(EventInfoImpl.EMPTY_FIELD)) {
+            placeProvinceText.setText(R.string.empty_field_message);
         } else {
-            placeText.setText(R.string.empty_field_message);
+            placeProvinceText.setText(placeProvince);
         }
-        if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
-            placeText.setText(placeName);
+        if (placeCity.equals(EventInfoImpl.EMPTY_FIELD)) {
+            placeCitytText.setText(R.string.empty_field_message);
         } else {
-            placeText.setText(R.string.empty_field_message);
+            placeCitytText.setText(placeCity);
         }
-        dateText.setText(date);
-        timeText.setText(time);
+        if (placeAddress.equals(EventInfoImpl.EMPTY_FIELD)) {
+            placeAddressText.setText(R.string.empty_field_message);
+        } else {
+            placeAddressText.setText(placeAddress);
+        }
+        if (date.equals(EventInfoImpl.EMPTY_FIELD)) {
+            dateText.setText(R.string.empty_field_message);
+        } else {
+            dateText.setText(date);
+        }
+        if (time.equals(EventInfoImpl.EMPTY_FIELD)) {
+            timeText.setText(R.string.empty_field_message);
+        } else {
+            timeText.setText(time);
+        }
 
 
         return rootView;
