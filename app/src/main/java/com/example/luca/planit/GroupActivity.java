@@ -70,7 +70,11 @@ public class GroupActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TO-DO
+                
+                Intent intent = new Intent(GroupActivity.this, GroupInfoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
             }
         });
         startTask();
@@ -81,7 +85,7 @@ public class GroupActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GroupActivity.this, PlanEventActivity.class);
+                Intent intent = new Intent(GroupActivity.this, GroupInfoActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -181,7 +185,7 @@ public class GroupActivity extends AppCompatActivity {
                 }
 
                 for (Group group : groups){
-                    ListGroupItem toAdd = new ListGroupItem(group.getNameGroup(),group.getGroupId());
+                    ListGroupItem toAdd = new ListGroupItem(group.getNameGroup(),group.getGroupId(),group);
                     if(!dataset.contains(toAdd)){
                         dataset.add(toAdd);
                     }
