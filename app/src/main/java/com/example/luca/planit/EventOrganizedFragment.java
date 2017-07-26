@@ -248,8 +248,10 @@ public class EventOrganizedFragment extends Fragment {
                     for (int j = 0; j < guestsJSon.length(); j++) {
 
                         JSONObject jsonObj = (JSONObject) guestsJSon.get(j);
-                        boolean confirmed = jsonObj.getString("accettato").equals("1") ? true : false;
-                        Guest toAdd = new GuestImpl(jsonObj.getString("nome"), jsonObj.getString("cognome"), confirmed);
+                        GuestState state = jsonObj.getString("accettato").equals("0")?
+                                GuestState.NOT_CONFIRMED:jsonObj.getString("accettato").equals("1")?
+                                GuestState.CONFIRMED:GuestState.DECLINED;
+                        Guest toAdd = new GuestImpl(jsonObj.getString("nome"),jsonObj.getString("cognome"),state);
                         guests.add(toAdd);
                         System.out.println(toAdd.toString());
                     }
