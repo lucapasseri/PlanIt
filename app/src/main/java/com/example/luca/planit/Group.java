@@ -6,4 +6,5 @@ public interface Group {
 	
 	public List<Person> getPeopleInGroup() ;
 	public String getNameGroup() ;
+	String getGroupId();
 }
