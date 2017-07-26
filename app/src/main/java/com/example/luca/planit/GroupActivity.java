@@ -1,10 +1,17 @@
 package com.example.luca.planit;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
+import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,21 +33,39 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class GroupActivity extends AppCompatActivity {
-    private final List<ListGroupItem> dataset = new LinkedList<>();
+    private List<ListGroupItem> dataset = new LinkedList<>();
     private ArrayAdapter<ListGroupItem> adapter;
     ListView listView;
+    private GroupDownloader groupDownloader;
+    private boolean bounded;
+    private ServiceConnection conn = new ServiceConnection (){
+        @Override
+        public void onServiceConnected (ComponentName cls , IBinder bnd ){
+            groupDownloader = (( GroupDownloader.GroupDownloaderBinder ) bnd).getService();
+            bounded = true ;
+            groupDownloader.startMonitoring(GroupActivity.this);
+        }
+        @Override
+        public void onServiceDisconnected ( ComponentName cls){
+            bounded = false ;
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_group);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         listView = (ListView) findViewById(R.id.list_group);
-        adapter = new ArrayAdapter<ListGroupItem>(this, R.layout.list_group_item,R.id.group_text_view);
+        adapter = new GroupListAdapter(this, R.layout.list_group_item,dataset);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,10 +74,57 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
         startTask();
+        Intent intent = new Intent(this,GroupDownloader.class);
+        bindService(intent,conn, Context.BIND_AUTO_CREATE);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GroupActivity.this, PlanEventActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
     }
     public void startTask(){
         GroupActivity.GetUserGroupTask getUserGroupTask = new GroupActivity.GetUserGroupTask(this);
         getUserGroupTask.execute(LoggedAccount.getLoggedAccount().getId());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(bounded){
+            unbindService(conn);
+            bounded = false;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(bounded){
+            unbindService(conn);
+            bounded = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this,GroupDownloader.class);
+        bindService(intent,conn, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public class GetUserGroupTask extends AsyncTask<String, Void, List<Group>> {
@@ -89,16 +161,38 @@ public class GroupActivity extends AppCompatActivity {
             if (groups.isEmpty()) {
                 //V
             } else {
+
+                List<String> listId = new LinkedList<>();
+                List<ListGroupItem> listItemToRemove = new LinkedList<>();
+
+                for(Group group : groups){
+                    listId.add(group.getGroupId());
+                }
+                for(ListGroupItem item : dataset){
+                    if(!listId.contains(item.getGroupId())){
+                        listItemToRemove.add(item);
+                    }
+
+                }
+
+                if (!listItemToRemove.isEmpty()) {
+                    Log.d("Removing",listItemToRemove.toString());
+                    dataset.clear();
+                }
+
                 for (Group group : groups){
                     ListGroupItem toAdd = new ListGroupItem(group.getNameGroup(),group.getGroupId());
+                    if(!dataset.contains(toAdd)){
+                        dataset.add(toAdd);
+                    }
                 }
+                Log.d("GruppiPost",dataset.toString());
                 adapter.notifyDataSetChanged();
             }
         }
 
         @Override
         protected List<Group> doInBackground(String... params) {
-            List<Event> listEvent = new LinkedList<>();
             try {
                 URL url = new URL(Resource.BASE_URL + Resource.GET_GROUP_PAGE); //Enter URL here
                 JSONObject returned = null;
@@ -149,7 +243,7 @@ public class GroupActivity extends AppCompatActivity {
                     }
 
                     listGroups.add(new GroupImpl(peopleInGroup,groupName,info.getString("id_gruppo")));
-
+                    Log.d("Gruppi",listGroups.toString());
                 }
             } catch (ProtocolException e1) {
                 e1.printStackTrace();

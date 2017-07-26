@@ -28,15 +28,20 @@ public class ListGroupItem {
 
         ListGroupItem that = (ListGroupItem) o;
 
-        if (!groupName.equals(that.groupName)) return false;
         return groupId.equals(that.groupId);
 
     }
 
     @Override
     public int hashCode() {
-        int result = groupName.hashCode();
-        result = 31 * result + groupId.hashCode();
-        return result;
+        return groupId.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "ListGroupItem{" +
+                "groupName='" + groupName + '\'' +
+                ", groupId='" + groupId + '\'' +
+                '}';
     }
 }
