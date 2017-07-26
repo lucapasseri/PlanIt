@@ -56,7 +56,7 @@ public class EventTakePartFragment extends Fragment {
         noEventsTextView = (TextView) rootView.findViewById(R.id.no_take_part_event_text);
         noConnectionTextView = (TextView) rootView.findViewById(R.id.no_connection_text);
 
-        adapter = new EventTakePartListAdapter(getActivity(), R.layout.list_item, R.id.textView, dataset);
+        adapter = new EventTakePartListAdapter(getActivity(), R.layout.list_item, dataset);
         listView.setAdapter(adapter);
 
         startTask();
@@ -159,6 +159,8 @@ public class EventTakePartFragment extends Fragment {
                 for (int i=0; i<events.size(); i++) {
                     if (i%2==0) {
                         ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
+                                events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
+                                events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
                                 EventOrganizedListAdapter.TYPE_LEFT,
                                 events.get(i).getEventInfo().getEventId());
                         if(!dataset.contains(toAdd)){
@@ -166,6 +168,8 @@ public class EventTakePartFragment extends Fragment {
                         }
                     } else {
                         ListViewItem toAdd =  new ListViewItem(events.get(i).getEventInfo().getNameEvent(),
+                                events.get(i).getEventInfo().getOrganizer().getOrganizerName(),
+                                events.get(i).getEventInfo().getOrganizer().getOrganizerSurname(),
                                 EventOrganizedListAdapter.TYPE_RIGHT,
                                 events.get(i).getEventInfo().getEventId());
                         if(!dataset.contains(toAdd)){

@@ -5,22 +5,26 @@ package com.example.luca.planit;
  */
 
 public class ListViewItem {
-    private String text;
+    private String eventName;
+    private String organizerName;
+    private String organizerSurname;
     private int type;
     private String eventId;
 
-    public ListViewItem(String text, int type, String eventId) {
-        this.text = text;
+    public ListViewItem(String eventName, String organizerName, String organizerSurname, int type, String eventId) {
+        this.eventName = eventName;
+        this.organizerName = organizerName;
+        this.organizerSurname = organizerSurname;
         this.type = type;
         this.eventId = eventId;
     }
 
-    public String getText() {
-        return text;
+    public String getEventName() {
+        return eventName;
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.eventName = text;
     }
 
     public int getType() {
@@ -35,6 +39,14 @@ public class ListViewItem {
         return eventId;
     }
 
+    public String getOrganizerName() {
+        return organizerName;
+    }
+
+    public String getOrganizerSurname() {
+        return organizerSurname;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,14 +55,14 @@ public class ListViewItem {
         ListViewItem that = (ListViewItem) o;
 
         if (type != that.type) return false;
-        if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        if (eventName != null ? !eventName.equals(that.eventName) : that.eventName != null) return false;
         return eventId != null ? eventId.equals(that.eventId) : that.eventId == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = text != null ? text.hashCode() : 0;
+        int result = eventName != null ? eventName.hashCode() : 0;
         result = 31 * result + type;
         result = 31 * result + (eventId != null ? eventId.hashCode() : 0);
         return result;

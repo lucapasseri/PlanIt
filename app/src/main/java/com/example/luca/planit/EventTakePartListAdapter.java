@@ -2,7 +2,6 @@ package com.example.luca.planit;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -23,8 +22,8 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
 
     private final List<ListViewItem> dataset;
 
-    public EventTakePartListAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<ListViewItem> objects) {
-        super(context, resource, textViewResourceId, objects);
+    public EventTakePartListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ListViewItem> objects) {
+        super(context, resource, objects);
 
         dataset = objects;
     }
@@ -52,21 +51,25 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_left);
                 textView.setBackground(drawable);
-                textView.setGravity(Gravity.CENTER);
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                textView.setPadding(50, 75, 0, 20);
+
+                TextView organizerText = (TextView) convertView.findViewById(R.id.organizer_name);
+                Drawable organizerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_organizer_left);
+                organizerText.setBackground(organizerDrawable);
+
             } else if (listViewItemType == EventOrganizedListAdapter.TYPE_RIGHT) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
                 TextView textView = (TextView) convertView.findViewById(R.id.textView);
                 Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_right);
                 textView.setBackground(drawable);
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                textView.setGravity(Gravity.CENTER);
-                textView.setPadding(0, 75, 50, 20);
+
+                TextView organizerText = (TextView) convertView.findViewById(R.id.organizer_name);
+                Drawable organizerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.list_item_organizer_right);
+                organizerText.setBackground(organizerDrawable);
             }
 
             TextView textView = (TextView) convertView.findViewById(R.id.textView);
-            viewHolder = new ViewHolder(textView);
+            TextView organizerText = (TextView) convertView.findViewById(R.id.organizer_name);
+            viewHolder = new ViewHolder(textView, organizerText);
 
             convertView.setTag(viewHolder);
 
@@ -74,7 +77,11 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.getText().setText(listViewItem.getText());
+        String initialNameLetter = listViewItem.getOrganizerName().substring(0, 1);
+        String initialSurnameLetter = listViewItem.getOrganizerSurname().substring(0, 1);
+
+        viewHolder.getEventNameventName().setText(listViewItem.getEventName());
+        viewHolder.getOrganizerText().setText(initialNameLetter + initialSurnameLetter);
 
         return convertView;
     }

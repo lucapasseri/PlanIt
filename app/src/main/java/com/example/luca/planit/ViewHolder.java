@@ -7,18 +7,21 @@ import android.widget.TextView;
  */
 
 public class ViewHolder {
-    TextView text;
+    TextView eventName;
+    TextView organizerText;
 
-    public ViewHolder(TextView text) {
-        this.text = text;
+    public ViewHolder(TextView eventName, TextView organizerText) {
+        this.eventName = eventName;
+        this.organizerText = organizerText;
     }
 
-    public TextView getText() {
-        return text;
+    public TextView getEventNameventName() {
+        return eventName;
     }
 
-    public void setText(TextView text) {
-        this.text = text;
+    public TextView getOrganizerText() {
+        return organizerText;
     }
+
 
 }
