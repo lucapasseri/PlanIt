@@ -1,6 +1,9 @@
 package com.example.luca.planit;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -55,8 +58,29 @@ public class AccountImpl implements Account {
         return id;
     }
 
-    public String getBorndate() {
-        return borndate;
+    public String getBornDate(DateFormatType formatType) {
+
+        switch (formatType) {
+
+            case DD_MM_YYYY_BACKSLASH:
+                SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
+                SimpleDateFormat toFormatter  = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
+
+                String formattedDate = borndate;
+
+                try {
+                    Date toFormatDate = fromFormatter.parse(formattedDate);
+                    formattedDate = toFormatter.format(toFormatDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                return formattedDate;
+
+            default:
+                return borndate;
+        }
+
     }
 
 

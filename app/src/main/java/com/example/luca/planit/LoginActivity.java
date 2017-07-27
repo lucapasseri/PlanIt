@@ -248,7 +248,7 @@ public class LoginActivity extends Activity {
                     String email = account.getEmail();
                     String username = account.getUsername();
                     String password = account.getPassword();
-                    String bornDate = account.getBorndate();
+                    String bornDate = account.getBornDate(DateFormatType.DD_MM_YYYY_BACKSLASH);
                     String id = account.getId();
 
                     SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);

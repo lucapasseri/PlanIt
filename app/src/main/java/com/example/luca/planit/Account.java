@@ -17,6 +17,6 @@ public interface Account {
 
     public String getId();
 
-    public String getBorndate();
+    public String getBornDate(DateFormatType dateFormatType);
 
 }

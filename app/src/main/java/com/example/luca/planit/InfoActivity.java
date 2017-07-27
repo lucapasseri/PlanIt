@@ -26,7 +26,7 @@ public class InfoActivity extends AppCompatActivity {
         displaySurname.setText(LoggedAccount.getLoggedAccount().getSurname());
         displayEmail.setText(LoggedAccount.getLoggedAccount().getEmail());
         displayUsername.setText(LoggedAccount.getLoggedAccount().getUsername());
-        displayBornDate.setText(LoggedAccount.getLoggedAccount().getBorndate());
+        displayBornDate.setText(LoggedAccount.getLoggedAccount().getBornDate(DateFormatType.DD_MM_YYYY_BACKSLASH));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
