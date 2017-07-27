@@ -31,12 +31,14 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 
 public class EventTakePartFragment extends Fragment {
@@ -79,7 +81,7 @@ public class EventTakePartFragment extends Fragment {
         return rootView;
     }
 
-    public void startTask(){
+    public void startTask() {
         TakePartEventTask takePartEventTask = new TakePartEventTask(getActivity());
         takePartEventTask.execute(LoggedAccount.getLoggedAccount());
     }
@@ -105,11 +107,11 @@ public class EventTakePartFragment extends Fragment {
         private void showItem(ItemType itemType) {
             for (Map.Entry<ItemType, View> e : items.entrySet()) {
                 if (e.getKey() == itemType) {
-                    if(items.get(e.getKey()).getVisibility() == View.GONE) {
+                    if (items.get(e.getKey()).getVisibility() == View.GONE) {
                         items.get(e.getKey()).setVisibility(View.VISIBLE);
                     }
                 } else {
-                    if(items.get(e.getKey()).getVisibility() == View.VISIBLE) {
+                    if (items.get(e.getKey()).getVisibility() == View.VISIBLE) {
                         items.get(e.getKey()).setVisibility(View.GONE);
                     }
                 }
@@ -156,12 +158,12 @@ public class EventTakePartFragment extends Fragment {
                 List<String> listId = new LinkedList<>();
                 List<ListViewItem> listItemToRemove = new LinkedList<>();
 
-                for(Event event : events){
+                for (Event event : events) {
                     listId.add(event.getEventInfo().getEventId());
                 }
 
-                for(ListViewItem item : dataset){
-                    if(!listId.contains(item.getEventId())){
+                for (ListViewItem item : dataset) {
+                    if (!listId.contains(item.getEventId())) {
                         listItemToRemove.add(item);
                     }
 
@@ -171,21 +173,21 @@ public class EventTakePartFragment extends Fragment {
                     dataset.clear();
                 }
 
-                for (int i=0; i<events.size(); i++) {
-                    if (i%2==0) {
-                        ListViewItem toAdd =  new ListViewItem(events.get(i),
+                for (int i = 0; i < events.size(); i++) {
+                    if (i % 2 == 0) {
+                        ListViewItem toAdd = new ListViewItem(events.get(i),
                                 EventListAdapter.TYPE_LEFT,
                                 events.get(i).getEventInfo().getEventId(),
                                 LoggedAccount.getColorT());
-                        if(!dataset.contains(toAdd)){
+                        if (!dataset.contains(toAdd)) {
                             dataset.add(toAdd);
                         }
                     } else {
-                        ListViewItem toAdd =  new ListViewItem(events.get(i),
+                        ListViewItem toAdd = new ListViewItem(events.get(i),
                                 EventListAdapter.TYPE_RIGHT,
                                 events.get(i).getEventInfo().getEventId(),
                                 LoggedAccount.getColorT());
-                        if(!dataset.contains(toAdd)){
+                        if (!dataset.contains(toAdd)) {
                             dataset.add(toAdd);
                         }
                     }
@@ -204,11 +206,11 @@ public class EventTakePartFragment extends Fragment {
                 URL url = new URL(Resource.BASE_URL + Resource.PART_OF_EVENT_PAGE); //Enter URL here
                 JSONObject returned = null;
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setConnectTimeout(3000);
                 httpURLConnection.setUseCaches(false);
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
-                //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
                 OutputStream os = httpURLConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                 HashMap<String, String> toPass = new HashMap<>();
@@ -216,8 +218,10 @@ public class EventTakePartFragment extends Fragment {
                 writer.write(getPostDataString(toPass));
                 writer.flush();
                 writer.close();
+
                 os.close();
                 httpURLConnection.connect();
+
                 int responseCode = httpURLConnection.getResponseCode();
                 if (responseCode == httpURLConnection.HTTP_OK) {
                     InputStream inputStream = httpURLConnection.getInputStream();
@@ -227,7 +231,7 @@ public class EventTakePartFragment extends Fragment {
                         response.append(line);
                     }
                     System.out.println(response.toString());
-                    if(response.toString().isEmpty()){
+                    if (response.toString().isEmpty()) {
                         return listEvent;
                     }
                     returned = new JSONObject(response.toString());
@@ -250,7 +254,7 @@ public class EventTakePartFragment extends Fragment {
                             .setNameEvent(eventInfoJson.getString("nome_evento"))
                             .setTime(eventInfoJson.optString("time"))
                             .setEventId(eventInfoJson.getString("id_evento"))
-                            .setOrganizer(new OrganizerImpl(eventInfoJson.getString("organizzatore_nome"),eventInfoJson.getString("organizzatore_cognome")))
+                            .setOrganizer(new OrganizerImpl(eventInfoJson.getString("organizzatore_nome"), eventInfoJson.getString("organizzatore_cognome")))
                             .build();
 
                     System.out.println(eventInfo.toString());
@@ -261,22 +265,24 @@ public class EventTakePartFragment extends Fragment {
                     for (int j = 0; j < guestsJSon.length(); j++) {
 
                         JSONObject jsonObj = (JSONObject) guestsJSon.get(j);
-                        GuestState state = jsonObj.getString("accettato").equals("0")?
-                                GuestState.NOT_CONFIRMED:jsonObj.getString("accettato").equals("1")?
-                                GuestState.CONFIRMED:GuestState.DECLINED;
-                        if(params[0].getId().equals(jsonObj.getString("id_utente"))){
+                        GuestState state = jsonObj.getString("accettato").equals("0") ?
+                                GuestState.NOT_CONFIRMED : jsonObj.getString("accettato").equals("1") ?
+                                GuestState.CONFIRMED : GuestState.DECLINED;
+                        if (params[0].getId().equals(jsonObj.getString("id_utente"))) {
                             mystate = state;
                         }
-                        Guest toAdd = new GuestImpl(jsonObj.getString("nome"),jsonObj.getString("cognome"),state);
+                        Guest toAdd = new GuestImpl(jsonObj.getString("nome"), jsonObj.getString("cognome"), state);
                         guests.add(toAdd);
                         System.out.println(toAdd.toString());
                     }
-                    if(mystate == GuestState.CONFIRMED){
+                    if (mystate == GuestState.CONFIRMED) {
                         listEvent.add(new EventImpl(eventInfo, guests));
                     }
                 }
             } catch (ProtocolException e1) {
                 e1.printStackTrace();
+            } catch (SocketTimeoutException et) {
+                return listEvent;
             } catch (IOException e1) {
                 e1.printStackTrace();
             } catch (JSONException e1) {

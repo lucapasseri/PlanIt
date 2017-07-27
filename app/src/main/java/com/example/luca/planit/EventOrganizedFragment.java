@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -213,6 +214,7 @@ public class EventOrganizedFragment extends Fragment {
                 URL url = new URL(Resource.BASE_URL + Resource.ORGANIZED_EVENT_PAGE); //Enter URL here
                 JSONObject returned = null;
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setConnectTimeout(3000);
                 httpURLConnection.setUseCaches(false);
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
@@ -226,7 +228,8 @@ public class EventOrganizedFragment extends Fragment {
                 writer.flush();
                 writer.close();
                 os.close();
-                httpURLConnection.connect();
+                 httpURLConnection.connect();
+
                 int responseCode = httpURLConnection.getResponseCode();
                 Log.d("event",String.valueOf(responseCode));
                 if (responseCode == httpURLConnection.HTTP_OK) {
@@ -285,8 +288,11 @@ public class EventOrganizedFragment extends Fragment {
                 }
             } catch (ProtocolException e1) {
                 e1.printStackTrace();
-            } catch (IOException e1) {
+            }catch (SocketTimeoutException et){
+                return listEvent;
+            }catch (IOException e1) {
                 e1.printStackTrace();
+                Log.d("Event","Time out Exception");
                 return listEvent;
             } catch (JSONException e1) {
                 e1.printStackTrace();
