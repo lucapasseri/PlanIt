@@ -51,6 +51,7 @@ public class EventOrganizedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_event_organized, container, false);
 
@@ -68,6 +69,8 @@ public class EventOrganizedFragment extends Fragment {
                 SelectedEvent.storeSelectedEvent(adapter.getItem(position).getEvent());
 
                 Intent intent = new Intent(EventOrganizedFragment.this.getActivity(), EventManagementActivity.class);
+                intent.putExtra(getString(R.string.extra_from_organized), true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

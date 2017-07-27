@@ -31,6 +31,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:background="@color/colorPrimaryDark"
         app:backgroundTint="@color/colorPrimaryDark"
-        app:srcCompat="@drawable/ic_add_circle_outline_white_36dp" />
+        app:srcCompat="@drawable/ic_add_event_64" />
 
 </android.support.design.widget.CoordinatorLayout>

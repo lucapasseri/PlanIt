@@ -44,4 +44,8 @@ public class LoggedAccount {
         LoggedAccount.colorsT.addLast(colorToReturn);
         return colorToReturn;
     }
+
+    public static void removeLoggedAccount() {
+        loggedAccount = null;
+    }
 }

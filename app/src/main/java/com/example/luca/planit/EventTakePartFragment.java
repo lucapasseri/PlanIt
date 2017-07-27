@@ -65,7 +65,11 @@ public class EventTakePartFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                SelectedEvent.storeSelectedEvent(adapter.getItem(position).getEvent());
+
                 Intent intent = new Intent(EventTakePartFragment.this.getActivity(), EventManagementActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

@@ -15,6 +15,10 @@ public class SelectedEvent {
         selectedEvent = event;
     }
 
+    public static void removeSelectedEvent() {
+        selectedEvent = null;
+    }
+
     public static Event getSelectedEvent() {
         return selectedEvent;
     }

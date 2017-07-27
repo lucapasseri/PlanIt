@@ -88,5 +88,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="empty_field_message">Still to be defined</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
+    <string name="extra_from_organized">extra_from_organized</string>
+    <string name="extra_from_info">extra_from_info</string>
 
 </resources>

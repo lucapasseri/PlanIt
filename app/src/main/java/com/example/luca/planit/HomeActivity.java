@@ -134,6 +134,7 @@ public class HomeActivity extends AppCompatActivity
                     getIntent().hasExtra(getString(R.string.extra_from_signup))) {
                 logout();
             }
+
             super.onBackPressed();
         }
 
@@ -162,6 +163,13 @@ public class HomeActivity extends AppCompatActivity
         super.onResume();
         Intent intent = new Intent(this,EventDownloader.class);
         bindService(intent,conn, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        LoggedAccount.removeLoggedAccount();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

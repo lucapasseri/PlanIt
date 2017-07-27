@@ -14,12 +14,16 @@ public class EventManagementActivity extends AppCompatActivity {
 
     private static final int NUM_PAGES = 3;
 
+    private static final int GUESTS_FRAGMENT = 0;
+    private static final int INFO_FRAGMENT = 1;
+    private static final int PROPOSALS_FRAGMENT = 2;
+
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
 
     private GuestsFragment guestsFragment = new GuestsFragment();
     private EventInfoFragment infoFragment = new EventInfoFragment();
-    private SuggestionsFragment suggestionsFragment = new SuggestionsFragment();
+    private ProposalsFragment proposalsFragment = new ProposalsFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,7 @@ public class EventManagementActivity extends AppCompatActivity {
         pager = (ViewPager) findViewById(R.id.pager);
         pagerAdapter = new EventManagementActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
-        pager.setCurrentItem(1);
+        pager.setCurrentItem(INFO_FRAGMENT);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager, true);
@@ -56,12 +60,12 @@ public class EventManagementActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if (position==0) {
+            if (position==GUESTS_FRAGMENT) {
                 return guestsFragment;
-            } else if (position==1) {
+            } else if (position==INFO_FRAGMENT) {
                 return infoFragment;
             } else {
-                return suggestionsFragment;
+                return proposalsFragment;
             }
         }
 
@@ -69,5 +73,12 @@ public class EventManagementActivity extends AppCompatActivity {
         public int getCount() {
             return NUM_PAGES;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SelectedEvent.removeSelectedEvent();
     }
 }

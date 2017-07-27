@@ -48,6 +48,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class PlanEventActivity extends AppCompatActivity {
 
@@ -63,7 +64,7 @@ public class PlanEventActivity extends AppCompatActivity {
     private RadioGroup timeRadio;
     private NumberPicker hourNp;
     private NumberPicker minutesNp;
-    private Button createButton;
+    private Button button;
     private View progressView;
     private ScrollView createEventFormView;
 
@@ -74,17 +75,37 @@ public class PlanEventActivity extends AppCompatActivity {
     private Calendar dateCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
 
+    private  EventInfo selectedEventInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan_event);
+
+        if(getIntent().hasExtra(getString(R.string.extra_from_info))) {
+            setContentView(R.layout.activity_modify_event);
+
+            selectedEventInfo = SelectedEvent.getSelectedEvent().getEventInfo();
+            TextView eventTitle = (TextView) findViewById(R.id.modify_event_title);
+            eventTitle.setText("Modify the Event\n \"" + selectedEventInfo.getNameEvent() + "\"");
+            button = (Button) findViewById(R.id.apply_button);
+        } else {
+            setContentView(R.layout.activity_plan_event);
+            eventNameEdit = (EditText) findViewById(R.id.event_name_edit);
+            button = (Button) findViewById(R.id.create_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attempt();
+                }
+            });
+        }
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         progressView = findViewById(R.id.signup_progress);
 
-        eventNameEdit = (EditText) findViewById(R.id.event_name_edit);
         placeRadio = (RadioGroup) findViewById(R.id.radio_place);
         placeNameEdit = (EditText) findViewById(R.id.place_name_edit);
         placeProvinceEdit = (EditText) findViewById(R.id.place_province_edit);
@@ -96,7 +117,6 @@ public class PlanEventActivity extends AppCompatActivity {
         timeRadio = (RadioGroup) findViewById(R.id.radio_time);
         hourNp = (NumberPicker) findViewById(R.id.hour_np);
         minutesNp = (NumberPicker) findViewById(R.id.minutes_np);
-        createButton = (Button) findViewById(R.id.create_button);
 
         dateLayout = (LinearLayout) findViewById(R.id.date_layout);
         placeLayout = (LinearLayout) findViewById(R.id.place_layout);
@@ -125,6 +145,26 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         });
 
+
+        if(getIntent().hasExtra(getString(R.string.extra_from_info))) {
+
+            placeNameEdit.setText(selectedEventInfo.getNamePlace());
+            placeProvinceEdit.setText(selectedEventInfo.getProvince());
+            placeCityEdit.setText(selectedEventInfo.getCity());
+            placeAddressEdit.setText(selectedEventInfo.getAddress());
+            dateEdit.setText(selectedEventInfo.getDate(DateFormatType.DD_MM_YYYY_BACKSLASH));
+
+            String time = selectedEventInfo.getTime();
+
+            if (!time.isEmpty()) {
+                StringTokenizer tokenizer = new StringTokenizer(time, ":");
+                int hour = Integer.parseInt(tokenizer.nextToken());;
+                int minutes = Integer.parseInt(tokenizer.nextToken());
+
+                hourNp.setValue(hour);
+                minutesNp.setValue(minutes);
+            }
+        }
 
         dateRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
@@ -203,13 +243,6 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         });
 
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptCreateEvent();
-            }
-        });
-
         ((ProgressBar) progressView).getIndeterminateDrawable().
                 setColorFilter(ContextCompat.getColor(this, R.color.green_sea), android.graphics.PorterDuff.Mode.MULTIPLY);
 
@@ -232,7 +265,7 @@ public class PlanEventActivity extends AppCompatActivity {
         dateEdit.setText(sdf.format(dateCalendar.getTime()));
     }
 
-    private void attemptCreateEvent() {
+    private void attempt() {
         // Reset errors.
         eventNameEdit.setError(null);
         placeNameEdit.setError(null);
@@ -371,7 +404,7 @@ public class PlanEventActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            createButton.setVisibility(show ? View.GONE : View.VISIBLE);
+            button.setVisibility(show ? View.GONE : View.VISIBLE);
             createEventFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 
             createEventFormView.animate().setDuration(shortAnimTime).alpha(
@@ -382,11 +415,11 @@ public class PlanEventActivity extends AppCompatActivity {
                 }
             });
 
-            createButton.animate().setDuration(shortAnimTime).alpha(
+            button.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    createButton.setVisibility(show ? View.GONE : View.VISIBLE);
+                    button.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -399,7 +432,7 @@ public class PlanEventActivity extends AppCompatActivity {
                 }
             });
         } else {
-            createButton.setVisibility(show ? View.GONE : View.VISIBLE);
+            button.setVisibility(show ? View.GONE : View.VISIBLE);
             createEventFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);

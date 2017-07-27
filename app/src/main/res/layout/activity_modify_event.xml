@@ -13,10 +13,9 @@
     tools:context="com.example.luca.planit.PlanEventActivity">
 
     <TextView
-        android:id="@+id/create_event_title"
+        android:id="@+id/modify_event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/create_event_title"
         android:textAlignment="center"
         android:textSize="35sp" />
 
@@ -40,50 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/event_name_text"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="2dp"
-                    android:src="@drawable/ic_edit_black_36dp" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15sp"
-                    android:theme="@style/TextLabel">
-
-                    <EditText
-                        android:id="@+id/event_name_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/event_name_edit"
-                        android:inputType="textCapSentences"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="30sp"
-                android:background="@color/iron"
-                android:theme="@style/HorizontalLine" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -412,16 +367,15 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/create_button"
+        android:id="@+id/apply_button"
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:background="@drawable/signup_button"
-        android:text="@string/create_button_text"
+        android:text="Apply"
         android:textColor="@color/white"
         android:textStyle="bold" />
-
 
 </LinearLayout>

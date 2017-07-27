@@ -1,11 +1,16 @@
 package com.example.luca.planit;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class EventInfoFragment extends Fragment {
@@ -21,8 +26,34 @@ public class EventInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_event_info, container, false);
+
+        ViewGroup rootView;
+
+        if(getActivity().getIntent().hasExtra(getString(R.string.extra_from_organized))) {
+            rootView = (ViewGroup) inflater.inflate(
+                    R.layout.fragment_event_info_organizer, container, false);
+
+            ImageView infoSettingsImage = (ImageView) rootView.findViewById(R.id.info_settings);
+
+            infoSettingsImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(EventInfoFragment.this.getActivity(), PlanEventActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra(getString(R.string.extra_from_info), true);
+                    startActivity(intent);
+
+                }
+            });
+
+
+
+        } else {
+            rootView = (ViewGroup) inflater.inflate(
+                    R.layout.fragment_event_info, container, false);
+        }
+
 
         nameText = (TextView) rootView.findViewById(R.id.name_text);
         placeNameText = (TextView) rootView.findViewById(R.id.place_name_text);
@@ -41,39 +72,34 @@ public class EventInfoFragment extends Fragment {
         String date = selectedEvent.getEventInfo().getDate(DateFormatType.DD_MM_YYYY_BACKSLASH);
         String time = selectedEvent.getEventInfo().getTime();
 
-        if(placeName.isEmpty()) {
-            Log.d("place1", "ciaoo");
-        }
-
-
 
         nameText.setText(nameEvent);
-        if (placeName.equals(EventInfoImpl.EMPTY_FIELD)) {
+        if (placeName.isEmpty()) {
             placeNameText.setText(R.string.empty_field_message);
         } else {
             placeNameText.setText(placeName);
         }
-        if (placeProvince.equals(EventInfoImpl.EMPTY_FIELD)) {
+        if (placeProvince.isEmpty()) {
             placeProvinceText.setText(R.string.empty_field_message);
         } else {
             placeProvinceText.setText(placeProvince);
         }
-        if (placeCity.equals(EventInfoImpl.EMPTY_FIELD)) {
+        if (placeCity.isEmpty()) {
             placeCitytText.setText(R.string.empty_field_message);
         } else {
             placeCitytText.setText(placeCity);
         }
-        if (placeAddress.equals(EventInfoImpl.EMPTY_FIELD)) {
+        if (placeAddress.isEmpty()) {
             placeAddressText.setText(R.string.empty_field_message);
         } else {
             placeAddressText.setText(placeAddress);
         }
-        if (date.equals(EventInfoImpl.EMPTY_FIELD)) {
+        if (date.isEmpty()) {
             dateText.setText(R.string.empty_field_message);
         } else {
             dateText.setText(date);
         }
-        if (time.equals(EventInfoImpl.EMPTY_FIELD)) {
+        if (time.isEmpty()) {
             timeText.setText(R.string.empty_field_message);
         } else {
             timeText.setText(time);
