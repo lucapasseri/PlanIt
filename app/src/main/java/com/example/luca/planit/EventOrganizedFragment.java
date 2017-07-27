@@ -142,6 +142,8 @@ public class EventOrganizedFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Event> events) {
 
+            Log.d("eventi_", String.valueOf(events.size()));
+
             if (events.isEmpty()) {
                 ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -276,6 +278,7 @@ public class EventOrganizedFragment extends Fragment {
                 e1.printStackTrace();
             } catch (IOException e1) {
                 e1.printStackTrace();
+                return listEvent;
             } catch (JSONException e1) {
                 e1.printStackTrace();
             } finally {

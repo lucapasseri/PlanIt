@@ -86,7 +86,7 @@ public class PlanEventActivity extends AppCompatActivity {
 
             selectedEventInfo = SelectedEvent.getSelectedEvent().getEventInfo();
             TextView eventTitle = (TextView) findViewById(R.id.modify_event_title);
-            eventTitle.setText("Modify the Event\n \"" + selectedEventInfo.getNameEvent() + "\"");
+            eventTitle.setText("Modify the Event\n\"" + selectedEventInfo.getNameEvent() + "\"");
             button = (Button) findViewById(R.id.apply_button);
         } else {
             setContentView(R.layout.activity_plan_event);
