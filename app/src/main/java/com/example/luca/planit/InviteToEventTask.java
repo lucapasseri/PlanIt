@@ -60,7 +60,7 @@ public class InviteToEventTask extends AsyncTask<EventInvite,Void,RequestResult>
     protected RequestResult doInBackground(EventInvite... params) {
         try {
 
-            URL url = new URL(Resource.BASE_URL+Resource.REGISTRATION_EVENT_PAGE); //Enter URL here
+            URL url = new URL(Resource.BASE_URL+Resource.INVITE_TO_EVENT_PAGE); //Enter URL here
             httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setDoOutput(true);

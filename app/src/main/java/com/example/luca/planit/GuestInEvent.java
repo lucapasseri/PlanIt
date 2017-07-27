@@ -40,4 +40,5 @@ public class GuestInEvent extends InviteWrapper {
                 ", guestUsername='" + guestUsername + '\'' +
                 '}'+super.toString();
     }
+
 }

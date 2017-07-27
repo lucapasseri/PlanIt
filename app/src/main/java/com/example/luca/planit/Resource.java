@@ -29,4 +29,5 @@ public final class Resource {
     public static final String GET_TASK_PAGE = "ritornaCompiti.php";
     public static final String UPDATE_EVENT_PAGE = "updateEvent.php";
     public static final String INVITE_TO_GROUP_PAGE = "inviteToGroup.php";
+    public static final String INVITE_TO_EVENT_PAGE = "inviaInviti.php";
 }

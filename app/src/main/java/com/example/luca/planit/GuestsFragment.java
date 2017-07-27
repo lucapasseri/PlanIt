@@ -66,15 +66,10 @@ public class GuestsFragment extends Fragment {
         return rootView;
     }
 
-    public void startTask(){
+    public void startTask() {
         GuestsFragment.GetInviteTask getUserGroupTask = new GuestsFragment.GetInviteTask(getActivity());
         getUserGroupTask.execute(LoggedAccount.getLoggedAccount());
     }
-
-
-
-
-
 
 
     public class GetInviteTask extends AsyncTask<Account, Void, List<GuestInEvent>> {
@@ -111,18 +106,17 @@ public class GuestsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<GuestInEvent> listGuest) {
-            ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected()) {
-                if (listGuest.isEmpty()) {
 
-                } else {
-                    dataset.clear();
-                    for (int i = 0; i < listGuest.size(); i++) {
-                        GuestInEvent toAdd = listGuest.get(i);
-                        dataset.add(toAdd);
-                        adapter.notifyDataSetChanged();
-                    }
+            if (listGuest.isEmpty()) {
+
+            } else {
+                dataset.clear();
+
+                for (int i = 0; i < listGuest.size(); i++) {
+                    GuestInEvent toAdd = listGuest.get(i);
+                    dataset.add(toAdd);
+                    adapter.notifyDataSetChanged();
+                }
                     /*
                     List<String> listId = new LinkedList<>();
                     List<GuestInEvent> listItemToRemove = new LinkedList<>();
@@ -152,28 +146,13 @@ public class GuestsFragment extends Fragment {
                     }
 
                     */
-                }
-            } else {
-                final Dialog d = new AlertDialog.Builder(activity).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        Intent intent = new Intent(GuestsFragment.this.getActivity(), HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).create();
-                d.show();
             }
 
         }
 
         @Override
         protected List<GuestInEvent> doInBackground(Account... params) {
-            Log.d("task","background");
+            Log.d("task", "background");
             List<GuestInEvent> listGuest = new LinkedList<>();
             try {
                 URL url = new URL(Resource.BASE_URL + Resource.PART_OF_EVENT_PAGE); //Enter URL here
@@ -233,7 +212,7 @@ public class GuestsFragment extends Fragment {
 
                     List<Guest> guests = new LinkedList<>();
                     if (eventInfo.getEventId().equals(SelectedEvent.getSelectedEvent().getEventInfo().getEventId())) {
-                        Log.d("Dentro",eventInfo.toString());
+                        Log.d("Dentro", eventInfo.toString());
                         JSONArray guestsJSon = event.getJSONArray("Invitati");
                         for (int j = 0; j < guestsJSon.length(); j++) {
 
@@ -243,12 +222,12 @@ public class GuestsFragment extends Fragment {
                                     GuestState.CONFIRMED : GuestState.DECLINED;
 
                             GuestInEvent toAdd = new GuestInEvent(eventInfo.getEventId(),
-                                                                    jsonObj.getString("id_utente"),
-                                                                    state,
-                                                                    eventInfo.getNameEvent(),
-                                                                    jsonObj.getString("nome"),
-                                                                    jsonObj.getString("cognome"),
-                                                                    jsonObj.getString("username"));
+                                    jsonObj.getString("id_utente"),
+                                    state,
+                                    eventInfo.getNameEvent(),
+                                    jsonObj.getString("nome"),
+                                    jsonObj.getString("cognome"),
+                                    jsonObj.getString("username"));
                             System.out.println(toAdd.toString());
                             listGuest.add(toAdd);
                         }
@@ -256,14 +235,13 @@ public class GuestsFragment extends Fragment {
                     }
 
                 }
-            }catch (ConnectException eC){
+            } catch (ConnectException eC) {
                 eC.printStackTrace();
-            }
-            catch (ProtocolException e1) {
-               e1.printStackTrace();
-            }catch (SocketTimeoutException et) {
+            } catch (ProtocolException e1) {
+                e1.printStackTrace();
+            } catch (SocketTimeoutException et) {
                 et.printStackTrace();
-            }  catch (IOException e1) {
+            } catch (IOException e1) {
                 e1.printStackTrace();
             } catch (JSONException e2) {
                 e2.printStackTrace();
