@@ -9,14 +9,14 @@ import java.util.List;
 
 public class OrganizedEvents {
 
-    private static List<Event> organizedEvents = new LinkedList<>();
+    private static List<EventInfo> organizedEventInfoList = new LinkedList<>();
 
     private OrganizedEvents() {
     }
 
-    public static boolean addEvent(Event event) {
-        if (!organizedEvents.contains(event)) {
-            organizedEvents.add(event);
+    public static boolean addEventInfo(EventInfo event) {
+        if (!organizedEventInfoList.contains(event)) {
+            organizedEventInfoList.add(event);
             return true;
         } else {
             return false;
@@ -24,17 +24,26 @@ public class OrganizedEvents {
 
     }
 
-    public static boolean removeEvent(Event event) {
-        if (organizedEvents.contains(event)) {
-            organizedEvents.remove(event);
+    public static boolean removeEventInfo(EventInfo event) {
+        if (organizedEventInfoList.contains(event)) {
+            organizedEventInfoList.remove(event);
             return true;
         } else {
             return false;
         }
     }
 
-    public static void clearEvents(Event event) {
-        organizedEvents.clear();
+    public static void clearEventInfoList(EventInfo event) {
+        organizedEventInfoList.clear();
+    }
+
+    public static boolean contains(EventInfo eventInfo) {
+        for (EventInfo info : organizedEventInfoList) {
+            if (info.getEventId().equals(eventInfo.getEventId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

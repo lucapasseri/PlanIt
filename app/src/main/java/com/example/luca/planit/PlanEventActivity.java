@@ -480,6 +480,8 @@ public class PlanEventActivity extends AppCompatActivity {
         protected void onPostExecute(EventInfo result) {
             if (result != null) {
 
+                OrganizedEvents.addEventInfo(result);
+
                 Intent intent = new Intent(getApplication(), HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

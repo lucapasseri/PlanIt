@@ -48,6 +48,8 @@ public class EventOrganizedFragment extends Fragment {
     TextView noEventsTextView;
     TextView noConnectionTextView;
 
+    private boolean settedOrganizedEvents = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,7 +71,6 @@ public class EventOrganizedFragment extends Fragment {
                 SelectedEvent.storeSelectedEvent(adapter.getItem(position).getEvent());
 
                 Intent intent = new Intent(EventOrganizedFragment.this.getActivity(), EventManagementActivity.class);
-                intent.putExtra(getString(R.string.extra_from_organized), true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -190,6 +191,14 @@ public class EventOrganizedFragment extends Fragment {
                             dataset.add(toAdd);
                         }
                     }
+                }
+
+                if (!settedOrganizedEvents) {
+                    for (ListViewItem item : dataset) {
+                        OrganizedEvents.addEventInfo(item.getEvent().getEventInfo());
+                    }
+
+                    settedOrganizedEvents = true;
                 }
 
                 adapter.notifyDataSetChanged();

@@ -29,7 +29,12 @@ public class EventInfoFragment extends Fragment {
 
         ViewGroup rootView;
 
-        if(getActivity().getIntent().hasExtra(getString(R.string.extra_from_organized))) {
+        Log.d("event_id", String.valueOf(SelectedEvent.getSelectedEvent().getEventInfo().getEventId()));
+
+        if(OrganizedEvents.contains(SelectedEvent.getSelectedEvent().getEventInfo())) {
+
+            Log.d("event_id", "id present");
+
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_event_info_organizer, container, false);
 
@@ -50,6 +55,7 @@ public class EventInfoFragment extends Fragment {
 
 
         } else {
+            Log.d("event_id", "id not present");
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_event_info, container, false);
         }
