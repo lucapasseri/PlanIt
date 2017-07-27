@@ -1,14 +1,17 @@
 package com.example.luca.planit;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,9 +33,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -72,7 +77,26 @@ public class InviteActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.list_invites);
         adapter = new InviteListAdapter(this, R.layout.list_invites_item, dataset);
         listView.setAdapter(adapter);
-        startTask();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            startTask();
+        }else{
+            final Dialog d = new AlertDialog.Builder(this).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    Intent intent = new Intent(InviteActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).create();
+            d.show();
+        }
+
         Intent intent = new Intent(this,InviteDownloader.class);
         bindService(intent,conn, Context.BIND_AUTO_CREATE);
     }
@@ -113,8 +137,14 @@ public class InviteActivity extends AppCompatActivity {
     }
 
     public void startTask(){
-        InviteActivity.GetInviteTask getUserGroupTask = new  InviteActivity.GetInviteTask(this);
-        getUserGroupTask.execute(LoggedAccount.getLoggedAccount());
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            InviteActivity.GetInviteTask getUserGroupTask = new  InviteActivity.GetInviteTask(this);
+            getUserGroupTask.execute(LoggedAccount.getLoggedAccount());
+        }else{
+        }
+
     }
 
     public class GetInviteTask extends AsyncTask<Account, Void, List<InviteWrapper>> {
@@ -151,40 +181,59 @@ public class InviteActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<InviteWrapper> invites) {
-            if (invites.isEmpty()) {
+            ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                if (invites.isEmpty()) {
 
+                } else {
+
+                    List<String> listId = new LinkedList<>();
+                    List<ListInviteItem> listItemToRemove = new LinkedList<>();
+
+                    for (InviteWrapper invite : invites) {
+                        listId.add(invite.getEventId());
+                    }
+
+                    for (ListInviteItem item : dataset) {
+                        if (!listId.contains(item.getInviteWrapper().getEventId())) {
+                            listItemToRemove.add(item);
+                        }
+
+                    }
+
+                    if (!listItemToRemove.isEmpty()) {
+                        dataset.clear();
+                    }
+
+                    for (int i = 0; i < invites.size(); i++) {
+                        ListInviteItem toAdd = new ListInviteItem(invites.get(i));
+
+                        if (!dataset.contains(toAdd)) {
+                            dataset.add(toAdd);
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+
+                }
             } else {
-
-                List<String> listId = new LinkedList<>();
-                List<ListInviteItem> listItemToRemove = new LinkedList<>();
-
-                for (InviteWrapper invite : invites) {
-                    listId.add(invite.getEventId());
-                }
-
-                for (ListInviteItem item : dataset) {
-                    if (!listId.contains(item.getInviteWrapper().getEventId())) {
-                        listItemToRemove.add(item);
+                final Dialog d = new AlertDialog.Builder(activity).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent intent = new Intent(InviteActivity.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }
-
-                }
-
-                if (!listItemToRemove.isEmpty()) {
-                    dataset.clear();
-                }
-
-                for (int i = 0; i < invites.size(); i++) {
-                    ListInviteItem toAdd = new ListInviteItem(invites.get(i));
-
-                    if (!dataset.contains(toAdd)) {
-                        dataset.add(toAdd);
+                }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                     }
-
-                    adapter.notifyDataSetChanged();
-                }
-
-
+                }).create();
+                d.show();
             }
+
         }
 
         @Override
@@ -194,6 +243,7 @@ public class InviteActivity extends AppCompatActivity {
                 URL url = new URL(Resource.BASE_URL + Resource.PART_OF_EVENT_PAGE); //Enter URL here
                 JSONObject returned = null;
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setConnectTimeout(3000);
                 httpURLConnection.setUseCaches(false);
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
@@ -265,18 +315,23 @@ public class InviteActivity extends AppCompatActivity {
                         listInviteWrapper.add(new InviteWrapper(eventInfo.getEventId(), params[0].getId(), mystate, eventInfo.getNameEvent()));
                     }
                 }
-            } catch (ProtocolException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            }catch (ConnectException eC){
+                return listInviteWrapper;
+            }
+            catch (ProtocolException e1) {
+                return listInviteWrapper;
+            }catch (SocketTimeoutException et) {
+                return listInviteWrapper;
+            }  catch (IOException e1) {
+                return listInviteWrapper;
             } catch (JSONException e1) {
-                e1.printStackTrace();
+                return listInviteWrapper;
             } finally {
                 if (rd != null) {
                     try {
                         rd.close();
                     } catch (Exception e) {
-
+                        return listInviteWrapper;
                     }
                 }
                 if (httpURLConnection != null) {

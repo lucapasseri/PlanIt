@@ -15,16 +15,16 @@
 
         <ImageView
             android:id="@+id/confirm_img"
-            android:layout_width="46sp"
-            android:layout_height="46sp"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
             android:layout_toLeftOf="@+id/denied_img"
             android:paddingRight="15sp"
             android:src="@drawable/success" />
 
         <ImageView
             android:id="@+id/denied_img"
-            android:layout_width="46sp"
-            android:layout_height="46sp"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
             android:paddingRight="15sp"
             android:src="@drawable/error" />
 

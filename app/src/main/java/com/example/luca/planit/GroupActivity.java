@@ -1,13 +1,18 @@
 package com.example.luca.planit;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +37,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -77,11 +83,29 @@ public class GroupActivity extends AppCompatActivity {
                 SelectedGroup.setSelectedGroup(adapter.getItem(position).getGroup());
                 Intent intent = new Intent(GroupActivity.this, GroupInfoActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
                 startActivity(intent);
             }
         });
-        startTask();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            startTask();
+        }else{
+            final Dialog d = new AlertDialog.Builder(this).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    Intent intent = new Intent(GroupActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).create();
+            d.show();
+        }
+
         Intent intent = new Intent(this,GroupDownloader.class);
         bindService(intent,conn, Context.BIND_AUTO_CREATE);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -94,8 +118,15 @@ public class GroupActivity extends AppCompatActivity {
         });
     }
     public void startTask(){
-        GroupActivity.GetUserGroupTask getUserGroupTask = new GroupActivity.GetUserGroupTask(this);
-        getUserGroupTask.execute(LoggedAccount.getLoggedAccount().getId());
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            GroupActivity.GetUserGroupTask getUserGroupTask = new GroupActivity.GetUserGroupTask(this);
+            getUserGroupTask.execute(LoggedAccount.getLoggedAccount().getId());
+        }else{
+
+        }
+
     }
 
     @Override
@@ -164,37 +195,56 @@ public class GroupActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Group> groups) {
-            if (groups.isEmpty()) {
-                //V
-            } else {
+            ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                if (groups.isEmpty()) {
+                    //V
+                } else {
 
-                List<String> listId = new LinkedList<>();
-                List<ListGroupItem> listItemToRemove = new LinkedList<>();
+                    List<String> listId = new LinkedList<>();
+                    List<ListGroupItem> listItemToRemove = new LinkedList<>();
 
-                for(Group group : groups){
-                    listId.add(group.getGroupId());
-                }
-                for(ListGroupItem item : dataset){
-                    if(!listId.contains(item.getGroupId())){
-                        listItemToRemove.add(item);
+                    for(Group group : groups){
+                        listId.add(group.getGroupId());
+                    }
+                    for(ListGroupItem item : dataset){
+                        if(!listId.contains(item.getGroupId())){
+                            listItemToRemove.add(item);
+                        }
+
                     }
 
-                }
-
-                if (!listItemToRemove.isEmpty()) {
-                    Log.d("Removing",listItemToRemove.toString());
-                    dataset.clear();
-                }
-
-                for (Group group : groups){
-                    ListGroupItem toAdd = new ListGroupItem(group.getNameGroup(),group.getGroupId(),group);
-                    if(!dataset.contains(toAdd)){
-                        dataset.add(toAdd);
+                    if (!listItemToRemove.isEmpty()) {
+                        Log.d("Removing",listItemToRemove.toString());
+                        dataset.clear();
                     }
+
+                    for (Group group : groups){
+                        ListGroupItem toAdd = new ListGroupItem(group.getNameGroup(),group.getGroupId(),group);
+                        if(!dataset.contains(toAdd)){
+                            dataset.add(toAdd);
+                        }
+                    }
+                    Log.d("GruppiPost",dataset.toString());
+                    adapter.notifyDataSetChanged();
                 }
-                Log.d("GruppiPost",dataset.toString());
-                adapter.notifyDataSetChanged();
+            }else{
+                final Dialog d = new AlertDialog.Builder(activity).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent intent = new Intent(GroupActivity.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create();
+                d.show();
             }
+
         }
 
         @Override
@@ -253,8 +303,10 @@ public class GroupActivity extends AppCompatActivity {
                 }
             } catch (ProtocolException e1) {
                 e1.printStackTrace();
+            }catch (SocketTimeoutException et) {
+                return listGroups;
             } catch (IOException e1) {
-                e1.printStackTrace();
+                return listGroups;
             } catch (JSONException e1) {
                 e1.printStackTrace();
             } finally {
