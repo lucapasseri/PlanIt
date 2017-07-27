@@ -56,18 +56,19 @@ public class GroupInfoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Invite to group", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Dialog custom = new CustomDialog(GroupInfoActivity.this);
                 custom.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         Intent intent = new Intent(GroupInfoActivity.this, GroupActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
-                                SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
-                        intent.putExtra("TASK","Invite to "+toPass+" sended");
-                        GroupInfoActivity.this.startActivity(intent);
+                        if(SelectedInvite.getSelectedInvite()!= null){
+                            String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
+                                    SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
+                            intent.putExtra("TASK","Invite to "+toPass+" sended");
+                            GroupInfoActivity.this.startActivity(intent);
+                        }
+
                     }
                 });
                 custom.show();

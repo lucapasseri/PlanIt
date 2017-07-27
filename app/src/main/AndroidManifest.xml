@@ -23,7 +23,10 @@
             android:name=".GroupDownloader"
             android:enabled="true"
             android:exported="true" />
-
+        <service
+            android:name=".InviteDownloader"
+            android:enabled="true"
+            android:exported="true" />
         <activity
             android:name=".FirstActivity"
             android:noHistory="true"
@@ -67,7 +70,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".GroupInfoActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".InviteActivity"></activity>
     </application>
 
 </manifest>

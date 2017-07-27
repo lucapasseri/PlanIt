@@ -209,6 +209,10 @@ public class HomeActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             logout();
+        } else if (id == R.id.nav_invites) {
+            Intent intent = new Intent(getApplication(), InviteActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

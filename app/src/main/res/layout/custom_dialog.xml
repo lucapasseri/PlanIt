@@ -2,38 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="vertical">
 
-    android:padding="20sp">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textAlignment="center"
+    android:textSize="20sp"
+    android:textColor="@color/white"
+    android:background="@color/colorPrimaryDark"
+    android:text="Invite a Person"
+    android:padding="7sp"
+    />
 
-
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20sp">
 
-        android:theme="@style/TextLabel">
-
-        <EditText
-            android:layout_marginTop="5sp"
-            android:id="@+id/invite_person_text"
-
-            android:layout_width="250sp"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username or Email of the person to invite:"
-            android:inputType="text"
-            android:maxLines="1"
-            android:singleLine="true" />
 
-    </android.support.design.widget.TextInputLayout>
+            android:theme="@style/TextLabel">
 
-    <Button
-        android:layout_marginTop="5sp"
-        android:id="@+id/button_invite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/signup_button"
-        android:text="Invite"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
+            <EditText
+                android:layout_marginTop="5sp"
+                android:id="@+id/invite_person_text"
+
+                android:layout_width="250sp"
+                android:layout_height="wrap_content"
+                android:hint="Username or Email of the person to invite:"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_marginTop="15sp"
+            android:id="@+id/button_invite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/signup_button"
+            android:text="Invite"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </LinearLayout>

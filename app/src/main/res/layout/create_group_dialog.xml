@@ -2,38 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="vertical">
 
-    android:padding="20sp">
-
-
-    <android.support.design.widget.TextInputLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:theme="@style/TextLabel">
-
-        <EditText
-            android:layout_marginTop="5sp"
-            android:id="@+id/create_group_text"
-
-            android:layout_width="250sp"
-            android:layout_height="wrap_content"
-            android:hint="Name of the group to create:"
-            android:inputType="text"
-            android:maxLines="1"
-            android:singleLine="true" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:layout_marginTop="5sp"
-        android:id="@+id/button_create_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/signup_button"
-        android:text="Create Group"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        android:padding="7sp"
+        android:text="Create a new Group"
+        android:textAlignment="center"
         android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20sp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:theme="@style/TextLabel">
+
+            <EditText
+                android:id="@+id/create_group_text"
+                android:layout_width="250sp"
+
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:hint="Name of the group to create:"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_create_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:background="@drawable/signup_button"
+            android:text="Create Group"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </LinearLayout>
