@@ -59,27 +59,31 @@ public class AccountImpl implements Account {
     }
 
     public String getBornDate(DateFormatType formatType) {
+        if(formatType == null){
+            switch (formatType) {
 
-        switch (formatType) {
+                case DD_MM_YYYY_BACKSLASH:
+                    SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
+                    SimpleDateFormat toFormatter  = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
 
-            case DD_MM_YYYY_BACKSLASH:
-                SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
-                SimpleDateFormat toFormatter  = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
+                    String formattedDate = borndate;
 
-                String formattedDate = borndate;
+                    try {
+                        Date toFormatDate = fromFormatter.parse(formattedDate);
+                        formattedDate = toFormatter.format(toFormatDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-                try {
-                    Date toFormatDate = fromFormatter.parse(formattedDate);
-                    formattedDate = toFormatter.format(toFormatDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    return formattedDate;
 
-                return formattedDate;
-
-            default:
-                return borndate;
+                default:
+                    return borndate;
+            }
+        }else {
+            return borndate;
         }
+
 
     }
 

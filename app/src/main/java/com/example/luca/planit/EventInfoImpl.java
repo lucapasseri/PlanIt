@@ -48,26 +48,30 @@ public class EventInfoImpl implements EventInfo {
 
 
 	public String getDate(DateFormatType formatType) {
+		if(data != null){
+			switch (formatType) {
 
-		switch (formatType) {
+				case DD_MM_YYYY_BACKSLASH:
+					SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
+					SimpleDateFormat toFormatter  = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
 
-            case DD_MM_YYYY_BACKSLASH:
-                SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
-                SimpleDateFormat toFormatter  = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
+					String formattedDate = data;
 
-                String formattedDate = data;
+					try {
+						Date toFormatDate = fromFormatter.parse(formattedDate);
+						formattedDate = toFormatter.format(toFormatDate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 
-                try {
-                    Date toFormatDate = fromFormatter.parse(formattedDate);
-                    formattedDate = toFormatter.format(toFormatDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+					return formattedDate;
 
-                return formattedDate;
+				default:
+					return data;
+			}
 
-			default:
-				return data;
+		}else{
+			return data;
 		}
 
 	}

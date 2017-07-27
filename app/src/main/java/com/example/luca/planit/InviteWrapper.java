@@ -52,4 +52,14 @@ public class InviteWrapper {
     public String getGuestId() {
         return guestId;
     }
+
+    @Override
+    public String toString() {
+        return "InviteWrapper{" +
+                "eventId='" + eventId + '\'' +
+                ", guestId='" + guestId + '\'' +
+                ", eventName='" + eventName + '\'' +
+                ", guestState=" + guestState +
+                '}';
+    }
 }

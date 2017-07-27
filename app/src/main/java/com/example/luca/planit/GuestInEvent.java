@@ -31,4 +31,13 @@ public class GuestInEvent extends InviteWrapper {
     public String getGuestUsername() {
         return guestUsername;
     }
+
+    @Override
+    public String toString() {
+        return "GuestInEvent{" +
+                "guestName='" + guestName + '\'' +
+                ", guestSurname='" + guestSurname + '\'' +
+                ", guestUsername='" + guestUsername + '\'' +
+                '}'+super.toString();
+    }
 }

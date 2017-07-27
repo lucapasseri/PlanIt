@@ -27,6 +27,10 @@
             android:name=".InviteDownloader"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".GuestDownloader"
+            android:enabled="true"
+            android:exported="true" />
         <activity
             android:name=".FirstActivity"
             android:noHistory="true"

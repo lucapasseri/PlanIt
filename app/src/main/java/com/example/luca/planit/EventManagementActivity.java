@@ -1,5 +1,10 @@
 package com.example.luca.planit;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +29,20 @@ public class EventManagementActivity extends AppCompatActivity {
     private GuestsFragment guestsFragment = new GuestsFragment();
     private EventInfoFragment infoFragment = new EventInfoFragment();
     private ProposalsFragment proposalsFragment = new ProposalsFragment();
+    private GuestDownloader guestDownloader;
+    private boolean bounded;
+    private ServiceConnection conn = new ServiceConnection (){
+        @Override
+        public void onServiceConnected (ComponentName cls , IBinder bnd ){
+            guestDownloader = (( GuestDownloader.GuestDownloaderBinder ) bnd).getService();
+            bounded = true ;
+            guestDownloader.startMonitoring(EventManagementActivity.this.guestsFragment);
+        }
+        @Override
+        public void onServiceDisconnected ( ComponentName cls){
+            bounded = false ;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +59,8 @@ public class EventManagementActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager, true);
+        Intent intent = new Intent(this,GuestDownloader.class);
+        bindService(intent,conn, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -80,5 +101,31 @@ public class EventManagementActivity extends AppCompatActivity {
         super.onDestroy();
 
         SelectedEvent.removeSelectedEvent();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(bounded){
+            unbindService(conn);
+            bounded = false;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(bounded){
+            unbindService(conn);
+            bounded = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this,GuestDownloader.class);
+        bindService(intent,conn, Context.BIND_AUTO_CREATE);
     }
 }
