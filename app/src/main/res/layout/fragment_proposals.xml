@@ -8,7 +8,6 @@
     tools:context="com.example.luca.planit.EventInfoFragment">
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="124dp"
         android:layout_height="124dp"
         android:layout_gravity="center_horizontal"
@@ -31,7 +30,8 @@
         android:background="@color/iron"
         android:theme="@style/HorizontalLine" />
 
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    <RadioGroup
+        android:id="@+id/proposal_radio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -39,31 +39,36 @@
         android:layout_marginTop="25sp">
 
         <RadioButton
+            android:id="@+id/radio_place"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_marginEnd="45sp"
             android:text="Places"/>
 
         <RadioButton
+            android:id="@+id/radio_date"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:text="Dates"/>
 
         <RadioButton
+            android:id="@+id/radio_hour"
             android:layout_marginStart="45sp"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:text="Dates"/>
+            android:text="Times"/>
 
     </RadioGroup>
 
     <ListView
+        android:id="@+id/proposal_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="10sp"
         android:layout_marginStart="10sp"
         android:layout_marginTop="35sp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:visibility="gone">
 
     </ListView>
 
