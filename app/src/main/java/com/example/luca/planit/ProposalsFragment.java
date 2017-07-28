@@ -80,9 +80,9 @@ public class ProposalsFragment extends Fragment {
                     listView.setVisibility(View.VISIBLE);
                     selectedRadio = SelectedRadio.PLACES;
 
-                    BestPlaceTask bestPlaceTask = new BestPlaceTask();
-                    startTask(SelectedRadio.PLACES);
+
                 }
+                startTask(SelectedRadio.PLACES);
             }
         });
 
@@ -96,6 +96,7 @@ public class ProposalsFragment extends Fragment {
                     listView.setVisibility(View.VISIBLE);
                     selectedRadio = SelectedRadio.DATES;
                 }
+                startTask(SelectedRadio.DATES);
             }
         });
 
@@ -109,6 +110,7 @@ public class ProposalsFragment extends Fragment {
                     listView.setVisibility(View.VISIBLE);
                     selectedRadio = SelectedRadio.TIME;
                 }
+                startTask(SelectedRadio.TIME);
             }
         });
 
@@ -134,8 +136,12 @@ public class ProposalsFragment extends Fragment {
                 getPlaceProposalsGroupTask.execute(SelectedEvent.getSelectedEvent().getEventInfo().getEventId());
                 break;
             case DATES:
+                ProposalsFragment.BestDateTask bestDateTask = new ProposalsFragment.BestDateTask();
+                bestDateTask.execute(SelectedEvent.getSelectedEvent().getEventInfo().getEventId());
                 break;
             case TIME:
+                ProposalsFragment.BestTimeTask bestTimeTask = new ProposalsFragment.BestTimeTask();
+                bestTimeTask.execute(SelectedEvent.getSelectedEvent().getEventInfo().getEventId());
                 break;
             default:
                 return;
@@ -339,6 +345,282 @@ public class ProposalsFragment extends Fragment {
                             System.out.println(toAdd.toString());
                         }
 
+                    }
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if( rd != null){
+                    try {
+                        rd.close();
+                    }catch (Exception e){
+
+                    }
+                }
+                if(httpURLConnection != null){
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return toReturn;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public class BestTimeTask extends AsyncTask<String,Void,List<TimePreference>> {
+        private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for(Map.Entry<String, String> entry : params.entrySet()){
+                if(first)
+                    first = false;
+                else
+                    result.append("&");
+                result.append(URLEncoder.encode(entry.getKey(),"UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(),"UTF-8"));
+            }
+
+            return  result.toString();
+        }
+
+        //Nome dei parametri del json di risposta
+
+
+        List<TimePreference> toReturn = new LinkedList<>() ;
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder response = new StringBuilder();
+        BufferedReader rd = null;
+
+        @Override
+        protected void onPostExecute(List<TimePreference> result) {
+            if(!result.isEmpty() ){
+
+                List<String> listId = new LinkedList<>();
+                List<TimePreference> listItemToRemove = new LinkedList<>();
+                for(TimePreference timePreference : result){
+                    listId.add(timePreference.getTime());
+                }
+                for(TimePreference item : timeDataset){
+                    if(!listId.contains(item.getTime())){
+                        listItemToRemove.add(item);
+                    }
+                }
+
+                if (!listItemToRemove.isEmpty()) {
+                    timeDataset.clear();
+                }
+
+                for (TimePreference timePreference : result) {
+                    if(!timeDataset.contains(timePreference)) {
+                        timeDataset.add(timePreference);
+                    }
+                }
+
+                placeSuggestionAdapter.notifyDataSetChanged();
+            }else{
+                //listener.onUnsuccessfulLogin();
+            }
+        }
+
+        @Override
+        protected List<TimePreference> doInBackground(String... params) {
+            try {
+                URL url = new URL(Resource.BASE_URL+Resource.GET_BEST_TIME_PAGE); //Enter URL here
+                JSONObject returned = null;
+                httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setUseCaches(false);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
+                //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                HashMap<String,String> toPass = new HashMap<>();
+                toPass.put("id_evento",params[0]);
+                writer.write(getPostDataString(toPass));
+                writer.flush();
+                writer.close();
+                os.close();
+                httpURLConnection.connect();
+                int responseCode = httpURLConnection.getResponseCode();
+                if(responseCode == httpURLConnection.HTTP_OK){
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    rd = new BufferedReader(new InputStreamReader(inputStream));
+                    String line = "";
+                    while ((line = rd.readLine())!= null){
+                        response.append(line);
+                    }
+                    System.out.println(response.toString());
+                    returned = new JSONObject(response.toString());
+                }
+
+                JSONArray dates = returned.optJSONArray("Ore_Possibili");
+                if (dates == null){
+                    JSONObject bestDate = returned.getJSONObject("Miglior_Ora");
+                    String time = bestDate.getString("ora");
+                    String hour = time.substring(0,2);
+                    String minutes = time.substring(2,4);
+                    time = (hour+":"+minutes);
+                    TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
+                    toReturn.add(toAdd);
+                    System.out.println(toAdd.toString());
+                }else {
+                    for ( int i = 0; i< dates.length() ; i++){
+                        JSONObject bestDate = (JSONObject) dates.get(i);
+                        String time = bestDate.getString("ora");
+                        String hour = time.substring(0,2);
+                        String minutes = time.substring(2,4);
+                        time = (hour+":"+minutes);
+                        TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
+                        toReturn.add(toAdd);
+                        System.out.println(toAdd.toString());
+                    }
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if( rd != null){
+                    try {
+                        rd.close();
+                    }catch (Exception e){
+
+                    }
+                }
+                if(httpURLConnection != null){
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return toReturn;
+        }
+    }
+
+
+
+
+    public class BestDateTask extends AsyncTask<String,Void,List<DatePreference>> {
+        private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for(Map.Entry<String, String> entry : params.entrySet()){
+                if(first)
+                    first = false;
+                else
+                    result.append("&");
+                result.append(URLEncoder.encode(entry.getKey(),"UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(),"UTF-8"));
+            }
+
+            return  result.toString();
+        }
+
+        //Nome dei parametri del json di risposta
+
+
+        List<DatePreference> toReturn = new LinkedList<>() ;
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder response = new StringBuilder();
+        BufferedReader rd = null;
+
+        @Override
+        protected void onPostExecute(List<DatePreference> result) {
+            if(!result.isEmpty() ){
+                List<String> listId = new LinkedList<>();
+                List<DatePreference> listItemToRemove = new LinkedList<>();
+                for(DatePreference datePreference : result){
+                    listId.add(datePreference.getDate());
+                }
+                for(DatePreference item : dateDataset){
+                    if(!listId.contains(item.getDate())){
+                        listItemToRemove.add(item);
+                    }
+                }
+
+                if (!listItemToRemove.isEmpty()) {
+                    dateDataset.clear();
+                }
+
+                for (DatePreference datePreference : result) {
+                    if(!dateDataset.contains(datePreference)) {
+                        dateDataset.add(datePreference);
+                    }
+                }
+
+                placeSuggestionAdapter.notifyDataSetChanged();
+            }else{
+                //listener.onUnsuccessfulLogin();
+            }
+        }
+
+        @Override
+        protected List<DatePreference> doInBackground(String... params) {
+            try {
+                URL url = new URL(Resource.BASE_URL+Resource.GET_BEST_DATE_PAGE); //Enter URL here
+                JSONObject returned = null;
+                httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setUseCaches(false);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
+                //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+                HashMap<String,String> toPass = new HashMap<>();
+                toPass.put("id_evento",params[0]);
+                writer.write(getPostDataString(toPass));
+                writer.flush();
+                writer.close();
+                os.close();
+                httpURLConnection.connect();
+
+                int responseCode = httpURLConnection.getResponseCode();
+                if(responseCode == httpURLConnection.HTTP_OK){
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    rd = new BufferedReader(new InputStreamReader(inputStream));
+                    String line = "";
+                    while ((line = rd.readLine())!= null){
+                        response.append(line);
+                    }
+                    System.out.println(response.toString());
+                    returned = new JSONObject(response.toString());
+                }
+                toReturn = new LinkedList<>();
+
+                JSONArray dates = returned.optJSONArray("Date_Possibili");
+                if (dates == null){
+                    JSONObject bestDate = returned.getJSONObject("Miglior_Data");
+                    DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
+                    toReturn.add(toAdd);
+                    System.out.println(toAdd.toString());
+                }else {
+                    for ( int i = 0; i< dates.length() ; i++){
+                        JSONObject bestDate = (JSONObject) dates.get(i);
+                        DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
+                        toReturn.add(toAdd);
                     }
                 }
 
