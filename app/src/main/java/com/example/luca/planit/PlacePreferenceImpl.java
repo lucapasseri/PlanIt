@@ -38,5 +38,19 @@ public class PlacePreferenceImpl implements PlacePreference {
 	}
 
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
+		PlacePreferenceImpl that = (PlacePreferenceImpl) o;
+
+		return idPlace.equals(that.idPlace);
+
+	}
+
+	@Override
+	public int hashCode() {
+		return idPlace.hashCode();
+	}
 }
