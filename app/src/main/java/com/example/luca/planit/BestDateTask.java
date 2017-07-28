@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by diego on 22/07/2017.
  */
 
-public class BestDateTask extends AsyncTask<String,Void,List<Preference>> {
+public class BestDateTask extends AsyncTask<String,Void,List<DatePreference>> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -47,13 +47,13 @@ public class BestDateTask extends AsyncTask<String,Void,List<Preference>> {
     //Nome dei parametri del json di risposta
 
 
-    List<Preference> toReturn ;
+    List<DatePreference> toReturn ;
     HttpURLConnection httpURLConnection = null;
     StringBuilder response = new StringBuilder();
     BufferedReader rd = null;
 
     @Override
-    protected void onPostExecute(List<Preference> result) {
+    protected void onPostExecute(List<DatePreference> result) {
         if(!result.isEmpty() ){
             //listener.onSuccessfulLogin(response.toString(),checkBox.isChecked());
         }else{
@@ -62,7 +62,7 @@ public class BestDateTask extends AsyncTask<String,Void,List<Preference>> {
     }
 
     @Override
-    protected List<Preference> doInBackground(String... params) {
+    protected List<DatePreference> doInBackground(String... params) {
         try {
             URL url = new URL(Resource.BASE_URL+Resource.GET_BEST_DATE_PAGE); //Enter URL here
             JSONObject returned = null;
@@ -98,13 +98,13 @@ public class BestDateTask extends AsyncTask<String,Void,List<Preference>> {
             JSONArray dates = returned.optJSONArray("Date_Possibili");
             if (dates == null){
                 JSONObject bestDate = returned.getJSONObject("Miglior_Data");
-                PreferenceImpl toAdd = new PreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
+                DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
                 toReturn.add(toAdd);
                 System.out.println(toAdd.toString());
             }else {
                 for ( int i = 0; i< dates.length() ; i++){
                     JSONObject bestDate = (JSONObject) dates.get(i);
-                    PreferenceImpl toAdd = new PreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
+                    DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
                     toReturn.add(toAdd);
                 }
             }

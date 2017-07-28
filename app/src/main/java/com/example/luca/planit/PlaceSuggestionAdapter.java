@@ -32,7 +32,7 @@ public class PlaceSuggestionAdapter extends ArrayAdapter<PlacePreference> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         PlaceSuggestionViewHolder viewHolder = null;
-        PlacePreference place = dataset.get(position);
+        PlacePreference placePreference = dataset.get(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_place_item,parent,false);
@@ -51,21 +51,17 @@ public class PlaceSuggestionAdapter extends ArrayAdapter<PlacePreference> {
         viewHolder = new PlaceSuggestionViewHolder(placeNameText, placeProvinceText, placeCityText,
                 placeAddressText, numberProposalText);
 
-        String placeName = dataset.get(position).getPlace().getNamePlace();
-        String placeProvince = dataset.get(position).getPlace().getProvince();
-        String placeCity = dataset.get(position).getPlace().getCity();
-        String placeAddress = dataset.get(position).getPlace().getAddress();
-        int numberProposal = dataset.get(position).getNumPreferences();
+        String placeName = placePreference.getPlace().getNamePlace();
+        String placeProvince = placePreference.getPlace().getProvince();
+        String placeCity = placePreference.getPlace().getCity();
+        String placeAddress = placePreference.getPlace().getAddress();
+        int numberProposal = placePreference.getNumPreferences();
 
 
         viewHolder.getPlaceNameText().setText(placeName);
+        viewHolder.getPlaceProvinceText().setText(placeProvince);
+        viewHolder.getPlaceCityText().setText(placeCity);
 
-        if (placeProvince != null) {
-            viewHolder.getPlaceProvinceText().setText(placeProvince);
-        }
-        if (placeCity != null) {
-            viewHolder.getPlaceCityText().setText(placeCity);
-        }
         if (placeAddress != null) {
             viewHolder.getPlaceAddressText().setText(placeAddress);
         }

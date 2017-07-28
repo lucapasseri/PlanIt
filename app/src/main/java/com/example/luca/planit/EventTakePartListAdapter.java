@@ -42,7 +42,7 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder = null;
+        EventViewHolder viewHolder = null;
         ListViewItem listViewItem = dataset.get(position);
         int listViewItemType = getItemViewType(position);
 
@@ -72,7 +72,7 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
 
             TextView textView = (TextView) convertView.findViewById(R.id.textView);
             TextView organizerText = (TextView) convertView.findViewById(R.id.organizer_name);
-            viewHolder = new ViewHolder(textView, organizerText);
+            viewHolder = new EventViewHolder(textView, organizerText);
 
             String initialNameLetter = listViewItem.getEvent().getEventInfo().getOrganizer().getOrganizerName().substring(0, 1);
             String initialSurnameLetter = listViewItem.getEvent().getEventInfo().getOrganizer().getOrganizerSurname().substring(0, 1);
@@ -88,7 +88,7 @@ public class EventTakePartListAdapter extends ArrayAdapter<ListViewItem> {
             convertView.setTag(viewHolder);
 
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (EventViewHolder) convertView.getTag();
         }
 
         return convertView;

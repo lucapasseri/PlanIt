@@ -1,10 +1,10 @@
 package com.example.luca.planit;
 
-public class PreferenceImpl implements Preference {
+public class DatePreferenceImpl implements DatePreference {
 	private final String date;
 	private final int numPreferences;
 	
-	public PreferenceImpl(String date, int numPreferences) {
+	public DatePreferenceImpl(String date, int numPreferences) {
 		super();
 		this.date = date;
 		this.numPreferences = numPreferences;
@@ -20,7 +20,7 @@ public class PreferenceImpl implements Preference {
 
 	@Override
 	public String toString() {
-		return "PreferenceImpl [date=" + date + ", numPreferences=" + numPreferences + "]";
+		return "DatePreferenceImpl [date=" + date + ", numPreferences=" + numPreferences + "]";
 	}
 	
 	

@@ -1,10 +1,13 @@
 package com.example.luca.planit;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 public class EventManagementActivity extends AppCompatActivity {
 
@@ -29,7 +33,9 @@ public class EventManagementActivity extends AppCompatActivity {
     private GuestsFragment guestsFragment = new GuestsFragment();
     private EventInfoFragment infoFragment = new EventInfoFragment();
     private ProposalsFragment proposalsFragment = new ProposalsFragment();
+
     private GuestDownloader guestDownloader;
+
     private boolean bounded;
     private ServiceConnection conn = new ServiceConnection (){
         @Override
@@ -56,6 +62,32 @@ public class EventManagementActivity extends AppCompatActivity {
         pagerAdapter = new EventManagementActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(INFO_FRAGMENT);
+
+        FloatingActionButton fabGuests = (FloatingActionButton) findViewById(R.id.fab_guests);
+        FloatingActionButton fabProposals = (FloatingActionButton) findViewById(R.id.fab_proposals);
+
+        fabGuests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog dialog = new InviteToEventDialog(EventManagementActivity.this);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent intent = new Intent(EventManagementActivity.this, EventManagementActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        if(SelectedInvite.getSelectedInvite()!= null){
+                            String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
+                                    SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
+                            intent.putExtra("TASK","Invite to "+toPass+" sended");
+                            EventManagementActivity.this.startActivity(intent);
+                        }
+
+                    }
+                });
+                dialog.show();
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager, true);

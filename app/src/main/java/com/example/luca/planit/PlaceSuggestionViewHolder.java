@@ -7,11 +7,11 @@ import android.widget.TextView;
  */
 
 public class PlaceSuggestionViewHolder {
-    TextView placeNameText;
-    TextView placeProvinceText;
-    TextView placeCityText;
-    TextView placeAddressText;
-    TextView suggestionNumberText;
+    private TextView placeNameText;
+    private TextView placeProvinceText;
+    private TextView placeCityText;
+    private TextView placeAddressText;
+    private TextView suggestionNumberText;
 
     public PlaceSuggestionViewHolder(TextView placeNameText, TextView placeProvinceText, TextView placeCityText,
                                      TextView placeAddressText, TextView suggestionNumberText) {

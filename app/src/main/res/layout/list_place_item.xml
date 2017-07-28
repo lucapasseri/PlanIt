@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="7sp"
+    android:paddingBottom="7sp"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -19,12 +21,15 @@
             <TextView
                 android:layout_width="90sp"
                 android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"
                 android:text="Name:" />
 
             <TextView
                 android:id="@+id/place_name_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
 
 
         </LinearLayout>
@@ -37,12 +42,15 @@
             <TextView
                 android:layout_width="90sp"
                 android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"
                 android:text="Province:" />
 
             <TextView
                 android:id="@+id/place_province_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -56,12 +64,15 @@
             <TextView
                 android:layout_width="90sp"
                 android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"
                 android:text="City:" />
 
             <TextView
                 android:id="@+id/place_city_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -73,12 +84,15 @@
             <TextView
                 android:layout_width="90sp"
                 android:layout_height="wrap_content"
-                android:text="Address" />
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"
+                android:text="Address:" />
 
             <TextView
                 android:id="@+id/place_address_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
