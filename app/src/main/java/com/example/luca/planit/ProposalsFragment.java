@@ -3,6 +3,7 @@ package com.example.luca.planit;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ public class ProposalsFragment extends Fragment {
                     selectedRadio = SelectedRadio.PLACES;
 
                     BestPlaceTask bestPlaceTask = new BestPlaceTask();
-
+                    startTask(SelectedRadio.PLACES);
                 }
             }
         });
@@ -181,7 +182,7 @@ public class ProposalsFragment extends Fragment {
         //Nome dei parametri del json di risposta
 
 
-        List<PlacePreference> toReturn ;
+        List<PlacePreference> toReturn = new LinkedList<>() ;
         HttpURLConnection httpURLConnection = null;
         StringBuilder response = new StringBuilder();
         BufferedReader rd = null;
@@ -238,8 +239,9 @@ public class ProposalsFragment extends Fragment {
                 writer.close();
                 os.close();
                 httpURLConnection.connect();
-
+                Log.d("Prop","Task do inback");
                 int responseCode = httpURLConnection.getResponseCode();
+                Log.d("Prop",String.valueOf(responseCode));
                 if(responseCode == httpURLConnection.HTTP_OK){
                     InputStream inputStream = httpURLConnection.getInputStream();
                     rd = new BufferedReader(new InputStreamReader(inputStream));
@@ -247,10 +249,9 @@ public class ProposalsFragment extends Fragment {
                     while ((line = rd.readLine())!= null){
                         response.append(line);
                     }
-                    System.out.println(response.toString());
+                    Log.d("Prop",response.toString());
                     returned = new JSONObject(response.toString());
                 }
-                List<PlacePreference> listPreferences = new LinkedList<>();
                 JSONArray dates = returned.optJSONArray("Luoghi_Possibili");
                 if (dates == null){
                     JSONObject bestDate = returned.getJSONObject("Miglior_Luogo");
@@ -290,7 +291,7 @@ public class ProposalsFragment extends Fragment {
                                 .setNamePlace(returned.getString("nome_luogo"))
                                 .build();
                         PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
-                        listPreferences.add(toAdd);
+                        toReturn.add(toAdd);
                         System.out.println(toAdd.toString());
                     }
 
@@ -334,7 +335,7 @@ public class ProposalsFragment extends Fragment {
                                     .setNamePlace(returned.getString("nome_luogo"))
                                     .build();
                             PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
-                            listPreferences.add(toAdd);
+                            toReturn.add(toAdd);
                             System.out.println(toAdd.toString());
                         }
 
