@@ -67,7 +67,7 @@ public class PlanEventActivity extends AppCompatActivity {
     private Button button;
     private View progressView;
     private ScrollView createEventFormView;
-
+    private boolean isUpdateActivity;
     private LinearLayout placeLayout;
     private LinearLayout dateLayout;
     private LinearLayout timeLayout;
@@ -75,19 +75,26 @@ public class PlanEventActivity extends AppCompatActivity {
     private Calendar dateCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
 
-    private  EventInfo selectedEventInfo;
+    private EventInfo selectedEventInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().hasExtra(getString(R.string.extra_from_info))) {
+        if (getIntent().hasExtra(getString(R.string.extra_from_info))) {
             setContentView(R.layout.activity_modify_event);
 
             selectedEventInfo = SelectedEvent.getSelectedEvent().getEventInfo();
             TextView eventTitle = (TextView) findViewById(R.id.modify_event_title);
             eventTitle.setText("Modify the Event\n\"" + selectedEventInfo.getNameEvent() + "\"");
             button = (Button) findViewById(R.id.apply_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attemptUpdate();
+                }
+            });
+            this.isUpdateActivity = true;
         } else {
             setContentView(R.layout.activity_plan_event);
             eventNameEdit = (EditText) findViewById(R.id.event_name_edit);
@@ -98,6 +105,7 @@ public class PlanEventActivity extends AppCompatActivity {
                     attempt();
                 }
             });
+            this.isUpdateActivity = false;
         }
 
 
@@ -146,7 +154,7 @@ public class PlanEventActivity extends AppCompatActivity {
         });
 
 
-        if(getIntent().hasExtra(getString(R.string.extra_from_info))) {
+        if (getIntent().hasExtra(getString(R.string.extra_from_info))) {
 
             placeNameEdit.setText(selectedEventInfo.getNamePlace());
             placeProvinceEdit.setText(selectedEventInfo.getProvince());
@@ -158,7 +166,8 @@ public class PlanEventActivity extends AppCompatActivity {
 
             if (!time.isEmpty()) {
                 StringTokenizer tokenizer = new StringTokenizer(time, ":");
-                int hour = Integer.parseInt(tokenizer.nextToken());;
+                int hour = Integer.parseInt(tokenizer.nextToken());
+                ;
                 int minutes = Integer.parseInt(tokenizer.nextToken());
 
                 hourNp.setValue(hour);
@@ -166,8 +175,7 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         }
 
-        dateRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        dateRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -181,8 +189,7 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         });
 
-        placeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        placeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -196,8 +203,7 @@ public class PlanEventActivity extends AppCompatActivity {
             }
         });
 
-        timeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        timeRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -251,7 +257,7 @@ public class PlanEventActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
 
@@ -263,6 +269,128 @@ public class PlanEventActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
 
         dateEdit.setText(sdf.format(dateCalendar.getTime()));
+    }
+
+
+    private void attemptUpdate() {
+        placeNameEdit.setError(null);
+        placeProvinceEdit.setError(null);
+        placeCityEdit.setError(null);
+        placeAddressEdit.setError(null);
+        dateEdit.setError(null);
+
+
+        // Store values at the time of the login attempt.
+
+        Choice placeChoice;
+        Choice dateChoice;
+        Choice timeChoice;
+
+        if (placeRadio.getCheckedRadioButtonId() == R.id.radio_place_defined) {
+            placeChoice = Choice.NOW;
+        } else {
+            placeChoice = Choice.AFTER;
+        }
+
+        if (dateRadio.getCheckedRadioButtonId() == R.id.radio_date_defined) {
+            dateChoice = Choice.NOW;
+        } else {
+            dateChoice = Choice.AFTER;
+        }
+        if (timeRadio.getCheckedRadioButtonId() == R.id.radio_time_defined) {
+            timeChoice = Choice.NOW;
+        } else {
+            timeChoice = Choice.AFTER;
+        }
+
+
+        String placeName = placeNameEdit.getText().toString();
+        String placeProvince = placeProvinceEdit.getText().toString();
+        String placeCity = placeCityEdit.getText().toString();
+        String placeAddress = placeAddressEdit.getText().toString();
+        String date = dateEdit.getText().toString();
+        String hour = String.format("%02d", hourNp.getValue());
+        String minutes = String.format("%02d", minutesNp.getValue());
+        String time = hour + ":" + minutes;
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (placeChoice == Choice.NOW) {
+            if (TextUtils.isEmpty(placeName)) {
+                placeNameEdit.setError(getString(R.string.error_field_required));
+                focusView = placeNameEdit;
+                cancel = true;
+            } else if (TextUtils.isEmpty(placeProvince)) {
+                placeProvinceEdit.setError(getString(R.string.error_field_required));
+                focusView = placeProvinceEdit;
+                cancel = true;
+            } else if (TextUtils.isEmpty(placeCity)) {
+                placeCityEdit.setError(getString(R.string.error_field_required));
+                focusView = placeCityEdit;
+                cancel = true;
+            }
+        }
+        if (!cancel && (dateChoice == Choice.NOW)) {
+            if (TextUtils.isEmpty(date)) {
+                dateEdit.setError(getString(R.string.error_field_required));
+                focusView = dateEdit;
+                cancel = true;
+                createEventFormView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+
+
+            SimpleDateFormat fromFormatter = new SimpleDateFormat(DateFormatType.DD_MM_YYYY_BACKSLASH.getFormat(), Locale.US);
+            SimpleDateFormat toFormatter = new SimpleDateFormat(DateFormatType.YYYY_MM_DD_DASH.getFormat(), Locale.US);
+
+            try {
+                Date dateFormatted = fromFormatter.parse(date);
+                date = toFormatter.format(dateFormatted);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (this.isUpdateActivity) {
+                EventUpdateWrapperImpl.Builder builder = new EventUpdateWrapperImpl.Builder();
+                builder.setEventId(SelectedEvent.getSelectedEvent().getEventInfo().getEventId());
+
+                if (placeChoice == Choice.NOW) {
+                    Place toAddPlace = new PlaceImpl.Builder()
+                            .setAddress(placeAddress)
+                            .setCity(placeCity)
+                            .setProvince(placeProvince)
+                            .setNamePlace(placeName)
+                            .build();
+                    builder.setPlace(toAddPlace);
+                }
+                if (dateChoice == Choice.NOW) {
+                    builder.setDate(date);
+                }
+                if (timeChoice == Choice.NOW) {
+                    builder.setTime(time);
+                }
+                //MEttere set time e controllo data subito
+                EventUpdateWrapper wrapper = builder
+                        .build();
+
+                PlanEventActivity.UpdateEventTask updateEventTask = new PlanEventActivity.UpdateEventTask(this);
+                updateEventTask.execute(wrapper);
+
+            }
+
+
+        }
     }
 
     private void attempt() {
@@ -360,6 +488,8 @@ public class PlanEventActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+
             EventRegistrationWrapperImpl.Builder builder = new EventRegistrationWrapperImpl.Builder();
 
             if (placeChoice == Choice.NOW) {
@@ -371,20 +501,21 @@ public class PlanEventActivity extends AppCompatActivity {
                         .build();
                 builder.setPlace(toAddPlace);
             }
-            if(dateChoice == Choice.NOW){
+            if (dateChoice == Choice.NOW) {
                 builder.setDate(date);
             }
-            if(timeChoice == Choice.NOW){
+            if (timeChoice == Choice.NOW) {
                 builder.setTime(time);
             }
             //MEttere set time e controllo data subito
-            EventRegistrationWrapper wrapper =  builder
-                                                .setName_event(eventName)
-                                                .setOrganizer_id(LoggedAccount.getLoggedAccount().getId())
-                                                .build();
+            EventRegistrationWrapper wrapper = builder
+                    .setName_event(eventName)
+                    .setOrganizer_id(LoggedAccount.getLoggedAccount().getId())
+                    .build();
 
             RegistrationEventTask registrationTask = new RegistrationEventTask(this);
             registrationTask.execute(wrapper);
+
 
         }
     }
@@ -397,7 +528,7 @@ public class PlanEventActivity extends AppCompatActivity {
 
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
@@ -556,7 +687,7 @@ public class PlanEventActivity extends AppCompatActivity {
 
                     if (params[0].getPlace() != null) {
 
-                                builder
+                        builder
                                 .setAddress(params[0].getPlace().getAddress())
                                 .setCity(params[0].getPlace().getCity())
                                 .setProvince(params[0].getPlace().getProvince())
@@ -572,7 +703,7 @@ public class PlanEventActivity extends AppCompatActivity {
 
                     builder.setNameEvent(params[0].getName_event())
                             .setEventId(returned.getString("result"))
-                            .setOrganizer(new OrganizerImpl(LoggedAccount.getLoggedAccount().getName(),LoggedAccount.getLoggedAccount().getSurname()))
+                            .setOrganizer(new OrganizerImpl(LoggedAccount.getLoggedAccount().getName(), LoggedAccount.getLoggedAccount().getSurname()))
                             .build();
                     toReturn = builder.build();
 
@@ -601,6 +732,122 @@ public class PlanEventActivity extends AppCompatActivity {
         }
     }
 
+    public class UpdateEventTask extends AsyncTask<EventUpdateWrapper, Void, RequestResult> {
+        Context context;
 
+        public UpdateEventTask(Context context) {
+            this.context = context;
+        }
+
+        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+
+            return result.toString();
+        }
+
+        //Nome dei parametri del json di risposta
+
+
+        RequestResult toReturn;
+        HttpURLConnection httpURLConnection = null;
+        StringBuilder response = new StringBuilder();
+        BufferedReader rd = null;
+
+        @Override
+        protected void onPostExecute(RequestResult result) {
+            if (result != null) {
+
+                Intent intent = new Intent(getApplication(), HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+            } else {
+                showProgress(false);
+            }
+        }
+
+        @Override
+        protected RequestResult doInBackground(EventUpdateWrapper... params) {
+            try {
+                URL url = new URL(Resource.BASE_URL + Resource.UPDATE_EVENT_PAGE); //Enter URL here
+                JSONObject returned = null;
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setUseCaches(false);
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
+                //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
+                OutputStream os = httpURLConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                HashMap<String, String> toPass = new HashMap<>();
+                if (params[0].getPlace() != null) {
+                    toPass.put("nome", params[0].getPlace().getNamePlace());
+                    toPass.put("indirizzo", params[0].getPlace().getAddress());
+                    toPass.put("citta", params[0].getPlace().getCity());
+                    toPass.put("provincia", params[0].getPlace().getProvince());
+                }
+
+                if (params[0].getDate() != null) {
+                    toPass.put("data", params[0].getDate());
+                }
+                if (params[0].getTime() != null) {
+                    toPass.put("ora", params[0].getTime());
+                }
+
+                toPass.put("id_evento", params[0].getEventId());
+
+                writer.write(getPostDataString(toPass));
+                writer.flush();
+                writer.close();
+                os.close();
+                httpURLConnection.connect();
+                int responseCode = httpURLConnection.getResponseCode();
+                if (responseCode == httpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    rd = new BufferedReader(new InputStreamReader(inputStream));
+                    String line = "";
+                    while ((line = rd.readLine()) != null) {
+                        response.append(line);
+                    }
+                    System.out.println(response.toString());
+                    returned = new JSONObject(response.toString());
+                }
+
+                System.out.println(returned.getString("result"));
+                toReturn = RequestResult.OK_UPDATE;
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (rd != null) {
+                    try {
+                        rd.close();
+                    } catch (Exception e) {
+
+                    }
+                }
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return toReturn;
+        }
+    }
 
 }
