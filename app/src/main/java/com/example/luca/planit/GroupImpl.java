@@ -27,10 +27,6 @@ public class GroupImpl implements Group {
 
 	@Override
 	public String toString() {
-		return "GroupImpl{" +
-				"peopleInGroup=" + peopleInGroup +
-				", nameGroup='" + nameGroup + '\'' +
-				", groupId='" + groupId + '\'' +
-				'}';
+		return nameGroup;
 	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="300sp"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -19,7 +19,7 @@
         android:textSize="20sp"
         android:textColor="@color/white"
         android:background="@color/colorPrimaryDark"
-        android:text="Invite a Person"
+        android:text="Invite a Person or a Group"
         android:padding="7sp"
         />
 
@@ -29,7 +29,40 @@
         android:orientation="vertical"
         android:padding="20sp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:id="@+id/guest_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40sp"
+                    android:text="User"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/radio_groups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Group"/>
+
+            </RadioGroup>
+
+
+        </LinearLayout>
+
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -38,15 +71,23 @@
             <EditText
                 android:layout_marginTop="5sp"
                 android:id="@+id/invite_person_text"
-
-                android:layout_width="250sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username or Email of the person to invite:"
+                android:hint="Username or Email of the guest:"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinner_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:visibility="gone"/>
+
 
         <Button
             android:layout_marginTop="15sp"
