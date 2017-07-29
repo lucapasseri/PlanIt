@@ -256,55 +256,13 @@ public class ProposalsFragment extends Fragment {
                         response.append(line);
                     }
                     Log.d("Prop",response.toString());
-                    returned = new JSONObject(response.toString());
+
                 }
-                JSONArray dates = returned.optJSONArray("Luoghi_Possibili");
-                if (dates == null){
-                    JSONObject bestDate = returned.getJSONObject("Miglior_Luogo");
-                    url = new URL(Resource.BASE_URL + Resource.GET_PLACE_BY_ID); // Enter URL
-                    httpURLConnection = (HttpURLConnection)url.openConnection();
-                    httpURLConnection.setUseCaches(false);
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoInput(true);
-                    httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
-                    //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
-                    os = httpURLConnection.getOutputStream();
-                    writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
-                    toPass = new HashMap<>();
-                    toPass.put("id_luogo",String.valueOf(bestDate.getInt("id_luogo")));
-
-                    writer.write(getPostDataString(toPass));
-                    writer.flush();
-                    writer.close();
-                    os.close();
-                    httpURLConnection.connect();
-
-                    responseCode = httpURLConnection.getResponseCode();
-                    response = new StringBuilder();
-                    if(responseCode == httpURLConnection.HTTP_OK){
-                        InputStream inputStream = httpURLConnection.getInputStream();
-                        rd = new BufferedReader(new InputStreamReader(inputStream));
-                        String line = "";
-                        while ((line = rd.readLine())!= null){
-                            response.append(line);
-                        }
-                        System.out.println(response.toString());
-                        returned = new JSONObject(response.toString());
-                        Place toAddPlace = new PlaceImpl.Builder()
-                                .setAddress(returned.getString("indirizzo"))
-                                .setCity(returned.getString("citta"))
-                                .setProvince(returned.getString("provincia"))
-                                .setNamePlace(returned.getString("nome_luogo"))
-                                .build();
-                        PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
-                        toReturn.add(toAdd);
-                        Log.d("Proposal",toAdd.toString());
-                    }
-
-
-                }else {
-                    for ( int i = 0; i< dates.length() ; i++){
-                        JSONObject bestDate = (JSONObject) dates.get(i);
+                if(!response.toString().isEmpty()){
+                    returned = new JSONObject(response.toString());
+                    JSONArray dates = returned.optJSONArray("Luoghi_Possibili");
+                    if (dates == null){
+                        JSONObject bestDate = returned.getJSONObject("Miglior_Luogo");
                         url = new URL(Resource.BASE_URL + Resource.GET_PLACE_BY_ID); // Enter URL
                         httpURLConnection = (HttpURLConnection)url.openConnection();
                         httpURLConnection.setUseCaches(false);
@@ -332,7 +290,7 @@ public class ProposalsFragment extends Fragment {
                             while ((line = rd.readLine())!= null){
                                 response.append(line);
                             }
-                            Log.d("Proposal",response.toString());
+                            System.out.println(response.toString());
                             returned = new JSONObject(response.toString());
                             Place toAddPlace = new PlaceImpl.Builder()
                                     .setAddress(returned.getString("indirizzo"))
@@ -345,7 +303,52 @@ public class ProposalsFragment extends Fragment {
                             Log.d("Proposal",toAdd.toString());
                         }
 
-                    }
+
+                    }else {
+                        for ( int i = 0; i< dates.length() ; i++) {
+                            JSONObject bestDate = (JSONObject) dates.get(i);
+                            url = new URL(Resource.BASE_URL + Resource.GET_PLACE_BY_ID); // Enter URL
+                            httpURLConnection = (HttpURLConnection) url.openConnection();
+                            httpURLConnection.setUseCaches(false);
+                            httpURLConnection.setDoOutput(true);
+                            httpURLConnection.setDoInput(true);
+                            httpURLConnection.setRequestMethod("POST"); // here you are telling that it is a POST request, which can be changed into "PUT", "GET", "DELETE" etc.
+                            //httpURLConnection.setRequestProperty("Content-Type", "application/json"); // here you are setting the `Content-Type` for the data you are sending which is `application/json`
+                            os = httpURLConnection.getOutputStream();
+                            writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                            toPass = new HashMap<>();
+                            toPass.put("id_luogo", String.valueOf(bestDate.getInt("id_luogo")));
+
+                            writer.write(getPostDataString(toPass));
+                            writer.flush();
+                            writer.close();
+                            os.close();
+                            httpURLConnection.connect();
+
+                            responseCode = httpURLConnection.getResponseCode();
+                            response = new StringBuilder();
+                            if (responseCode == httpURLConnection.HTTP_OK) {
+                                InputStream inputStream = httpURLConnection.getInputStream();
+                                rd = new BufferedReader(new InputStreamReader(inputStream));
+                                String line = "";
+                                while ((line = rd.readLine()) != null) {
+                                    response.append(line);
+                                }
+                                Log.d("Proposal", response.toString());
+                                returned = new JSONObject(response.toString());
+                                Place toAddPlace = new PlaceImpl.Builder()
+                                        .setAddress(returned.getString("indirizzo"))
+                                        .setCity(returned.getString("citta"))
+                                        .setProvince(returned.getString("provincia"))
+                                        .setNamePlace(returned.getString("nome_luogo"))
+                                        .build();
+                                PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace, bestDate.getInt("preferenze"), String.valueOf(bestDate.getInt("id_luogo")));
+                                toReturn.add(toAdd);
+                                Log.d("Proposal", toAdd.toString());
+                            }
+                        }
+                }
+
                 }
 
             } catch (MalformedURLException e) {
@@ -474,13 +477,15 @@ public class ProposalsFragment extends Fragment {
 
                 JSONArray dates = returned.optJSONArray("Ore_Possibili");
                 if (dates == null){
-                    JSONObject bestDate = returned.getJSONObject("Miglior_Ora");
-                    String time = bestDate.getString("ora");
-                    String hour = time.substring(0,2);
-                    String minutes = time.substring(2,4);
-                    time = (hour+":"+minutes);
-                    TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
-                    toReturn.add(toAdd);
+                    JSONObject bestDate = returned.optJSONObject("Miglior_Ora");
+                    if(bestDate != null){
+                        String time = bestDate.getString("ora");
+                        String hour = time.substring(0,2);
+                        String minutes = time.substring(2,4);
+                        time = (hour+":"+minutes);
+                        TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
+                        toReturn.add(toAdd);
+                    }
                     //Log.d("Proposal",toAdd.toString());
                 }else {
                     for ( int i = 0; i< dates.length() ; i++){
@@ -491,7 +496,7 @@ public class ProposalsFragment extends Fragment {
                         time = (hour+":"+minutes);
                         TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
                         toReturn.add(toAdd);
-                        //Log.d("Proposal",toAdd.toString());
+                        Log.d("Proposal",toAdd.toString());
                     }
                 }
 
@@ -607,25 +612,28 @@ public class ProposalsFragment extends Fragment {
                         response.append(line);
                     }
                     //Log.d("Proposal",response.toString());
-                    returned = new JSONObject(response.toString());
-                }
-                toReturn = new LinkedList<>();
 
-                JSONArray dates = returned.optJSONArray("Date_Possibili");
-                if (dates == null){
-                    JSONObject bestDate = returned.getJSONObject("Miglior_Data");
-                    DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
-                    toReturn.add(toAdd);
-                    //Log.d("Proposal",toAdd.toString());
-                }else {
-                    for ( int i = 0; i< dates.length() ; i++){
-                        JSONObject bestDate = (JSONObject) dates.get(i);
+                }
+                if(!response.toString().isEmpty()){
+                    returned = new JSONObject(response.toString());
+                    toReturn = new LinkedList<>();
+
+                    JSONArray dates = returned.optJSONArray("Date_Possibili");
+                    if (dates == null){
+                        JSONObject bestDate = returned.getJSONObject("Miglior_Data");
                         DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
                         toReturn.add(toAdd);
                         //Log.d("Proposal",toAdd.toString());
+                    }else {
+                        for ( int i = 0; i< dates.length() ; i++){
+                            JSONObject bestDate = (JSONObject) dates.get(i);
+                            DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
+                            toReturn.add(toAdd);
+                            //Log.d("Proposal",toAdd.toString());
+                        }
                     }
                 }
-
+                
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {

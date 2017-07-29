@@ -151,7 +151,7 @@ public class EventManagementActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        SelectedEvent.removeSelectedEvent();
+        //SelectedEvent.removeSelectedEvent();
     }
 
 

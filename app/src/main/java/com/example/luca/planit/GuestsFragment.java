@@ -211,6 +211,8 @@ public class GuestsFragment extends Fragment {
 
 
                     List<Guest> guests = new LinkedList<>();
+                    Log.d("GuestsFr",SelectedEvent.getSelectedEvent().toString());
+                    Log.d("GuestsFr",eventInfo.toString());
                     if (eventInfo.getEventId().equals(SelectedEvent.getSelectedEvent().getEventInfo().getEventId())) {
                         Log.d("Dentro", eventInfo.toString());
                         JSONArray guestsJSon = event.getJSONArray("Invitati");
