@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/date_text"
-        android:text="Dates"
+        android:text="@string/list_dates_item_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.9"

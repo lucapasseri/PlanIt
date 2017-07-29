@@ -33,7 +33,7 @@
 
                 android:layout_width="250sp"
                 android:layout_height="wrap_content"
-                android:hint="Username or Email of the person to invite:"
+                android:hint="@string/username_or_email_of_the_person_to_invite_edit"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/signup_button"
-            android:text="Invite"
+            android:text="@string/invite_button"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

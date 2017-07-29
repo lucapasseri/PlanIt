@@ -98,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15sp"
-                        android:text="Place Name"
+                        android:text="@string/place_name_info_text"
                         android:textColor="@color/colorAccent"
                         android:textSize="15sp" />
 
@@ -126,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10sp"
-                            android:text="Place Province"
+                            android:text="@string/place_province_info_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 
@@ -156,7 +156,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10sp"
-                            android:text="Place City"
+                            android:text="@string/place_city_info_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 
@@ -186,7 +186,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10sp"
-                            android:text="Place Address"
+                            android:text="@string/place_address_infor_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 

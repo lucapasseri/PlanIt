@@ -219,7 +219,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Born date:"
+                        android:text="@string/born_date_info"
                         android:textSize="15sp"
                         android:textColor="@color/colorAccent"
                         />

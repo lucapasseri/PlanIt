@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textSize="25sp"
             android:textColor="@color/colorPrimaryDark"
-            android:text="Info"/>
+            android:text="@string/event_organizer_info_text"/>
 
         <ImageView
             android:id="@+id/info_settings"
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15sp"
-                        android:text="Place Name"
+                        android:text="@string/event_organizer_place_name_text"
                         android:textColor="@color/colorAccent"
                         android:textSize="15sp" />
 
@@ -143,7 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10sp"
-                            android:text="Place Province"
+                            android:text="@string/event_organizer_place_province_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 
@@ -173,7 +173,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10sp"
-                            android:text="Place City"
+                            android:text="@string/event_organizer_place_city_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 
@@ -203,7 +203,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10sp"
-                            android:text="Place Address"
+                            android:text="@string/event_organizer_place_address_text"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 

@@ -84,11 +84,57 @@
     <string name="email_info">Email:</string>
     <string name="usernameInfo">Username:</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="empty_field_message">Still to be defined</string>
+
     <string name="title_activity_group_info">GroupInfoActivity</string>
     <string name="extra_from_organized">extra_from_organized</string>
     <string name="extra_from_info">extra_from_info</string>
+
+    <string name="empty_field_message">To be defined</string>
+    <string name="your_groups_nav">Your Groups</string>
+    <string name="born_date_info">Born date:</string>
+    <string name="your_invites_nav">Your Invites</string>
+    <string name="apply_button">Apply</string>
+    <string name="group_name_text">Group Name</string>
+    <string name="create_a_new_group_text">Create a new Group</string>
+    <string name="name_of_the_group_to_create_text">Name of the group to create:</string>
+    <string name="create_group_button">Create Group</string>
+    <string name="username_or_email_of_the_person_to_invite_edit">Username or Email of the person to invite:</string>
+    <string name="invite_button">Invite</string>
+    <string name="make_a_proposal_text">Make a Proposal</string>
+    <string name="don_t_propose_place_radio">Don\'t propose place</string>
+    <string name="propose_place_redio">Propose place</string>
+    <string name="don_t_propose_date_radio">Don\'t propose date</string>
+    <string name="propose_date_radio">Propose date</string>
+    <string name="don_t_propose_time_radio">Don\'t propose time</string>
+    <string name="propose_time_radio">Propose time</string>
+    <string name="send_proposal_button">Send Proposal</string>
+    <string name="place_name_info_text">Place Name</string>
+    <string name="place_province_info_text">Place Province</string>
+    <string name="place_city_info_text">Place City</string>
+    <string name="place_address_infor_text">Place Address</string>
+    <string name="event_organizer_info_text">Info</string>
+    <string name="event_organizer_place_name_text">Place Name</string>
+    <string name="event_organizer_place_province_text">Place Province</string>
+    <string name="event_organizer_place_city_text">Place City</string>
+    <string name="event_organizer_place_address_text">Place Address</string>
+    <string name="guests_text">Guests</string>
+    <string name="proposals_text">Proposals</string>
+    <string name="places_proposals_text">Places</string>
+    <string name="dates_proposal_text">Dates</string>
+    <string name="times_proposal_text">Times</string>
+    <string name="invite_a_person_or_a_group_text">Invite a Person or a Group</string>
+    <string name="invite_event_user_radio">User</string>
+    <string name="invite_event_group_radio">Group</string>
+    <string name="username_or_email_of_the_guest_text">Username or Email of the guest:</string>
+    <string name="invite_to_event_invite_button">Invite</string>
+    <string name="list_dates_item_text">Dates</string>
+    <string name="list_place_item_name">Name:</string>
+    <string name="list_place_item_province">Province:</string>
+    <string name="list_place_item_city">City:</string>
+    <string name="list_place_item_address">Address:</string>
+    <string name="list_time_item_time">Time</string>
+    <string name="nav_header_home_text">Plan It</string>
+    <string name="nav_header_home_subtitle">The event planner you always wondered</string>
+    <string name="nav_your_invites">Your invites</string>
 
 </resources>

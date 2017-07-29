@@ -374,7 +374,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:background="@drawable/signup_button"
-        android:text="Apply"
+        android:text="@string/apply_button"
         android:textColor="@color/white"
         android:textStyle="bold" />
 

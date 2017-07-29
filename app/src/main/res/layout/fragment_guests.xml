@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:textColor="@color/colorPrimaryDark"
-        android:text="Guests"/>
+        android:text="@string/guests_text"/>
 
     <View
         android:layout_width="match_parent"

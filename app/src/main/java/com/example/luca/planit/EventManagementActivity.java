@@ -75,9 +75,7 @@ public class EventManagementActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         Intent intent = new Intent(EventManagementActivity.this, EventManagementActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
-                                SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
-                        intent.putExtra("TASK","Invite to sended");
+                        intent.putExtra("TASK","Invite sended");
 
                         EventManagementActivity.this.startActivity(intent);
 
@@ -91,7 +89,13 @@ public class EventManagementActivity extends AppCompatActivity {
         fabProposals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new MakeProposalDialog(EventManagementActivity.this);
+                Dialog dialog;
+                if (SelectedEvent.getSelectedEvent().getEventInfo().getDate(DateFormatType.DD_MM_YYYY_BACKSLASH).isEmpty()) {
+                    dialog = new MakeProposalDialog(ToShow.DATE, EventManagementActivity.this);
+                } else {
+                    dialog = new MakeProposalDialog(ToShow.TIME, EventManagementActivity.this);
+                }
+
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -178,5 +182,9 @@ public class EventManagementActivity extends AppCompatActivity {
         super.onResume();
         Intent intent = new Intent(this,GuestDownloader.class);
         bindService(intent,conn, Context.BIND_AUTO_CREATE);
+    }
+
+    public enum ToShow {
+        DATE, TIME;
     }
 }

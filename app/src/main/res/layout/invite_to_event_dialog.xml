@@ -19,7 +19,7 @@
         android:textSize="20sp"
         android:textColor="@color/white"
         android:background="@color/colorPrimaryDark"
-        android:text="Invite a Person or a Group"
+        android:text="@string/invite_a_person_or_a_group_text"
         android:padding="7sp"
         />
 
@@ -47,14 +47,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="40sp"
-                    android:text="User"
+                    android:text="@string/invite_event_user_radio"
                     android:checked="true"/>
 
                 <RadioButton
                     android:id="@+id/radio_groups"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Group"/>
+                    android:text="@string/invite_event_group_radio"/>
 
             </RadioGroup>
 
@@ -73,7 +73,7 @@
                 android:id="@+id/invite_person_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username or Email of the guest:"
+                android:hint="@string/username_or_email_of_the_guest_text"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/signup_button"
-            android:text="Invite"
+            android:text="@string/invite_to_event_invite_button"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

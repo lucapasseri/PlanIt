@@ -13,7 +13,7 @@
 
     <string name="event_organized_title">Eventi che organizzi</string>
     <string name="event_take_part_title">Eventi a cui partecipi</string>
-    <string name="nav_groups_title">Gruppi</string>
+    <string name="nav_groups_title">I tuoi Gruppi</string>
     <string name="nav_info_title">Info</string>
     <string name="nav_logout_title">Log Out</string>
 
@@ -28,7 +28,7 @@
     <string name="born_date_pref">date</string>
 
     <!-- Strings related to Login -->
-    <string name="login_prompt_email">Email or Username</string>
+    <string name="login_prompt_email">Email o Username</string>
     <string name="login_prompt_password">Password</string>
     <string name="login_text_button">Accedi</string>
     <string name="signup_text_button">Registrati</string>
@@ -46,6 +46,7 @@
     <string name="error_already_present_email">Email già presente</string>
     <string name="error_already_existing_username">Username già esistente</string>
     <string name="signup_account_title">Registrazione Account</string>
+    <string name="your_invites">I tuoi Inviti</string>
 
 
     <!-- Strings related to PlanEvent -->
@@ -85,11 +86,56 @@
     <string name="email_info">Email:</string>
     <string name="usernameInfo">Username:</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="empty_field_message">Ancora da definire</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
     <string name="extra_from_organized">extra_from_organized</string>
     <string name="extra_from_info">extra_from_info</string>
+
+    <string name="empty_field_message">Da definire</string>
+    <string name="your_groups_nav">I tuoi Gruppi</string>
+    <string name="born_date_info">Data di nascita:</string>
+    <string name="your_invites_nav">I tuoi Inviti</string>
+    <string name="apply_button">Applica</string>
+    <string name="group_name_text">Nome del gruppo</string>
+    <string name="create_a_new_group_text">Crea un nuovo gruppo</string>
+    <string name="name_of_the_group_to_create_text">Nome del gruppo da creare:</string>
+    <string name="create_group_button">Crea il gruppo</string>
+    <string name="username_or_email_of_the_person_to_invite_edit">Username o Email della persona da invitare:</string>
+    <string name="invite_button">Invita</string>
+    <string name="make_a_proposal_text">Fai una proposta</string>
+    <string name="don_t_propose_place_radio">Non proporre luogo</string>
+    <string name="propose_place_redio">Proponi luogo</string>
+    <string name="don_t_propose_date_radio">Non proporre una data</string>
+    <string name="propose_date_radio">Proponi data</string>
+    <string name="don_t_propose_time_radio">Non proporre un orario</string>
+    <string name="propose_time_radio">Proponi orario</string>
+    <string name="send_proposal_button">Invia proposta</string>
+    <string name="place_name_info_text">Nome luogo</string>
+    <string name="place_province_info_text">Provincia luogo</string>
+    <string name="place_city_info_text">Città luogo</string>
+    <string name="place_address_infor_text">Indirizzo luogo</string>
+    <string name="event_organizer_info_text">Info</string>
+    <string name="event_organizer_place_name_text">Nome posto</string>
+    <string name="event_organizer_place_province_text">Provincia luogo</string>
+    <string name="event_organizer_place_city_text">Città luogo</string>
+    <string name="event_organizer_place_address_text">Indirizzo luogo</string>
+    <string name="guests_text">Invitati</string>
+    <string name="proposals_text">Proposte</string>
+    <string name="places_proposals_text">Luoghi</string>
+    <string name="dates_proposal_text">Date</string>
+    <string name="times_proposal_text">Orari</string>
+    <string name="invite_a_person_or_a_group_text">Invita una persona o un gruppo</string>
+    <string name="invite_event_user_radio">Utente</string>
+    <string name="invite_event_group_radio">Gruppo</string>
+    <string name="username_or_email_of_the_guest_text">Username o Email dell\'invitato:</string>
+    <string name="invite_to_event_invite_button">Invita</string>
+    <string name="list_dates_item_text">Date</string>
+    <string name="list_place_item_name">Nome:</string>
+    <string name="list_place_item_province">Provincia:</string>
+    <string name="list_place_item_city">Città:</string>
+    <string name="list_place_item_address">Indirizzo:</string>
+    <string name="list_time_item_time">Orario</string>
+    <string name="nav_header_home_text">Plan It</string>
+    <string name="nav_header_home_subtitle">The event planner you always wondered</string>
+    <string name="nav_your_invites">I tuoi Inviti</string>
 
 </resources>

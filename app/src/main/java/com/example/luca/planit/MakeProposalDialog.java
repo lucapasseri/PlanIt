@@ -51,6 +51,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.view.View.GONE;
+
 /**
  * Created by diego on 26/07/2017.
  */
@@ -86,16 +88,21 @@ public class MakeProposalDialog extends Dialog {
     private Calendar endDateCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener endDate;
 
-    protected MakeProposalDialog(@NonNull Context context) {
+    private final EventManagementActivity.ToShow toShow;
+
+    protected MakeProposalDialog(EventManagementActivity.ToShow toShow, @NonNull Context context) {
         super(context);
+        this.toShow = toShow;
     }
 
-    protected MakeProposalDialog(@NonNull Context context, @StyleRes int themeResId) {
+    protected MakeProposalDialog(EventManagementActivity.ToShow toShow, @NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
+        this.toShow = toShow;
     }
 
-    protected MakeProposalDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
+    protected MakeProposalDialog(EventManagementActivity.ToShow toShow, @NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
+        this.toShow = toShow;
     }
 
     @Override
@@ -166,6 +173,12 @@ public class MakeProposalDialog extends Dialog {
             }
         });
 
+        if (toShow == EventManagementActivity.ToShow.DATE) {
+            findViewById(R.id.time_full_layout).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.date_full_layout).setVisibility(View.GONE);
+        }
+
         dateRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -175,7 +188,7 @@ public class MakeProposalDialog extends Dialog {
                         dateLayout.setVisibility(View.VISIBLE);
                         break;
                     case R.id.radio_date_not_defined:
-                        dateLayout.setVisibility(View.GONE);
+                        dateLayout.setVisibility(GONE);
                 }
             }
         });
@@ -189,7 +202,7 @@ public class MakeProposalDialog extends Dialog {
                         placeLayout.setVisibility(View.VISIBLE);
                         break;
                     case R.id.radio_place_not_defined:
-                        placeLayout.setVisibility(View.GONE);
+                        placeLayout.setVisibility(GONE);
                 }
             }
         });
@@ -203,7 +216,7 @@ public class MakeProposalDialog extends Dialog {
                         timeLayout.setVisibility(View.VISIBLE);
                         break;
                     case R.id.radio_time_not_defined:
-                        timeLayout.setVisibility(View.GONE);
+                        timeLayout.setVisibility(GONE);
                 }
             }
         });
@@ -218,7 +231,10 @@ public class MakeProposalDialog extends Dialog {
                 startDateCalendar.set(Calendar.MONTH, monthOfYear);
                 startDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (startDateCalendar.getTime().before(Calendar.getInstance().getTime())) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, -1);
+
+                if (startDateCalendar.getTime().before(cal.getTime())) {
                     Toast.makeText(getContext(), "The startDate must be at least today", Toast.LENGTH_SHORT).show();
                 } else {
                     updateStartDateLabel();
@@ -238,10 +254,16 @@ public class MakeProposalDialog extends Dialog {
                 endDateCalendar.set(Calendar.MONTH, monthOfYear);
                 endDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if(startDate == null) {
+                if(startDateEdit.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), "Select start date first", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (startDateCalendar.getTime().before(endDateCalendar.getTime())) {
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.YEAR, year);
+                    cal.set(Calendar.MONTH, monthOfYear);
+                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth-1);
+
+                    if (startDateCalendar.getTime().before(cal.getTime())) {
                         updateEndDateLabel();
                     } else {
                         Toast.makeText(getContext(), "The date must be at least the same of the start date", Toast.LENGTH_SHORT).show();
@@ -321,12 +343,14 @@ public class MakeProposalDialog extends Dialog {
             placeChoice = Choice.NOT_DEFINED;
         }
 
-        if (dateRadio.getCheckedRadioButtonId() == R.id.radio_date_defined) {
+        if (dateRadio.getCheckedRadioButtonId() == R.id.radio_date_defined &&
+                toShow == EventManagementActivity.ToShow.DATE) {
             dateChoice = Choice.DEFINED;
         } else {
             dateChoice = Choice.NOT_DEFINED;
         }
-        if (timeRadio.getCheckedRadioButtonId() == R.id.radio_time_defined) {
+        if (timeRadio.getCheckedRadioButtonId() == R.id.radio_time_defined &&
+                toShow == EventManagementActivity.ToShow.TIME) {
             timeChoice = Choice.DEFINED;
         } else {
             timeChoice = Choice.NOT_DEFINED;
@@ -379,20 +403,22 @@ public class MakeProposalDialog extends Dialog {
         } else if (!cancel && (timeChoice == Choice.DEFINED)) {
             if ((endHourNp.getValue() - startHourNp.getValue()) < 2) {
                 Toast.makeText(getContext(), "The end time must be at least after 2 hour of the start time", Toast.LENGTH_SHORT).show();
-                focusView = endHourNp;
+                focusView = null;
                 cancel = true;
                 makeProposalFormView.fullScroll(ScrollView.FOCUS_DOWN);
             } else if ((endHourNp.getValue() - startHourNp.getValue()) == 2) {
                 if (startMinutesNp.getValue() > endMinutesNp.getValue()) {
                     Toast.makeText(getContext(), "The end time must be at least after 2 hour of the start time", Toast.LENGTH_SHORT).show();
-                    focusView = endHourNp;
+                    focusView = null;
                     cancel = true;
                 }
             }
         }
 
         if (cancel) {
-            focusView.requestFocus();
+            if(focusView != null) {
+                focusView.requestFocus();
+            }
 
         } else {
 
@@ -414,6 +440,8 @@ public class MakeProposalDialog extends Dialog {
 
             if(placeChoice == Choice.DEFINED) {
 
+                Log.d("proposal_", "start place task");
+
                 maxTask++;
                 Place place = new PlaceImpl.Builder()
                         .setNamePlace(placeName)
@@ -431,6 +459,8 @@ public class MakeProposalDialog extends Dialog {
 
             if (dateChoice == Choice.DEFINED) {
 
+                Log.d("prop_", "start date task");
+
                 maxTask++;
                 DatePreferenceWrapper datePreferenceWrapper = new DatePreferenceWrapperImpl.Builder()
                         .setStartDate(startDate)
@@ -444,6 +474,8 @@ public class MakeProposalDialog extends Dialog {
             }
 
             if(timeChoice == Choice.DEFINED) {
+
+                Log.d("proposal_", "start time task");
 
                 maxTask++;
                 TimePreferenceWrapper timePreferenceWrapper = new TimePreferenceWrapperImpl.Builder()
@@ -476,14 +508,14 @@ public class MakeProposalDialog extends Dialog {
                 Log.d("proposal_", "scroll view null");
             }
 
-            sendProposalButton.setVisibility(show ? View.GONE : View.VISIBLE);
-            makeProposalFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            sendProposalButton.setVisibility(show ? GONE : View.VISIBLE);
+            makeProposalFormView.setVisibility(show ? GONE : View.VISIBLE);
 
             makeProposalFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    makeProposalFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    makeProposalFormView.setVisibility(show ? GONE : View.VISIBLE);
                 }
             });
 
@@ -491,23 +523,23 @@ public class MakeProposalDialog extends Dialog {
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    sendProposalButton.setVisibility(show ? View.GONE : View.VISIBLE);
+                    sendProposalButton.setVisibility(show ? GONE : View.VISIBLE);
                 }
             });
 
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.setVisibility(show ? View.VISIBLE : GONE);
             progressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    progressView.setVisibility(show ? View.VISIBLE : GONE);
                 }
             });
         } else {
-            sendProposalButton.setVisibility(show ? View.GONE : View.VISIBLE);
-            makeProposalFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            sendProposalButton.setVisibility(show ? GONE : View.VISIBLE);
+            makeProposalFormView.setVisibility(show ? GONE : View.VISIBLE);
 
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.setVisibility(show ? View.VISIBLE : GONE);
         }
     }
 

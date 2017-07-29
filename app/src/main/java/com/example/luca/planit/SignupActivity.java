@@ -27,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,7 +108,15 @@ public class SignupActivity extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, - (365*10));
+
+                if (calendar.getTime().before(cal.getTime())) {
+                    updateLabel();
+                } else {
+                    Toast.makeText(SignupActivity.this, "You must have at least 10 years", Toast.LENGTH_SHORT).show();
+                }
             }
 
         };

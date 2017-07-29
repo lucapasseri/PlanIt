@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textColor="@color/colorAccent"
-                android:text="Name:" />
+                android:text="@string/list_place_item_name" />
 
             <TextView
                 android:id="@+id/place_name_text"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textColor="@color/colorAccent"
-                android:text="Province:" />
+                android:text="@string/list_place_item_province" />
 
             <TextView
                 android:id="@+id/place_province_text"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textColor="@color/colorAccent"
-                android:text="City:" />
+                android:text="@string/list_place_item_city" />
 
             <TextView
                 android:id="@+id/place_city_text"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textColor="@color/colorAccent"
-                android:text="Address:" />
+                android:text="@string/list_place_item_address" />
 
             <TextView
                 android:id="@+id/place_address_text"

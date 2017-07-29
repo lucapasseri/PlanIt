@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:textColor="@color/colorPrimaryDark"
-        android:text="Proposals"/>
+        android:text="@string/proposals_text"/>
 
     <View
         android:layout_width="match_parent"
@@ -43,20 +43,20 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_marginEnd="45sp"
-            android:text="Places"/>
+            android:text="@string/places_proposals_text"/>
 
         <RadioButton
             android:id="@+id/radio_date"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:text="Dates"/>
+            android:text="@string/dates_proposal_text"/>
 
         <RadioButton
             android:id="@+id/radio_time"
             android:layout_marginStart="45sp"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:text="Times"/>
+            android:text="@string/times_proposal_text"/>
 
     </RadioGroup>
 

@@ -227,7 +227,10 @@ public class PlanEventActivity extends AppCompatActivity {
                 dateCalendar.set(Calendar.MONTH, monthOfYear);
                 dateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (!dateCalendar.getTime().before(Calendar.getInstance().getTime())) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, -1);
+
+                if (dateCalendar.getTime().after(cal.getTime())) {
                     updateDateLabel();
                 } else {
                     Toast.makeText(PlanEventActivity.this, "The date must be at least today", Toast.LENGTH_SHORT).show();

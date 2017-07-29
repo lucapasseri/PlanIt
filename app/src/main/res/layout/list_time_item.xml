@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/time_text"
-        android:text="Time"
+        android:text="@string/list_time_item_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.9"
