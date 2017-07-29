@@ -173,10 +173,10 @@ public class InviteToEventDialog extends Dialog {
             if (result == RequestResult.INVITE_SENDED) {
                 InviteToEventDialog.this.dismiss();
             } else if (result == RequestResult.NOT_EXISTING_USERNAME) {
-                inviteEditText.setError("This username doesn't exist");
+                inviteEditText.setError(getContext().getString(R.string.user_not_e));
                 inviteEditText.requestFocus();
             } else {
-                inviteEditText.setError("This email doesn't exist");
+                inviteEditText.setError(getContext().getString(R.string.email_not_e));
                 inviteEditText.requestFocus();
             }
             //listener.onUnsuccessfulLogin();

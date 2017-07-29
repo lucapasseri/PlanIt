@@ -75,7 +75,7 @@ public class EventManagementActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         Intent intent = new Intent(EventManagementActivity.this, EventManagementActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("TASK","Invite sended");
+                        intent.putExtra("TASK",getString(R.string.invite_sended));
 
                         EventManagementActivity.this.startActivity(intent);
 
@@ -101,7 +101,7 @@ public class EventManagementActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         Intent intent = new Intent(EventManagementActivity.this, EventManagementActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("TASK","Proposal sended");
+                        intent.putExtra("TASK",getString(R.string.pro_sended));
 
                         EventManagementActivity.this.startActivity(intent);
 

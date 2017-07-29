@@ -135,6 +135,26 @@
     <string name="list_time_item_time">Time</string>
     <string name="nav_header_home_text">Plan It</string>
     <string name="nav_header_home_subtitle">The event planner you always wondered</string>
+
     <string name="nav_your_invites">Your invites</string>
+    <string name="custom_dialog_c_problem">Connection problem,please retry</string>
+    <string name="user_not_e">This username doesn\'t exist</string>
+    <string name="email_not_e">This email doesn\'t exist</string>
+    <string name="del_ev">Delete Event</string>
+    <string name="sur_ev">Are you sure you want to delete event?</string>
+    <string name="invite_sended">Invite sended</string>
+    <string name="pro_sended">Proposal sended</string>
+    <string name="ok_check">Ok, i will check</string>
+    <string name="conn_err">Connection error</string>
+    <string name="conn_un">Your connection is unavailable</string>
+    <string name="member">members</string>
+    <string name="alone">You are alone!</string>
+    <string name="invite_to">Invite to</string>
+    <string name="sended">sended</string>
+    <string name="select_date_first">Select start date first</string>
+    <string name="same_date">The date must be at least the same of the start date</string>
+    <string name="least_ten">You must have at least 10 years</string>
+    <string name="check">Check your connection</string>
+    <string name="internet_not">Internet not available</string>
 
 </resources>

@@ -1,9 +1,10 @@
-package com.example.luca.planit;
+package com.example.luca.planit.future;
 
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
+
+import com.example.luca.planit.InsertTaskWrapper;
+import com.example.luca.planit.RequestResult;
+import com.example.luca.planit.Resource;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +28,7 @@ import java.util.Map;
  * Created by diego on 22/07/2017.
  */
 
-public class LoginTask extends AsyncTask<LoginData,Void,Result> {
+public class AssigTaskTask extends AsyncTask<InsertTaskWrapper,Void,RequestResult> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -47,14 +48,14 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
     //Nome dei parametri del json di risposta
 
 
-    Result toReturn ;
+    RequestResult toReturn ;
     HttpURLConnection httpURLConnection = null;
     StringBuilder response = new StringBuilder();
     BufferedReader rd = null;
 
     @Override
-    protected void onPostExecute(Result result) {
-        if(result.getResult().equals(RequestResult.OK_LOGIN)){
+    protected void onPostExecute(RequestResult result) {
+        if(result !=null ){
             //listener.onSuccessfulLogin(response.toString(),checkBox.isChecked());
         }else{
             //listener.onUnsuccessfulLogin();
@@ -62,12 +63,11 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
     }
 
     @Override
-    protected Result doInBackground(LoginData... params) {
+    protected RequestResult doInBackground(InsertTaskWrapper... params) {
         try {
-            URL url = new URL(Resource.BASE_URL+Resource.LOGIN_PAGE); //Enter URL here
-
+            URL url = new URL(Resource.BASE_URL+Resource.ASSIGN_TASK_PAGE); //Enter URL here
+            JSONObject returned = null;
             httpURLConnection = (HttpURLConnection)url.openConnection();
-
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
@@ -76,13 +76,11 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
-            if(params[0].isMailLoginData()){
-                toPass.put("email",params[0].getEmail());
-            }else{
-                toPass.put("username",params[0].getEmail());
-            }
 
-            toPass.put("password",params[0].getPassword());
+            toPass.put("id_evento",params[0].getId_evento());
+            toPass.put("testo", params[0].getTaskText());
+            toPass.put("username", params[0].getUsername());
+
             writer.write(getPostDataString(toPass));
             writer.flush();
             writer.close();
@@ -96,31 +94,17 @@ public class LoginTask extends AsyncTask<LoginData,Void,Result> {
                 while ((line = rd.readLine())!= null){
                     response.append(line);
                 }
-            }
-            if(response.toString().isEmpty()){
-                Log.d("risposta","Credenziali errate");
-            }else{
-                try {
-                    JSONObject returned = new JSONObject(response.toString());
-                    Account loggedAccount = new AccountImpl.Builder()
-                            .setBorndate(returned.getString("data_nascita"))
-                            .setEmail(returned.getString("email"))
-                            .setId(String.valueOf(returned.getInt("id")))
-                            .setName(returned.getString("nome"))
-                            .setSurname(returned.getString("cognome"))
-                            .setPassword(returned.getString("password"))
-                            .setUsername(returned.getString("username"))
-                            .build();
-                    toReturn = new Result(RequestResult.OK_LOGIN,loggedAccount);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                System.out.println(response.toString());
+                returned = new JSONObject(response.toString());
 
+                toReturn = RequestResult.TASK_ASSIGNED;
             }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             if( rd != null){

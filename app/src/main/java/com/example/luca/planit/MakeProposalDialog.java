@@ -255,7 +255,7 @@ public class MakeProposalDialog extends Dialog {
                 endDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 if(startDateEdit.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Select start date first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.select_date_first, Toast.LENGTH_SHORT).show();
                 } else {
 
                     Calendar cal = Calendar.getInstance();
@@ -266,7 +266,7 @@ public class MakeProposalDialog extends Dialog {
                     if (startDateCalendar.getTime().before(cal.getTime())) {
                         updateEndDateLabel();
                     } else {
-                        Toast.makeText(getContext(), "The date must be at least the same of the start date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.same_date, Toast.LENGTH_SHORT).show();
                     }
                 }
 

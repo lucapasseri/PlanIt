@@ -118,13 +118,13 @@ public class CustomDialog extends Dialog {
             if (result == RequestResult.INVITE_SENDED) {
                 CustomDialog.this.dismiss();
             } else if (result == RequestResult.NO_CONNECTION) {
-                inviteEditText.setError("Connection problem,please retry");
+                inviteEditText.setError(context.getString(R.string.custom_dialog_c_problem));
                 inviteEditText.requestFocus();
             } else if (result == RequestResult.NOT_EXISTING_USERNAME) {
-                inviteEditText.setError("This username doesn't exist");
+                inviteEditText.setError(context.getString(R.string.user_not_e));
                 inviteEditText.requestFocus();
             } else {
-                inviteEditText.setError("This email doesn't exist");
+                inviteEditText.setError(context.getString(R.string.email_not_e));
                 inviteEditText.requestFocus();
             }
             //listener.onUnsuccessfulLogin();

@@ -91,14 +91,14 @@ public class GroupActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             startTask();
         }else{
-            final Dialog d = new AlertDialog.Builder(this).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
+            final Dialog d = new AlertDialog.Builder(this).setTitle(R.string.conn_err).setMessage(R.string.conn_un).setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     Intent intent = new Intent(GroupActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
-            }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
+            }).setPositiveButton(R.string.ok_check, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }
@@ -230,14 +230,14 @@ public class GroupActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 }
             }else{
-                final Dialog d = new AlertDialog.Builder(activity).setTitle("Connection error").setMessage("Your connection is unavailable").setOnDismissListener(new DialogInterface.OnDismissListener() {
+                final Dialog d = new AlertDialog.Builder(activity).setTitle(R.string.conn_err).setMessage(R.string.conn_un).setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         Intent intent = new Intent(GroupActivity.this, HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
-                }).setPositiveButton("Ok, i will check", new DialogInterface.OnClickListener() {
+                }).setPositiveButton(R.string.ok_check, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }

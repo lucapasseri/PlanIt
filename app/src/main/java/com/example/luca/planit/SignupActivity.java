@@ -115,7 +115,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (calendar.getTime().before(cal.getTime())) {
                     updateLabel();
                 } else {
-                    Toast.makeText(SignupActivity.this, "You must have at least 10 years", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, R.string.least_ten, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -334,8 +334,8 @@ public class SignupActivity extends AppCompatActivity {
         protected void onPostExecute(Result result) {
             if (result.getResult() == RequestResult.NO_CONNECTION) {
                 new AlertDialog.Builder(this.context)
-                        .setMessage("Check your connection")
-                        .setTitle("Internet not available")
+                        .setMessage(R.string.check)
+                        .setTitle(R.string.internet_not)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

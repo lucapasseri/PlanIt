@@ -138,4 +138,26 @@
     <string name="nav_header_home_subtitle">The event planner you always wondered</string>
     <string name="nav_your_invites">I tuoi Inviti</string>
 
+
+
+    <string name="custom_dialog_c_problem">Problema di connessione,riprova per favore</string>
+    <string name="user_not_e">Username non esistente</string>
+    <string name="email_not_e">Email non esistente</string>
+    <string name="del_ev">Cancella evento</string>
+    <string name="sur_ev">Sei sicuro di voler eliminare questo evento?</string>
+    <string name="invite_sended">Invito inviato</string>
+    <string name="pro_sended">Proposta inviata</string>
+    <string name="ok_check">Ok,controllerò</string>
+    <string name="conn_err">Errore di connessione</string>
+    <string name="conn_un">La tua connessione non è disponibile</string>
+    <string name="member">membri</string>
+    <string name="alone">Sei da solo!</string>
+    <string name="invite_to">Invito per</string>
+    <string name="sended">spedito</string>
+    <string name="select_date_first">Seleziona prima la data iniziale</string>
+    <string name="same_date">La data deve essere almeno pari a quella di inizio</string>
+    <string name="least_ten">Devi avere almeno 10 anni</string>
+    <string name="check">Controlla la connessione</string>
+    <string name="internet_not">Internet non disponibile</string>
+
 </resources>

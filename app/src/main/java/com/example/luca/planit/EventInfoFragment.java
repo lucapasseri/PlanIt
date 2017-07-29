@@ -77,8 +77,8 @@ public class EventInfoFragment extends Fragment {
                 public void onClick(View v) {
 
                     confirmDialog = new AlertDialog.Builder(getContext())
-                            .setTitle("Delete Event")
-                            .setMessage("Are you sure you want to delete event?")
+                            .setTitle(R.string.del_ev)
+                            .setMessage(R.string.sur_ev)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     DeleteEventTask deleteEventTask = new DeleteEventTask();

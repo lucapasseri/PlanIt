@@ -1,7 +1,12 @@
-package com.example.luca.planit;
+package com.example.luca.planit.future;
 
 import android.os.AsyncTask;
 
+import com.example.luca.planit.InsertTaskWrapper;
+import com.example.luca.planit.Resource;
+import com.example.luca.planit.TaskRequestWrapper;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,13 +23,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by diego on 22/07/2017.
  */
 
-public class InsertTimePreferenceTask extends AsyncTask<TimePreferenceWrapper,Void,RequestResult> {
+public class GetTaskTask extends AsyncTask<TaskRequestWrapper,Void,List<InsertTaskWrapper>> {
     private String getPostDataString(HashMap<String,String > params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -42,14 +49,16 @@ public class InsertTimePreferenceTask extends AsyncTask<TimePreferenceWrapper,Vo
     }
 
     //Nome dei parametri del json di risposta
-    RequestResult toReturn  = null;
+
+
+    List<InsertTaskWrapper> listTask = new LinkedList<>();
     HttpURLConnection httpURLConnection = null;
     StringBuilder response = new StringBuilder();
     BufferedReader rd = null;
 
     @Override
-    protected void onPostExecute(RequestResult result) {
-        if(result == RequestResult.INSERTED_TIME_PREFERENCE ){
+    protected void onPostExecute(List<InsertTaskWrapper> result) {
+        if(!result.isEmpty() ){
             //listener.onSuccessfulLogin(response.toString(),checkBox.isChecked());
         }else{
             //listener.onUnsuccessfulLogin();
@@ -57,10 +66,10 @@ public class InsertTimePreferenceTask extends AsyncTask<TimePreferenceWrapper,Vo
     }
 
     @Override
-    protected RequestResult doInBackground(TimePreferenceWrapper... params) {
+    protected List<InsertTaskWrapper> doInBackground(TaskRequestWrapper... params) {
         try {
-
-            URL url = new URL(Resource.BASE_URL+Resource.INSERT_TIME_PREFERENCE_PAGE); //Enter URL here
+            URL url = new URL(Resource.BASE_URL+Resource.GET_TASK_PAGE); //Enter URL here
+            JSONObject returned = null;
             httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setDoOutput(true);
@@ -70,17 +79,16 @@ public class InsertTimePreferenceTask extends AsyncTask<TimePreferenceWrapper,Vo
             OutputStream os = httpURLConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
             HashMap<String,String> toPass = new HashMap<>();
-
-            toPass.put("id_utente",params[0].getUserId());
             toPass.put("id_evento",params[0].getEventId());
-            toPass.put("ora_inizio", params[0].getStartTime());
-            toPass.put("ora_fine", params[0].getEndTime());
+            toPass.put("username",params[0].getUserName());
+
 
             writer.write(getPostDataString(toPass));
             writer.flush();
             writer.close();
             os.close();
             httpURLConnection.connect();
+
             int responseCode = httpURLConnection.getResponseCode();
             if(responseCode == httpURLConnection.HTTP_OK){
                 InputStream inputStream = httpURLConnection.getInputStream();
@@ -90,11 +98,20 @@ public class InsertTimePreferenceTask extends AsyncTask<TimePreferenceWrapper,Vo
                     response.append(line);
                 }
                 System.out.println(response.toString());
-                JSONObject returned = new JSONObject(response.toString());
-                System.out.println(returned.getString("result"));
-                return RequestResult.INSERTED_TIME_PREFERENCE;
+                if(response.toString().isEmpty()){
+                    return listTask;
+                }
+                returned = new JSONObject(response.toString());
             }
+            List<InsertTaskWrapper> listTask = new LinkedList<>();
 
+            JSONArray tasks = returned.optJSONArray("Compiti");
+            for ( int i = 0; i< tasks.length() ; i++){
+                JSONObject task = (JSONObject) tasks.get(i);
+                InsertTaskWrapper toAdd = new InsertTaskWrapper(params[0].getUserName(),task.getString("Compito"),params[0].getEventId());
+                listTask.add(toAdd);
+                System.out.println(toAdd.toString());
+            }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -115,6 +132,6 @@ public class InsertTimePreferenceTask extends AsyncTask<TimePreferenceWrapper,Vo
             }
         }
 
-        return toReturn;
+        return listTask;
     }
 }
