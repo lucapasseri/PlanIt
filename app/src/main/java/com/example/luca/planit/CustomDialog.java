@@ -65,7 +65,8 @@ public class CustomDialog extends Dialog {
             }
         });
     }
-    public void startTask(){
+
+    public void startTask() {
         CustomDialog.InviteToGroupTask inviteToGroupTask = new CustomDialog.InviteToGroupTask(getContext());
         String insertedText = inviteEditText.getText().toString();
         if (insertedText.contains("@")) {
@@ -116,6 +117,9 @@ public class CustomDialog extends Dialog {
         protected void onPostExecute(RequestResult result) {
             if (result == RequestResult.INVITE_SENDED) {
                 CustomDialog.this.dismiss();
+            } else if (result == RequestResult.NO_CONNECTION) {
+                inviteEditText.setError("Connection problem,please retry");
+                inviteEditText.requestFocus();
             } else if (result == RequestResult.NOT_EXISTING_USERNAME) {
                 inviteEditText.setError("This username doesn't exist");
                 inviteEditText.requestFocus();
@@ -178,11 +182,11 @@ public class CustomDialog extends Dialog {
 
                 }
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                return RequestResult.NO_CONNECTION;
             } catch (IOException e) {
-                e.printStackTrace();
+                return RequestResult.NO_CONNECTION;
             } catch (JSONException e) {
-                e.printStackTrace();
+                return RequestResult.NO_CONNECTION;
             } finally {
                 if (rd != null) {
                     try {

@@ -288,6 +288,7 @@ public class EventOrganizedFragment extends Fragment {
                 }
             } catch (ProtocolException e1) {
                 e1.printStackTrace();
+                return listEvent;
             }catch (SocketTimeoutException et){
                 return listEvent;
             }catch (IOException e1) {
@@ -296,6 +297,7 @@ public class EventOrganizedFragment extends Fragment {
                 return listEvent;
             } catch (JSONException e1) {
                 e1.printStackTrace();
+                return listEvent;
             } finally {
                 if (rd != null) {
                     try {

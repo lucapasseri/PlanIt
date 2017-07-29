@@ -197,7 +197,7 @@ public class ProposalsFragment extends Fragment {
         protected void onPostExecute(List<PlacePreference> result) {
             if(!result.isEmpty() ){
 
-
+                Log.d("Proposal",result.toString());
                 List<String> listId = new LinkedList<>();
                 List<PlacePreference> listItemToRemove = new LinkedList<>();
                 for(PlacePreference placePreference : result){
@@ -298,7 +298,7 @@ public class ProposalsFragment extends Fragment {
                                 .build();
                         PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
                         toReturn.add(toAdd);
-                        System.out.println(toAdd.toString());
+                        Log.d("Proposal",toAdd.toString());
                     }
 
 
@@ -332,7 +332,7 @@ public class ProposalsFragment extends Fragment {
                             while ((line = rd.readLine())!= null){
                                 response.append(line);
                             }
-                            System.out.println(response.toString());
+                            Log.d("Proposal",response.toString());
                             returned = new JSONObject(response.toString());
                             Place toAddPlace = new PlaceImpl.Builder()
                                     .setAddress(returned.getString("indirizzo"))
@@ -342,7 +342,7 @@ public class ProposalsFragment extends Fragment {
                                     .build();
                             PlacePreference toAdd = new PlacePreferenceImpl(toAddPlace,bestDate.getInt("preferenze"),String.valueOf(bestDate.getInt("id_luogo")));
                             toReturn.add(toAdd);
-                            System.out.println(toAdd.toString());
+                            Log.d("Proposal",toAdd.toString());
                         }
 
                     }
@@ -412,7 +412,7 @@ public class ProposalsFragment extends Fragment {
         @Override
         protected void onPostExecute(List<TimePreference> result) {
             if(!result.isEmpty() ){
-
+                Log.d("Proposal",result.toString());
                 List<String> listId = new LinkedList<>();
                 List<TimePreference> listItemToRemove = new LinkedList<>();
                 for(TimePreference timePreference : result){
@@ -434,7 +434,7 @@ public class ProposalsFragment extends Fragment {
                     }
                 }
 
-                placeSuggestionAdapter.notifyDataSetChanged();
+                timeSuggestionAdapter.notifyDataSetChanged();
             }else{
                 //listener.onUnsuccessfulLogin();
             }
@@ -468,7 +468,7 @@ public class ProposalsFragment extends Fragment {
                     while ((line = rd.readLine())!= null){
                         response.append(line);
                     }
-                    System.out.println(response.toString());
+                    //.d("Proposal",response.toString());
                     returned = new JSONObject(response.toString());
                 }
 
@@ -481,7 +481,7 @@ public class ProposalsFragment extends Fragment {
                     time = (hour+":"+minutes);
                     TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
                     toReturn.add(toAdd);
-                    System.out.println(toAdd.toString());
+                    //Log.d("Proposal",toAdd.toString());
                 }else {
                     for ( int i = 0; i< dates.length() ; i++){
                         JSONObject bestDate = (JSONObject) dates.get(i);
@@ -491,7 +491,7 @@ public class ProposalsFragment extends Fragment {
                         time = (hour+":"+minutes);
                         TimePreference toAdd = new TimePreferenceImpl(time,bestDate.getInt("preferenze"));
                         toReturn.add(toAdd);
-                        System.out.println(toAdd.toString());
+                        //Log.d("Proposal",toAdd.toString());
                     }
                 }
 
@@ -549,6 +549,7 @@ public class ProposalsFragment extends Fragment {
         @Override
         protected void onPostExecute(List<DatePreference> result) {
             if(!result.isEmpty() ){
+                //Log.d("Proposal",result.toString());
                 List<String> listId = new LinkedList<>();
                 List<DatePreference> listItemToRemove = new LinkedList<>();
                 for(DatePreference datePreference : result){
@@ -570,7 +571,7 @@ public class ProposalsFragment extends Fragment {
                     }
                 }
 
-                placeSuggestionAdapter.notifyDataSetChanged();
+                dateSuggestionAdapter.notifyDataSetChanged();
             }else{
                 //listener.onUnsuccessfulLogin();
             }
@@ -605,7 +606,7 @@ public class ProposalsFragment extends Fragment {
                     while ((line = rd.readLine())!= null){
                         response.append(line);
                     }
-                    System.out.println(response.toString());
+                    //Log.d("Proposal",response.toString());
                     returned = new JSONObject(response.toString());
                 }
                 toReturn = new LinkedList<>();
@@ -615,12 +616,13 @@ public class ProposalsFragment extends Fragment {
                     JSONObject bestDate = returned.getJSONObject("Miglior_Data");
                     DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
                     toReturn.add(toAdd);
-                    System.out.println(toAdd.toString());
+                    //Log.d("Proposal",toAdd.toString());
                 }else {
                     for ( int i = 0; i< dates.length() ; i++){
                         JSONObject bestDate = (JSONObject) dates.get(i);
                         DatePreferenceImpl toAdd = new DatePreferenceImpl(bestDate.getString("data"),bestDate.getInt("preferenze"));
                         toReturn.add(toAdd);
+                        //Log.d("Proposal",toAdd.toString());
                     }
                 }
 

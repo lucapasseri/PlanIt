@@ -302,13 +302,13 @@ public class GroupActivity extends AppCompatActivity {
                     Log.d("Gruppi",listGroups.toString());
                 }
             } catch (ProtocolException e1) {
-                e1.printStackTrace();
+                return listGroups;
             }catch (SocketTimeoutException et) {
                 return listGroups;
             } catch (IOException e1) {
                 return listGroups;
             } catch (JSONException e1) {
-                e1.printStackTrace();
+                return listGroups;
             } finally {
                 if (rd != null) {
                     try {
