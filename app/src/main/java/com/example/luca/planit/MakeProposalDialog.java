@@ -401,14 +401,14 @@ public class MakeProposalDialog extends Dialog {
                 makeProposalFormView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         } else if (!cancel && (timeChoice == Choice.DEFINED)) {
-            if ((endHourNp.getValue() - startHourNp.getValue()) < 2) {
-                Toast.makeText(getContext(), "The end time must be at least after 2 hour of the start time", Toast.LENGTH_SHORT).show();
+            if ((endHourNp.getValue() - startHourNp.getValue()) < 1) {
+                Toast.makeText(getContext(), "The end time must be at least after 1 hour of the start time", Toast.LENGTH_SHORT).show();
                 focusView = null;
                 cancel = true;
                 makeProposalFormView.fullScroll(ScrollView.FOCUS_DOWN);
-            } else if ((endHourNp.getValue() - startHourNp.getValue()) == 2) {
+            } else if ((endHourNp.getValue() - startHourNp.getValue()) == 1) {
                 if (startMinutesNp.getValue() > endMinutesNp.getValue()) {
-                    Toast.makeText(getContext(), "The end time must be at least after 2 hour of the start time", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "The end time must be at least after 1 hour of the start time", Toast.LENGTH_SHORT).show();
                     focusView = null;
                     cancel = true;
                 }
