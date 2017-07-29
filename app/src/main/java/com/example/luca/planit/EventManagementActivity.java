@@ -75,12 +75,31 @@ public class EventManagementActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         Intent intent = new Intent(EventManagementActivity.this, EventManagementActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        if(SelectedInvite.getSelectedInvite()!= null){
-                            String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
-                                    SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
-                            intent.putExtra("TASK","Invite to "+toPass+" sended");
-                            EventManagementActivity.this.startActivity(intent);
-                        }
+                        String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
+                                SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
+                        intent.putExtra("TASK","Invite to sended");
+
+                        EventManagementActivity.this.startActivity(intent);
+
+                    }
+                });
+                dialog.show();
+
+            }
+        });
+
+        fabProposals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog dialog = new MakeProposalDialog(EventManagementActivity.this);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Intent intent = new Intent(EventManagementActivity.this, EventManagementActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("TASK","Proposal sended");
+
+                        EventManagementActivity.this.startActivity(intent);
 
                     }
                 });
