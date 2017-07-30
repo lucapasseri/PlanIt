@@ -147,10 +147,10 @@
     <string name="ok_check">Ok, i will check</string>
     <string name="conn_err">Connection error</string>
     <string name="conn_un">Your connection is unavailable</string>
-    <string name="member">members</string>
+    <string name="member"> members</string>
     <string name="alone">You are alone!</string>
     <string name="invite_to">Invite to</string>
-    <string name="sended">sended</string>
+    <string name="sended"> sended</string>
     <string name="select_date_first">Select start date first</string>
     <string name="same_date">The date must be at least the same of the start date</string>
     <string name="least_ten">You must have at least 10 years</string>
