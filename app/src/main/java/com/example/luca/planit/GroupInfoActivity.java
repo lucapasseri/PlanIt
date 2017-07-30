@@ -39,7 +39,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         numNumbers = (TextView) findViewById(R.id.num_invited);
         int num = SelectedGroup.getSelectedGroup().getPeopleInGroup().size();
         if(num >1){
-            numNumbers.setText(num+getString(R.string.member));
+            numNumbers.setText(num+" "+getString(R.string.member));
         }else {
             numNumbers.setText(R.string.alone);
         }
@@ -65,7 +65,7 @@ public class GroupInfoActivity extends AppCompatActivity {
                         if(SelectedInvite.getSelectedInvite()!= null){
                             String toPass = SelectedInvite.getSelectedInvite().isMailGroupWrapper()?
                                     SelectedInvite.getSelectedInvite().getEmail():SelectedInvite.getSelectedInvite().getUsername();
-                            intent.putExtra("TASK",getString(R.string.invite_to)+toPass+getString(R.string.sended));
+                            intent.putExtra("TASK",getString(R.string.invite_to)+" "+toPass+" "+getString(R.string.sended));
                             GroupInfoActivity.this.startActivity(intent);
                         }
 
